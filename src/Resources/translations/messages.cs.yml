@@ -1,0 +1,18 @@
+threebrs:
+    shop:
+        checkout:
+            complete:
+                pplParcelShop: PPL ParcelShop
+            shippingStep:
+                choosePplParcelShop: Vyberte PPL ParcelShop
+                pplError: Výběr PPL ParcelShopu se nezdařil, zkuste to prosím znovu.
+
+    admin:
+        pplParcelShop:
+            title: PPL ParcelShop
+            form:
+                pplParcelshopsShippingMethod: To PPL ParcelShop enabled
+                pplOptionCountry: Zobrazovat ParcelShopy z dané země
+            export:
+                toPplBranch: Na PPL ParcelShop
+                toAddress: Na addressu

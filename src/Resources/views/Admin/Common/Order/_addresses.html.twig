@@ -1,0 +1,11 @@
+{% set shipment = order.shipments.last %}
+{% if shipment.pplKTMID %}
+	<address>
+		{{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
+		<strong>{{ shipment.pplKTMname }}</strong><br>
+		{{ shipment.pplKTMaddress }}<br>
+		ID: {{ shipment.pplKTMID }}
+	</address>
+{% else %}
+	{% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}
+{% endif %}

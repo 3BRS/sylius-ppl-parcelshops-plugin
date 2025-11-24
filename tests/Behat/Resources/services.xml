@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<services>
+		<defaults public="true"/>
+
+		<service id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod\UpdatePageInterface"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod\UpdatePage"
+				 parent="sylius.behat.page.admin.crud.update" public="false">
+			<argument type="string">sylius_admin_channel_update</argument>
+		</service>
+
+		<service id="sylius_ppl_parcelshops_plugin.context.ui.admin.shipping_method"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShippingMethodContext">
+			<argument type="service"
+					  id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod\UpdatePageInterface"/>
+			<argument type="service" id="sylius.behat.notification_checker"/>
+		</service>
+
+		<service id="sylius_ppl_parcelshops_plugin.context.domain.command"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Domain\CommandContext">
+			<argument type="service" id="kernel"/>
+			<argument type="service" id="doctrine.orm.entity_manager"/>
+		</service>
+
+		<service id="sylius_ppl_parcelshops_plugin.context.setup.shipping_method"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup\ShippingMethodContext">
+			<argument type="service" id="doctrine.orm.entity_manager"/>
+			<argument type="service" id="sylius.behat.shared_storage"/>
+		</service>
+
+		<service id="sylius_ppl_parcelshops_plugin.context.ui.shop.managing_ppl_context"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Shop\ManagingPplContext">
+			<argument type="service"
+					  id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl\PplPagesInterface"/>
+			<argument type="service" id="sylius.behat.context.ui.shop.checkout.shipping"/>
+		</service>
+
+		<service id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl\PplPagesInterface"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl\PplPages"
+				 parent="sylius.behat.page.admin.crud.update" public="false">
+			<argument type="string">sylius_admin_channel_update</argument>
+		</service>
+
+	</services>
+</container>

@@ -1,0 +1,18 @@
+mangoweb:
+    shop:
+        checkout:
+            complete:
+                pplParcelShop: PPL ParcelShop
+            shippingStep:
+                choosePplParcelShop: Choose PPL ParcelShop
+                pplError: PPL ParcelShop selection failed, please try again.
+
+    admin:
+        pplParcelShop:
+            title: PPL ParcelShop
+            form:
+                pplParcelshopsShippingMethod: To PPL ParcelShop enabled
+                pplOptionCountry: Show ParcelShops from country
+            export:
+                toPplBranch: To PPL ParcelShop
+                toAddress: To address

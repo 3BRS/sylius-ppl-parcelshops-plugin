@@ -1,0 +1,4 @@
+mango_sylius_ppl_parcelshop_return:
+    path: /{_locale}/ppl/return-from-ppl/{methodCode}
+    defaults:
+        _controller: ThreeBRS\SyliusPplParcelshopsPlugin\Controller\PplController::pplReturn
