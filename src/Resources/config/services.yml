@@ -1,6 +1,6 @@
 parameters:
-    pplShippingMethodsCodes: ['ppl_parcel_shop']
-    mango_sylius_ppl_parcelshops_plugin_ppl_countries: ['CZ', 'PL']
+    pplShippingMethodsCodes: [ 'ppl_parcel_shop' ]
+    mango_sylius_ppl_parcelshops_plugin_ppl_countries: [ 'CZ', 'PL' ]
 
 services:
     _defaults:
@@ -14,13 +14,13 @@ services:
             - '@sylius.repository.shipping_method'
             - '@translator'
         tags:
-            - name: form.type_extension
-              extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType
+            -   name: form.type_extension
+                extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType
 
     ThreeBRS\SyliusPplParcelshopsPlugin\Form\Extension\AdminPplShippingMethodExtension:
         tags:
-            - name: form.type_extension
-              extended_type: Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType
+            -   name: form.type_extension
+                extended_type: Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType
         arguments:
             $countryChoices: '%mango_sylius_ppl_parcelshops_plugin_ppl_countries%'
 
@@ -30,9 +30,9 @@ services:
             $currencyConverter: '@sylius.currency_converter'
             $pplShippingMethodsCodes: '%pplShippingMethodsCodes%'
         tags:
-            - name: mango_sylius.shipment_exporter_type
-              type: 'ppl_parcel_shop'
-              label: 'PPL ParcelShop'
+            -   name: mango_sylius.shipment_exporter_type
+                type: 'ppl_parcel_shop'
+                label: 'PPL ParcelShop'
 
     ThreeBRS\SyliusPplParcelshopsPlugin\Controller\PplController:
         public: true

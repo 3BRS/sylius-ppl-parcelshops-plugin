@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Controller;
 
-use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Core\Model\ShippingMethodInterface;
@@ -16,72 +15,52 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
 
 final class PplController
 {
-	/** @var RouterInterface */
-	private $router;
+    public function __construct(
+        private readonly RouterInterface                   $router,
+        private readonly ShipmentRepositoryInterface       $shipmentRepository,
+        private readonly CartContextInterface              $cartContext,
+        private readonly FlashBagInterface                 $flashBag,
+        private readonly TranslatorInterface               $translator,
+        private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
+    ) {
+    }
 
-	/** @var ShipmentRepositoryInterface */
-	private $shipmentRepository;
+    public function pplReturn(
+        Request $request,
+        string  $methodCode,
+        string  $redirectTo = 'sylius_shop_checkout_select_shipping',
+    ): RedirectResponse {
+        $order = $this->cartContext->getCart();
+        assert($order instanceof OrderInterface);
 
-	/** @var CartContextInterface */
-	private $cartContext;
+        $shipmentId     = $request->query->get('sessid');
+        $shipment       = $this->shipmentRepository->find($shipmentId);
+        $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $methodCode]);
 
-	/** @var FlashBagInterface */
-	private $flashBag;
+        if ($shippingMethod === null || $shipment === null || !$order->getShipments()->contains($shipment)) {
+            $this->flashBag->add('error', $this->translator->trans('threebrs.shop.checkout.shippingStep.pplError'));
 
-	/** @var TranslatorInterface */
-	private $translator;
+            return new RedirectResponse($this->router->generate($redirectTo));
+        }
+        assert($shippingMethod instanceof ShippingMethodInterface);
+        assert($shipment instanceof ShipmentInterface);
+        assert($shipment instanceof PplShipmentInterface);
 
-	/** @var ShippingMethodRepositoryInterface */
-	private $shippingMethodRepository;
+        $ktmId      = $request->query->get('KTMID');
+        $ktmAddress = $request->query->get('KTMaddress');
+        $ktmName    = $request->query->get('KTMname');
 
-	public function __construct(
-		RouterInterface $router,
-		ShipmentRepositoryInterface $shipmentRepository,
-		CartContextInterface $cartContext,
-		FlashBagInterface $flashBag,
-		TranslatorInterface $translator,
-		ShippingMethodRepositoryInterface $shippingMethodRepository
-	) {
-		$this->router = $router;
-		$this->shipmentRepository = $shipmentRepository;
-		$this->cartContext = $cartContext;
-		$this->flashBag = $flashBag;
-		$this->translator = $translator;
-		$this->shippingMethodRepository = $shippingMethodRepository;
-	}
+        $shipment->setPplKTMID($ktmId);
+        $shipment->setPplKTMaddress($ktmAddress);
+        $shipment->setPplKTMname($ktmName);
+        $shipment->setMethod($shippingMethod);
 
-	public function pplReturn(Request $request, string $methodCode, string $redirectTo = 'sylius_shop_checkout_select_shipping'): RedirectResponse
-	{
-		$order = $this->cartContext->getCart();
-		assert($order instanceof OrderInterface);
+        $this->shipmentRepository->add($shipment);
 
-		$shipmentId = $request->query->get('sessid');
-		$shipment = $this->shipmentRepository->find($shipmentId);
-		$shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $methodCode]);
-
-		if ($shippingMethod === null || $shipment === null || !$order->getShipments()->contains($shipment)) {
-			$this->flashBag->add('error', $this->translator->trans('threebrs.shop.checkout.shippingStep.pplError'));
-
-			return new RedirectResponse($this->router->generate($redirectTo));
-		}
-		assert($shippingMethod instanceof ShippingMethodInterface);
-		assert($shipment instanceof ShipmentInterface);
-		assert($shipment instanceof PplShipmentInterface);
-
-		$ktmId = $request->query->get('KTMID');
-		$ktmAddress = $request->query->get('KTMaddress');
-		$ktmName = $request->query->get('KTMname');
-
-		$shipment->setPplKTMID($ktmId);
-		$shipment->setPplKTMaddress($ktmAddress);
-		$shipment->setPplKTMname($ktmName);
-		$shipment->setMethod($shippingMethod);
-
-		$this->shipmentRepository->add($shipment);
-
-		return new RedirectResponse($this->router->generate($redirectTo));
-	}
+        return new RedirectResponse($this->router->generate($redirectTo));
+    }
 }

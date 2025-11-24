@@ -8,54 +8,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PplShipmentTrait
 {
-	/**
-	 * @var string|null
-	 *
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	private $pplKTMname;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    private ?string $pplKTMname = null;
 
-	/**
-	 * @var string|null
-	 *
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	private $pplKTMaddress;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    private ?string $pplKTMaddress = null;
 
-	/**
-	 * @var string|null
-	 *
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	private $pplKTMID;
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, nullable: true)]
+    private ?string $pplKTMID = null;
 
-	public function getPplKTMname(): ?string
-	{
-		return $this->pplKTMname;
-	}
+    public function getPplKTMname(): ?string
+    {
+        return $this->pplKTMname;
+    }
 
-	public function setPplKTMname(?string $pplKTMname): void
-	{
-		$this->pplKTMname = $pplKTMname;
-	}
+    public function setPplKTMname(?string $pplKTMname): void
+    {
+        $this->pplKTMname = $pplKTMname;
+    }
 
-	public function getPplKTMaddress(): ?string
-	{
-		return $this->pplKTMaddress;
-	}
+    public function getPplKTMaddress(): ?string
+    {
+        return $this->pplKTMaddress;
+    }
 
-	public function setPplKTMaddress(?string $pplKTMaddress): void
-	{
-		$this->pplKTMaddress = $pplKTMaddress;
-	}
+    public function setPplKTMaddress(?string $pplKTMaddress): void
+    {
+        $this->pplKTMaddress = $pplKTMaddress;
+    }
 
-	public function getPplKTMID(): ?string
-	{
-		return $this->pplKTMID;
-	}
+    public function getPplKTMID(): ?string
+    {
+        return $this->pplKTMID;
+    }
 
-	public function setPplKTMID(?string $pplKTMID): void
-	{
-		$this->pplKTMID = $pplKTMID;
-	}
+    public function setPplKTMID(?string $pplKTMID): void
+    {
+        $this->pplKTMID = $pplKTMID;
+    }
 }

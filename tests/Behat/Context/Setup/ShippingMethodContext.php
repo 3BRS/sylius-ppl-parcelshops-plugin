@@ -14,19 +14,9 @@ use Sylius\Component\Core\Model\ShippingMethodInterface;
 
 final class ShippingMethodContext implements Context
 {
-	/** @var EntityManagerInterface */
-	private $entityManager;
-
-	/** @var SharedStorageInterface */
-	private $sharedStorage;
-
-	public function __construct(
-		EntityManagerInterface $entityManager,
-		SharedStorageInterface $sharedStorage
-	) {
-		$this->entityManager = $entityManager;
-		$this->sharedStorage = $sharedStorage;
-	}
+	public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SharedStorageInterface $sharedStorage)
+ {
+ }
 
 	/**
 	 * @Given /^(this shipping method) is enabled PPL parcelshops$/

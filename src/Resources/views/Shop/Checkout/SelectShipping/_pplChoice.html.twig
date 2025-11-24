@@ -1,31 +1,31 @@
 {% if form.parent.parent['pplKTMID_' ~ method.code] is defined and form.parent.parent['pplKTMID_' ~ method.code] %}
-	{% set inputId = form.parent.parent['pplKTMID_' ~ method.code].vars.id %}
-	{% set labelId = inputId ~ '_title' %}
-	{% set countrOption = form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-country'] %}
-	{% set prefillAdress = order.shippingAddress.postcode ~ ',' ~ order.shippingAddress.street %}
-	{% set returnUrl = url('mango_sylius_ppl_parcelshop_return', {
-		'methodCode': method.code,
-		'sessid': shipment.id
-	})|url_encode ~ '%26KTMID%3d{0}%26KTMaddress%3d{1}%26KTMname%3d{2}' %}
+    {% set inputId = form.parent.parent['pplKTMID_' ~ method.code].vars.id %}
+    {% set labelId = inputId ~ '_title' %}
+    {% set countrOption = form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-country'] %}
+    {% set prefillAdress = order.shippingAddress.postcode ~ ',' ~ order.shippingAddress.street %}
+    {% set returnUrl = url('mango_sylius_ppl_parcelshop_return', {
+        'methodCode': method.code,
+        'sessid': shipment.id
+    })|url_encode ~ '%26KTMID%3d{0}%26KTMaddress%3d{1}%26KTMname%3d{2}' %}
 
-	<div class="ui hidden divider"></div>
-	<div class="center aligned ui grid">
-		<a id="{{ labelId }}"
-		   class="ui secondary basic button"
-		   href="https://www.pplbalik.cz/Main3.aspx?cls=KTMMap&CountryCode={{ countrOption }}&KTMAddress={{ prefillAdress|url_encode }}&ReturnUrl={{ returnUrl }}"
-		>
-			{% if form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is not empty %}
-				{{ form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] }}
-			{% else %}
-				{{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
-			{% endif %}
-		</a>
-	</div>
-	<div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="center aligned ui grid">
+        <a id="{{ labelId }}"
+           class="ui secondary basic button"
+           href="https://www.pplbalik.cz/Main3.aspx?cls=KTMMap&CountryCode={{ countrOption }}&KTMAddress={{ prefillAdress|url_encode }}&ReturnUrl={{ returnUrl }}"
+        >
+            {% if form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is not empty %}
+                {{ form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] }}
+            {% else %}
+                {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
+            {% endif %}
+        </a>
+    </div>
+    <div class="ui hidden divider"></div>
 
-	{{ form_widget(form.parent.parent['pplKTMID_' ~ method.code]) }}
-	{{ form_widget(form.parent.parent['pplKTMname_' ~ method.code]) }}
-	{{ form_widget(form.parent.parent['pplKTMaddress_' ~ method.code]) }}
+    {{ form_widget(form.parent.parent['pplKTMID_' ~ method.code]) }}
+    {{ form_widget(form.parent.parent['pplKTMname_' ~ method.code]) }}
+    {{ form_widget(form.parent.parent['pplKTMaddress_' ~ method.code]) }}
 {% endif %}
 
 {{ form_widget(form.parent.parent.pplKTMID) }}

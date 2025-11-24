@@ -10,14 +10,9 @@ use Webmozart\Assert\Assert;
 
 final class ManagingShippingMethodContext implements Context
 {
-	/** @var UpdatePageInterface */
-	private $updatePage;
-
-	public function __construct(
-		UpdatePageInterface $updatePage
-	) {
-		$this->updatePage = $updatePage;
-	}
+	public function __construct(private readonly UpdatePageInterface $updatePage)
+ {
+ }
 
 	/**
 	 * @Then it should be shipped to PPL parcelshop

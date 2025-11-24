@@ -10,10 +10,8 @@ use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodInterface;
 use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodTrait;
 use Sylius\Component\Core\Model\ShippingMethod as BaseShippingMethod;
 
-/**
- * @MappedSuperclass
- * @Table(name="sylius_shipping_method")
- */
+#[MappedSuperclass]
+#[Table(name: 'sylius_shipping_method')]
 class ShippingMethod extends BaseShippingMethod implements PplShippingMethodInterface
 {
 	use PplShippingMethodTrait;

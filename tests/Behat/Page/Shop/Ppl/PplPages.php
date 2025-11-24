@@ -19,7 +19,7 @@ final class PplPages extends BaseUpdatePage implements PplPagesInterface
 	{
 		$shippingAddress = $this->getElement('shippingAddress')->getText();
 
-		return false !== strpos($shippingAddress, 'PPL ParcelShop');
+		return str_contains($shippingAddress, 'PPL ParcelShop');
 	}
 
 	protected function getDefinedElements(): array

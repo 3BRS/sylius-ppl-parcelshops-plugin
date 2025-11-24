@@ -1,11 +1,11 @@
 {% set shipment = order.shipments.last %}
 
 {% if shipment.pplKTMID %}
-	<address>
-		{{ 'threebrs.shop.checkout.complete.pplParcelShop'|trans }}<br>
-		<strong>{{ shipment.pplKTMID ~ shipment.pplKTMname }}</strong><br>
-		{{ shipment.pplKTMaddress }}
-	</address>
+    <address>
+        {{ 'threebrs.shop.checkout.complete.pplParcelShop'|trans }}<br>
+        <strong>{{ shipment.pplKTMID ~ shipment.pplKTMname }}</strong><br>
+        {{ shipment.pplKTMaddress }}
+    </address>
 {% else %}
-	{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}
+    {% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}
 {% endif %}
