@@ -18,12 +18,12 @@ class PplShipmentExporter implements ShipmentExporterInterface
      */
     public function __construct(
         private readonly CurrencyConverter $currencyConverter,
-        private readonly array             $pplShippingMethodsCodes,
+        private readonly array $pplShippingMethodsCodes,
     ) {
     }
 
     private function convert(
-        int    $amount,
+        int $amount,
         string $sourceCurrencyCode,
         string $targetCurrencyCode,
     ): int {
@@ -45,7 +45,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
      */
     public function getRow(
         ShipmentInterface $shipment,
-        array             $questionsArray,
+        array $questionsArray,
     ): array {
         assert($shipment instanceof PplShipmentInterface);
 
@@ -72,7 +72,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
         assert($currencyCode !== null);
 
         $targetCurrencyCode = 'CZK';
-        $totalAmount        = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+        $totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 
         $totalAmount = number_format(
             $totalAmount / 100,

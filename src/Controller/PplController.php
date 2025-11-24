@@ -20,25 +20,25 @@ use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
 final class PplController
 {
     public function __construct(
-        private readonly RouterInterface                   $router,
-        private readonly ShipmentRepositoryInterface       $shipmentRepository,
-        private readonly CartContextInterface              $cartContext,
-        private readonly FlashBagInterface                 $flashBag,
-        private readonly TranslatorInterface               $translator,
+        private readonly RouterInterface $router,
+        private readonly ShipmentRepositoryInterface $shipmentRepository,
+        private readonly CartContextInterface $cartContext,
+        private readonly FlashBagInterface $flashBag,
+        private readonly TranslatorInterface $translator,
         private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
     ) {
     }
 
     public function pplReturn(
         Request $request,
-        string  $methodCode,
-        string  $redirectTo = 'sylius_shop_checkout_select_shipping',
+        string $methodCode,
+        string $redirectTo = 'sylius_shop_checkout_select_shipping',
     ): RedirectResponse {
         $order = $this->cartContext->getCart();
         assert($order instanceof OrderInterface);
 
-        $shipmentId     = $request->query->get('sessid');
-        $shipment       = $this->shipmentRepository->find($shipmentId);
+        $shipmentId = $request->query->get('sessid');
+        $shipment = $this->shipmentRepository->find($shipmentId);
         $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $methodCode]);
 
         if ($shippingMethod === null || $shipment === null || !$order->getShipments()->contains($shipment)) {
@@ -50,9 +50,9 @@ final class PplController
         assert($shipment instanceof ShipmentInterface);
         assert($shipment instanceof PplShipmentInterface);
 
-        $ktmId      = $request->query->get('KTMID');
+        $ktmId = $request->query->get('KTMID');
         $ktmAddress = $request->query->get('KTMaddress');
-        $ktmName    = $request->query->get('KTMname');
+        $ktmName = $request->query->get('KTMname');
 
         $shipment->setPplKTMID($ktmId);
         $shipment->setPplKTMaddress($ktmAddress);

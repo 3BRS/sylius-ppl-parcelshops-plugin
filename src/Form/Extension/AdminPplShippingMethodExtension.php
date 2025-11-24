@@ -30,17 +30,17 @@ class AdminPplShippingMethodExtension extends AbstractTypeExtension
     /** @param array<mixed> $options */
     public function buildForm(
         FormBuilderInterface $builder,
-        array                $options,
+        array $options,
     ): void {
         $builder
             ->add('pplParcelshopsShippingMethod', CheckboxType::class, [
-                'label'    => 'threebrs.admin.pplParcelShop.form.pplParcelshopsShippingMethod',
+                'label' => 'threebrs.admin.pplParcelShop.form.pplParcelshopsShippingMethod',
                 'required' => false,
             ])
             ->add('pplOptionCountry', ChoiceType::class, [
-                'label'    => 'threebrs.admin.pplParcelShop.form.pplOptionCountry',
+                'label' => 'threebrs.admin.pplParcelShop.form.pplOptionCountry',
                 'required' => false,
-                'choices'  => array_combine($this->countryChoices, $this->countryChoices),
+                'choices' => array_combine($this->countryChoices, $this->countryChoices),
                 'multiple' => false,
                 'expanded' => false,
             ]);

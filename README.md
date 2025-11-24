@@ -2,14 +2,14 @@
     PPL parcelshop plugin
     <br />
     <a href="https://packagist.org/packages/3BRS/sylius-ppl-parcelshop-plugin" title="License" target="_blank">
-        <img src="https://img.shields.io/packagist/l/mangoweb-sylius/sylius-ppl-parcelshops-plugin.svg" />
+        <img src="https://img.shields.io/packagist/l/3BRS/sylius-ppl-parcelshops-plugin.svg" />
     </a>
-    <a href="https://packagist.org/packages/mangoweb-sylius/sylius-ppl-parcelshops-plugin" title="Version" target="_blank">
-        <img src="https://img.shields.io/packagist/v/mangoweb-sylius/sylius-ppl-parcelshops-plugin.svg" />
+    <a href="https://packagist.org/packages/3BRS/sylius-ppl-parcelshops-plugin" title="Version" target="_blank">
+        <img src="https://img.shields.io/packagist/v/3BRS/sylius-ppl-parcelshops-plugin.svg" />
     </a>
-    <a href="https://travis-ci.org/mangoweb-sylius/SyliusPplParcelshopsPlugin" title="Build status" target="_blank">
-        <img src="https://img.shields.io/travis/mangoweb-sylius/SyliusPplParcelshopsPlugin/master.svg" />
-    </a>
+    <a href="https://circleci.com/gh/3BRS/sylius-ppl-parcelshops-plugin" title="Build status" target="_blank">
+       <img src="https://circleci.com/gh/3BRS/sylius-ppl-parcelshops-plugin.svg?style=shield" />
+   </a>
 </h1>
 
 ## Features
@@ -21,52 +21,57 @@
 
 ## Installation
 
-1. Run `$ composer require mangoweb-sylius/sylius-ppl-parcelshops-plugin`.
+1. Run `$ composer require 3brs/sylius-ppl-parcelshops-plugin`.
 1. Add plugin classes to your `config/bundles.php`:
 
-   ```php
-   return [
-      ...
-      ThreeBRS\ShipmentExportPlugin\ThreeBRSShipmentExportPlugin::class => ['all' => true],
-      ThreeBRS\SyliusPplParcelshopsPlugin\ThreeBRSSyliusPplParcelshopsPlugin::class => ['all' => true],
-   ];
-   ```
-   
-1. Add routing to `config/_routes.yaml`
+    ```php
+    return [
+    // ...
+        ThreeBRS\SyliusShipmentExportPlugin\ThreeBRSSyliusShipmentExportPlugin::class => ['all' => true],
+        ThreeBRS\SyliusPplParcelshopsPlugin\ThreeBRSSyliusPplParcelshopsPlugin::class => ['all' => true],
+    ];
+    ```
+
+1. Add routing to `config/routes.yaml`
 
     ```yaml
-    sylius_ppl_parcelshops_plugin:
-        resource: '@ThreeBRSPplParcelshopsPlugin/Resources/config/routing.yml'
-   
-    mango_sylius_shipment_export_plugin:
-        resource: '@ThreeBRSShipmentExportPlugin/Resources/config/routing.yml'
-        prefix: /admin
+    threebrs_sylius_shipment_export_plugin:
+        resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/routing.yml"
+        prefix: '/%sylius_admin.path_name%'
+
+    threebrs_sylius_ppl_parcelshops_plugin:
+        resource: '@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.yml'
+        prefix: /
     ```
-   
+
 1. Your Entity `Shipment` has to implement `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface`. 
    You can use the trait `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait`.
  
-   ```php
-   <?php 
+    ```php
+    <?php 
    
-   declare(strict_types=1);
+    declare(strict_types=1);
    
-   namespace App\Entity\Shipping;
+    namespace App\Entity\Shipping;
    
-   use Doctrine\ORM\Mapping as ORM;
-   use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
-   use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait;
-   use Sylius\Component\Core\Model\Shipment as BaseShipment;
+    use Doctrine\ORM\Mapping as ORM;
+    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
+    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait;
+    use Sylius\Component\Core\Model\Shipment as BaseShipment;
    
-   /**
-    * @ORM\Entity
-    * @ORM\Table(name="sylius_shipment")
-    */
-   class Shipment extends BaseShipment implements PplShipmentInterface
-   {
-       use PplShipmentTrait;
-   }
-   ```
+    use Doctrine\ORM\Mapping\MappedSuperclass;
+    use Doctrine\ORM\Mapping\Table;
+    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
+    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait;
+    use Sylius\Component\Core\Model\Shipment as BaseShipment;
+   
+    #[MappedSuperclass]
+    #[Table(name: 'sylius_shipment')]
+    class Shipment extends BaseShipment implements PplShipmentInterface
+    {
+        use PplShipmentTrait;
+    }
+    ```
    
 1. Your Entity `ShippingMethod` has to implement `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodInterface`. 
    You can use the trait `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodTrait`.

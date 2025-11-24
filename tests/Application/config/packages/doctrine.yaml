@@ -7,8 +7,7 @@ parameters:
 
 doctrine:
     dbal:
-        driver: 'pdo_sqlite'
-        path: "%kernel.project_dir%/var/db.sql"
+        url: '%env(resolve:DATABASE_URL)%'
         charset: UTF8
 
     orm:
@@ -18,7 +17,7 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity'
                 alias: App

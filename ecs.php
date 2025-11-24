@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
+use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
+use PhpCsFixer\Fixer\Import\SingleImportPerStatementFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return static function (ECSConfig $ecsConfig): void {
@@ -16,5 +18,10 @@ return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->skip([
         __DIR__ . '/tests/Application/var/',
         VisibilityRequiredFixer::class => ['*Spec.php'],
+    ]);
+
+    $ecsConfig->rules([
+        NoUnusedImportsFixer::class,
+        SingleImportPerStatementFixer::class,
     ]);
 };

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Model;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 trait PplShippingMethodTrait
 {
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN, nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $pplParcelshopsShippingMethod = null;
 
-    #[ORM\Column(nullable: true, type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplOptionCountry = null;
 
     public function getPplParcelshopsShippingMethod(): ?bool

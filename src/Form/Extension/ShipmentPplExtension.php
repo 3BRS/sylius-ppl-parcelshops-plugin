@@ -25,16 +25,16 @@ class ShipmentPplExtension extends AbstractTypeExtension
     private array $pplMethodsCodes = [];
 
     public function __construct(
-        private readonly ShippingMethodsResolverInterface  $shippingMethodsResolver,
+        private readonly ShippingMethodsResolverInterface $shippingMethodsResolver,
         private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
-        private readonly TranslatorInterface               $translator,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
     /** @param array<mixed> $options */
     public function buildForm(
         FormBuilderInterface $builder,
-        array                $options,
+        array $options,
     ): void {
         $builder
             ->add('pplKTMID', HiddenType::class)
@@ -48,16 +48,16 @@ class ShipmentPplExtension extends AbstractTypeExtension
                 assert(array_key_exists('pplKTMID', $orderData));
                 assert(array_key_exists('method', $orderData));
 
-                $orderData['pplKTMID']      = null;
-                $orderData['pplKTMname']    = null;
+                $orderData['pplKTMID'] = null;
+                $orderData['pplKTMname'] = null;
                 $orderData['pplKTMaddress'] = null;
                 if (
                     array_key_exists('pplKTMID_' . $orderData['method'], $orderData) &&
                     in_array($orderData['method'], $this->pplMethodsCodes, true) &&
                     $orderData['pplKTMID_' . $orderData['method']] !== ''
                 ) {
-                    $orderData['pplKTMID']      = $orderData['pplKTMID_' . $orderData['method']];
-                    $orderData['pplKTMname']    = $orderData['pplKTMname_' . $orderData['method']];
+                    $orderData['pplKTMID'] = $orderData['pplKTMID_' . $orderData['method']];
+                    $orderData['pplKTMname'] = $orderData['pplKTMname_' . $orderData['method']];
                     $orderData['pplKTMaddress'] = $orderData['pplKTMaddress_' . $orderData['method']];
                 }
 
@@ -65,14 +65,14 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
                 // validation
                 $data = $event->getData();
-                if (array_key_exists('pplKTMID_' . $data['method'], $data) && !((bool)$orderData['pplKTMID_' . $orderData['method']])) {
+                if (array_key_exists('pplKTMID_' . $data['method'], $data) && !((bool) $orderData['pplKTMID_' . $orderData['method']])) {
                     $event->getForm()->addError(new FormError($this->translator->trans('threebrs.shop.checkout.pplBranch', [], 'validators')));
                 }
             })
             ->addEventListener(FormEvents::PRE_SET_DATA, function (
                 FormEvent $event,
             ) {
-                $form     = $event->getForm();
+                $form = $event->getForm();
                 $shipment = $event->getData();
                 if ($shipment && $this->shippingMethodsResolver->supports($shipment)) {
                     $shippingMethods = $this->shippingMethodsResolver->getSupportedMethods($shipment);
@@ -104,23 +104,23 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         $this->pplMethodsCodes[] = $method->getCode();
                         $form
                             ->add('pplKTMID_' . $method->getCode(), HiddenType::class, [
-                                'attr'     => [
+                                'attr' => [
                                     'data-country' => $method->getPplOptionCountry(),
-                                    'data-label'   => $dataLabel,
+                                    'data-label' => $dataLabel,
                                 ],
-                                'data'     => $shipment->getPplKTMID(),
+                                'data' => $shipment->getPplKTMID(),
                                 'required' => false,
-                                'mapped'   => false,
+                                'mapped' => false,
                             ])
                             ->add('pplKTMname_' . $method->getCode(), HiddenType::class, [
                                 'required' => false,
-                                'mapped'   => false,
-                                'data'     => $shipment->getPplKTMname(),
+                                'mapped' => false,
+                                'data' => $shipment->getPplKTMname(),
                             ])
                             ->add('pplKTMaddress_' . $method->getCode(), HiddenType::class, [
                                 'required' => false,
-                                'mapped'   => false,
-                                'data'     => $shipment->getPplKTMaddress(),
+                                'mapped' => false,
+                                'data' => $shipment->getPplKTMaddress(),
                             ]);
                     }
                 }

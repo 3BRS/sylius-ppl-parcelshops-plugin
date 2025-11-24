@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Set\ValueObject\SetList;
+use Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Rector\ReorderAttributeArgumentsRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -28,4 +29,6 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::EARLY_RETURN,
         SetList::INSTANCEOF,
     ]);
+
+    $rectorConfig->rule(ReorderAttributeArgumentsRector::class);
 };
