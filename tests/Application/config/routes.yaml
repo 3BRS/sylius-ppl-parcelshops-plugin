@@ -3,5 +3,5 @@ threebrs_sylius_shipment_export_plugin:
     prefix: '/%sylius_admin.path_name%'
 
 threebrs_sylius_ppl_parcelshops_plugin:
-    resource: '@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.yml'
+    resource: '@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.y*ml'
     prefix: /

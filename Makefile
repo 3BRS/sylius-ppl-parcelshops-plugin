@@ -21,6 +21,7 @@ init:
 	./bin-docker/php ./bin/console assets:install
 	./bin-docker/yarn --cwd=tests/Application install --pure-lockfile
 	GULP_ENV=prod ./bin-docker/yarn --cwd=tests/Application build
+	./bin-docker/php ./bin/console lexik:jwt:generate-keypair --skip-if-exists --no-interaction
 	@make var
 
 init-tests:
@@ -40,6 +41,7 @@ init-tests:
 	./bin-docker/php ./bin/console --env=test assets:install
 	./bin-docker/yarn --cwd=tests/Application install --pure-lockfile
 	GULP_ENV=prod ./bin-docker/yarn --cwd=tests/Application build
+	./bin-docker/php ./bin/console --env=test lexik:jwt:generate-keypair --skip-if-exists --no-interaction
 	@make var
 
 cache:

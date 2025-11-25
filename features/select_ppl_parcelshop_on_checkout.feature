@@ -25,14 +25,14 @@ Feature: Select PPL parcelshop branch in checkout
 		When I confirm my order
 		Then I should see the thank you page
 
-	@ui
+	@ui @mink:panther
 	Scenario: Unable to complete shipping step with PPL parcelshop shipping methods without selecting the PPL parcelshop
 		Given I have product "PHP T-Shirt" in the cart
 		And I specified the billing address as "Ankh Morpork", "Frost Alley", "90210", "United States" for "Jon Snow"
 		When I select "PPL parcelshop" shipping method
 		Then I should not be able to go to the payment step again
 
-	@ui
+	@ui @mink:panther
 	Scenario: Complete order with PPL parcelshop shipping method
 		Given I have product "PHP T-Shirt" in the cart
 		And I specified the billing address as "Ankh Morpork", "Frost Alley", "90210", "United States" for "Jon Snow"

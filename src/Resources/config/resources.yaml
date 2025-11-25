@@ -1,0 +1,7 @@
+sylius_ui:
+    events:
+        sylius.shop.layout.javascripts:
+            blocks:
+                threebrs_sylius.sylius_ppl_plugin.shop.layout.javascripts:
+                    template: "@ThreeBRSSyliusPplParcelshopsPlugin/Shop/_javascripts.html.twig"
+                    priority: 5

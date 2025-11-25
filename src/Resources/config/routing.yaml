@@ -1,3 +1,5 @@
+# Deprecated route - kept only for backward compatibility with old orders using redirect-based parcelshop selection
+# New orders use the modal widget integration and do not require this route
 mango_sylius_ppl_parcelshop_return:
     path: /{_locale}/ppl/return-from-ppl/{methodCode}
     defaults:

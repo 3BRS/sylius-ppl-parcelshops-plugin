@@ -12,18 +12,24 @@ use Sylius\Component\Core\Repository\ShippingMethodRepositoryInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use ThreeBRS\SyliusPplParcelshopsPlugin\Controller\Partials\GetFlashBagTrait;
 use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
 
+/**
+ * @deprecated This controller is deprecated and kept only for backward compatibility
+ *             with old orders using the redirect-based parcelshop selection.
+ *             New orders use the modal widget integration.
+ */
 final class PplController
 {
+    use GetFlashBagTrait;
+
     public function __construct(
         private readonly RouterInterface $router,
         private readonly ShipmentRepositoryInterface $shipmentRepository,
         private readonly CartContextInterface $cartContext,
-        private readonly FlashBagInterface $flashBag,
         private readonly TranslatorInterface $translator,
         private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
     ) {
@@ -42,7 +48,7 @@ final class PplController
         $shippingMethod = $this->shippingMethodRepository->findOneBy(['code' => $methodCode]);
 
         if ($shippingMethod === null || $shipment === null || !$order->getShipments()->contains($shipment)) {
-            $this->flashBag->add('error', $this->translator->trans('threebrs.shop.checkout.shippingStep.pplError'));
+            $this->getFlashBag($request)->add('error', $this->translator->trans('threebrs.shop.checkout.shippingStep.pplError'));
 
             return new RedirectResponse($this->router->generate($redirectTo));
         }

@@ -36,101 +36,58 @@
 
     ```yaml
     threebrs_sylius_shipment_export_plugin:
-        resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/routing.yml"
+        resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/routing.y*ml"
         prefix: '/%sylius_admin.path_name%'
 
     threebrs_sylius_ppl_parcelshops_plugin:
-        resource: '@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.yml'
+        resource: '@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.y*ml'
         prefix: /
+    ```
+
+1. Add config to `config/packages/_sylius.yaml`
+    ```yaml
+    imports:
+    # ...
+        - { resource: "@ThreeBRSSyliusPplParcelshopsPlugin/config/config.y*ml" }
     ```
 
 1. Your Entity `Shipment` has to implement `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface`. 
    You can use the trait `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait`.
- 
-    ```php
-    <?php 
-   
-    declare(strict_types=1);
-   
-    namespace App\Entity\Shipping;
-   
-    use Doctrine\ORM\Mapping as ORM;
-    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
-    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait;
-    use Sylius\Component\Core\Model\Shipment as BaseShipment;
-   
-    use Doctrine\ORM\Mapping\MappedSuperclass;
-    use Doctrine\ORM\Mapping\Table;
-    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
-    use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentTrait;
-    use Sylius\Component\Core\Model\Shipment as BaseShipment;
-   
-    #[MappedSuperclass]
-    #[Table(name: 'sylius_shipment')]
-    class Shipment extends BaseShipment implements PplShipmentInterface
-    {
-        use PplShipmentTrait;
-    }
-    ```
    
 1. Your Entity `ShippingMethod` has to implement `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodInterface`. 
    You can use the trait `\ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodTrait`.
- 
-   ```php
-   <?php 
-   
-   declare(strict_types=1);
-   
-   namespace App\Entity\Shipping;
-   
-   use Doctrine\ORM\Mapping as ORM;
-   use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodInterface;
-   use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodTrait;
-   use Sylius\Component\Core\Model\ShippingMethod as BaseShippingMethod;
-   
-   /**
-    * @ORM\Entity
-    * @ORM\Table(name="sylius_shipping_method")
-    */
-   class ShippingMethod extends BaseShippingMethod implements PplShippingMethodInterface
-   {
-       use PplShippingMethodTrait;
-   }
-   ```
 
-1. Include `@ThreeBRSPplParcelshopsPlugin/Admin/ShippingMethod/_pplForm.html.twig` into `@SyliusAdmin/ShippingMethod/_form.html.twig`.
+1. Include `@ThreeBRSSyliusPplParcelshopsPlugin/Admin/ShippingMethod/_pplForm.html.twig` into `@SyliusAdmin/ShippingMethod/_form.html.twig`.
  
     ```twig
-    ...	
-   {{ include('@ThreeBRSPplParcelshopsPlugin/Admin/ShippingMethod/_pplForm.html.twig') }}
+    {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Admin/ShippingMethod/_pplForm.html.twig') }}
     ```
    
-1. Include `@ThreeBRSPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig` into `@SyliusShop/Checkout/SelectShipping/_choice.html.twig`.
+1. Include `@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig` into `@SyliusShop/Checkout/SelectShipping/_choice.html.twig`.
  
     ```twig
-    ...
-   {{ include('@ThreeBRSPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig') }}
+    {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig') }}
     ```
    
 1. Replace `{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}` 
-   with `{{ include('@ThreeBRSPplParcelshopsPlugin/Shop/Common/Order/_addresses.html.twig') }}` 
+   with `{{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Common/Order/_addresses.html.twig') }}` 
    in `@SyliusShop/Common/Order/_addresses.html.twig`
 
 1. Replace `{% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}` 
-   with `{{ include('@ThreeBRSPplParcelshopsPlugin/Admin/Common/Order/_addresses.html.twig') }}` 
+   with `{{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Admin/Common/Order/_addresses.html.twig') }}` 
    in `@SyliusAdmin/Order/Show/_addresses.html.twig`
 
 1. Override the template in `@ThreeBRSShipmentExportPlugin/_row.html.twig`
     ```twig
-   {% extends '@ThreeBRSShipmentExportPlugin/_row.html.twig' %}
-   
-   {% block address %}
-       {% if row.pplKTMID %}
-          {{ include('@ThreeBRSPplParcelshopsPlugin/_exporterRow.html.twig') }}
-       {% else %}
-          {{ parent() }}
-       {% endif %}
-   {% endblock %}
+    {% extends '@ThreeBRSShipmentExportPlugin/_row.html.twig' %}
+
+    {% block address %}
+        {% if row.pplKTMID %}
+           {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/_exporterRow.html.twig') }}
+        {% else %}
+           {{ parent() }}
+        {% endif %}
+    {% endblock %}
     ```
    
 1. Create and run doctrine database migrations.
@@ -141,10 +98,11 @@ For the guide how to use your own entity see [Sylius docs - Customizing Models](
 
 * For delivery to the PPL parcelshop, create new shipping method in the admin panel, check `To PPL ParcelShop enabled`.
 * PPL CSV export will be generated for shipping method which has the code 'ppl_parcel_shop', you can change this in parameters, it is an array.
-  ```yaml
-  parameters:
-      pplShippingMethodsCodes: ['ppl_parcel_shop']
-  ```
+
+    ```yaml
+    parameters:
+        pplShippingMethodsCodes: ['ppl_parcel_shop']
+    ```
 
 ## Development
 

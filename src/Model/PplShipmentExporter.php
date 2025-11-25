@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Model;
 
+use Payum\Core\Model\GatewayConfigInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Currency\Converter\CurrencyConverter;
+use Sylius\Component\Order\Model\OrderInterface;
 use ThreeBRS\SyliusShipmentExportPlugin\Model\ShipmentExporterInterface;
 
 class PplShipmentExporter implements ShipmentExporterInterface
@@ -50,7 +52,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
         assert($shipment instanceof PplShipmentInterface);
 
         $order = $shipment->getOrder();
-        assert($order instanceof \Sylius\Component\Order\Model\OrderInterface);
+        assert($order instanceof OrderInterface);
         $channel = $order->getChannel();
         assert($channel !== null);
         $address = $order->getShippingAddress();
@@ -64,7 +66,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
         assert($payment instanceof PaymentInterface);
         $paymentMethod = $payment->getMethod();
         assert($paymentMethod instanceof PaymentMethodInterface);
-        assert($paymentMethod->getGatewayConfig() instanceof \Payum\Core\Model\GatewayConfigInterface);
+        assert($paymentMethod->getGatewayConfig() instanceof GatewayConfigInterface);
 
         $isCashOnDelivery = $paymentMethod->getGatewayConfig()->getFactoryName() === 'offline';
 
@@ -74,7 +76,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
         $targetCurrencyCode = 'CZK';
         $totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 
-        $totalAmount = number_format(
+        $totalAmount = \number_format(
             $totalAmount / 100,
             0,
             '.',

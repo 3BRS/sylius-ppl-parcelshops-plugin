@@ -34,7 +34,7 @@ final class ShippingMethodContext implements Context
 	/**
 	 * @Given choose PPL parcelshop ID ":id", name ":name" and address ":address"
 	 */
-	public function choosePplBranch(int $id, string $name, string $address)
+	public function choosePplBranch(string $id, string $name, string $address)
 	{
 		$order = $this->sharedStorage->get('order');
 		assert($order instanceof OrderInterface);

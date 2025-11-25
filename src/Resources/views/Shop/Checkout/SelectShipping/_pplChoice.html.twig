@@ -1,33 +1,57 @@
-{% if form.parent.parent['pplKTMID_' ~ method.code] is defined and form.parent.parent['pplKTMID_' ~ method.code] %}
-    {% set inputId = form.parent.parent['pplKTMID_' ~ method.code].vars.id %}
-    {% set labelId = inputId ~ '_title' %}
-    {% set countrOption = form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-country'] %}
-    {% set prefillAdress = order.shippingAddress.postcode ~ ',' ~ order.shippingAddress.street %}
-    {% set returnUrl = url('mango_sylius_ppl_parcelshop_return', {
-        'methodCode': method.code,
-        'sessid': shipment.id
-    })|url_encode ~ '%26KTMID%3d{0}%26KTMaddress%3d{1}%26KTMname%3d{2}' %}
+{% if form.parent.parent['ppl_data_' ~ method.code] is defined and form.parent.parent['ppl_data_' ~ method.code] %}
+    {% set inputId = form.parent.parent['ppl_data_' ~ method.code].vars.id %}
+    {% set buttonId = inputId ~ '_button' %}
+    {% set modalId = inputId ~ '_modal' %}
+    {% set countryOption = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-country'] %}
+    {% set latitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lat'] %}
+    {% set longitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lng'] %}
+    {% set language = app.request.locale in ['cs', 'en'] ? app.request.locale : 'cs' %}
 
     <div class="ui hidden divider"></div>
     <div class="center aligned ui grid">
-        <a id="{{ labelId }}"
-           class="ui secondary basic button"
-           href="https://www.pplbalik.cz/Main3.aspx?cls=KTMMap&CountryCode={{ countrOption }}&KTMAddress={{ prefillAdress|url_encode }}&ReturnUrl={{ returnUrl }}"
-        >
-            {% if form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is not empty %}
-                {{ form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] }}
+        <button type="button"
+                id="{{ buttonId }}"
+                class="ui secondary basic button"
+                onclick="openPplModal('{{ modalId }}')">
+            {% if form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] is not empty %}
+                {{ form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] }}
             {% else %}
                 {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
             {% endif %}
-        </a>
+        </button>
     </div>
     <div class="ui hidden divider"></div>
 
-    {{ form_widget(form.parent.parent['pplKTMID_' ~ method.code]) }}
-    {{ form_widget(form.parent.parent['pplKTMname_' ~ method.code]) }}
-    {{ form_widget(form.parent.parent['pplKTMaddress_' ~ method.code]) }}
+    {# Modal for PPL widget #}
+    <div id="{{ modalId }}" class="ui modal" style="display: none;"
+    data-ppl-input-id="{{ inputId }}" data-ppl-button-id="{{ buttonId }}" data-ppl-modal-id="{{ modalId }}">
+        <i class="close icon" onclick="closePplModal('{{ modalId }}')"></i>
+        <div class="header">
+            {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
+        </div>
+        <div class="content" style="height: 720px;">
+            <div id="ppl-parcelshop-map"
+                 data-mode="default"
+                 data-lat="{{ latitude }}"
+                 data-lng="{{ longitude }}"
+                 data-language="{{ language }}"
+                 data-country="{{ countryOption|lower }}"
+                 style="height: 100%; width: 100%;"></div>
+        </div>
+    </div>
+
+    {# Hidden field for JSON data #}
+    {{ form_widget(form.parent.parent['ppl_data_' ~ method.code]) }}
+
+    {# Deprecated fields for backward compatibility #}
+    {% if form.parent.parent['pplKTMID_' ~ method.code] is defined %}
+        {{ form_widget(form.parent.parent['pplKTMID_' ~ method.code]) }}
+        {{ form_widget(form.parent.parent['pplKTMname_' ~ method.code]) }}
+        {{ form_widget(form.parent.parent['pplKTMaddress_' ~ method.code]) }}
+    {% endif %}
 {% endif %}
 
-{{ form_widget(form.parent.parent.pplKTMID) }}
-{{ form_widget(form.parent.parent.pplKTMname) }}
-{{ form_widget(form.parent.parent.pplKTMaddress) }}
+{# Deprecated main fields for backward compatibility #}
+{#{{ form_widget(form.parent.parent.pplKTMID) }}#}
+{#{{ form_widget(form.parent.parent.pplKTMname) }}#}
+{#{{ form_widget(form.parent.parent.pplKTMaddress) }}#}

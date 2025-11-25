@@ -40,7 +40,6 @@ services:
             $router: '@router'
             $shipmentRepository: '@sylius.repository.shipment'
             $cartContext: '@sylius.context.cart.composite'
-            $flashBag: '@session.flash_bag'
             $translator: '@translator'
             $shippingMethodRepository: '@sylius.repository.shipping_method'
         tags:

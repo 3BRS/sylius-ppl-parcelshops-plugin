@@ -3,7 +3,6 @@ default:
         select_ppl_parcelshop_on_checkout:
             contexts:
                 - sylius.behat.context.hook.doctrine_orm
-                - sylius.behat.context.hook.email_spool
 
                 - sylius.behat.context.setup.channel
                 - sylius.behat.context.setup.currency

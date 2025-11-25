@@ -8,7 +8,7 @@ use Sylius\Behat\Page\Admin\Channel\UpdatePageInterface as BaseUpdatePageInterfa
 
 interface PplPagesInterface extends BaseUpdatePageInterface
 {
-	public function selectPplBranch(int $id, string $name, string $address): void;
+	public function selectPplBranch(string $id, string $name, string $address): void;
 
 	public function iSeePplBranchInsteadOfShippingAddress(): bool;
 }
