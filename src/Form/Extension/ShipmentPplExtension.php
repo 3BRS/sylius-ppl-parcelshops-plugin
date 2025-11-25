@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Form\Extension;
 
+use JsonException;
 use Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType;
 use Sylius\Component\Addressing\Model\ZoneInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
@@ -38,80 +39,19 @@ class ShipmentPplExtension extends AbstractTypeExtension
         array $options,
     ): void {
         $builder
-            ->add('pplKTMID', HiddenType::class)
-            // Deprecated fields - kept for backward compatibility
-            ->add('pplKTMname', HiddenType::class)
-            ->add('pplKTMaddress', HiddenType::class)
             ->addEventListener(FormEvents::PRE_SUBMIT, function (
                 FormEvent $event,
             ): void {
                 $orderData = $event->getData();
 
-                assert(\array_key_exists('pplKTMID', $orderData));
                 assert(\array_key_exists('method', $orderData));
-
-                $orderData['pplKTMID'] = null;
-                $orderData['pplKTMname'] = null;
-                $orderData['pplKTMaddress'] = null;
-
-                // Handle new JSON-based data
-                if (
-                    \array_key_exists('ppl_data_' . $orderData['method'], $orderData) &&
-                    \in_array($orderData['method'], $this->pplMethodsCodes, true) &&
-                    $orderData['ppl_data_' . $orderData['method']] !== ''
-                ) {
-                    $pplData = \json_decode($orderData['ppl_data_' . $orderData['method']], true);
-
-                    if ($pplData && \is_array($pplData)) {
-                        // Extract data for deprecated fields (backward compatibility)
-                        $orderData['pplKTMID'] = $pplData['code'] ?? null;
-                        $orderData['pplKTMname'] = $pplData['name'] ?? null;
-
-                        // Build address string from address object
-                        $addressParts = [];
-                        if (isset($pplData['address'])) {
-                            if (isset($pplData['address']['street'])) {
-                                $addressParts[] = $pplData['address']['street'];
-                            }
-                            if (isset($pplData['address']['city'])) {
-                                $addressParts[] = $pplData['address']['city'];
-                            }
-                            if (isset($pplData['address']['zipCode'])) {
-                                $addressParts[] = $pplData['address']['zipCode'];
-                            }
-                        }
-                        $orderData['pplKTMaddress'] = \implode(', ', $addressParts);
-
-                        // Also populate deprecated per-method fields if they exist
-                        if (\array_key_exists('pplKTMID_' . $orderData['method'], $orderData)) {
-                            $orderData['pplKTMID_' . $orderData['method']] = $orderData['pplKTMID'];
-                            $orderData['pplKTMname_' . $orderData['method']] = $orderData['pplKTMname'];
-                            $orderData['pplKTMaddress_' . $orderData['method']] = $orderData['pplKTMaddress'];
-                        }
-                    }
-                }
-                // Fallback: handle old redirect-based data (backward compatibility)
-                elseif (
-                    \array_key_exists('pplKTMID_' . $orderData['method'], $orderData) &&
-                    \in_array($orderData['method'], $this->pplMethodsCodes, true) &&
-                    $orderData['pplKTMID_' . $orderData['method']] !== ''
-                ) {
-                    $orderData['pplKTMID'] = $orderData['pplKTMID_' . $orderData['method']];
-                    $orderData['pplKTMname'] = $orderData['pplKTMname_' . $orderData['method']];
-                    $orderData['pplKTMaddress'] = $orderData['pplKTMaddress_' . $orderData['method']];
-                }
-
-                $event->setData($orderData);
+                $method = $orderData['method'];
 
                 // Validation - check if parcelshop was selected for PPL methods
-                $data = $event->getData();
                 if (
-                    \in_array($data['method'], $this->pplMethodsCodes, true) &&
-                    (
-                        (\array_key_exists('ppl_data_' . $data['method'], $data) && empty($data['ppl_data_' . $data['method']])) ||
-                        (\array_key_exists('pplKTMID_' . $data['method'], $data) && empty($data['pplKTMID_' . $data['method']]))
-                    ) &&
-                    empty($orderData['pplKTMID'])
+                    \in_array($method, $this->pplMethodsCodes, true) &&
+                    \array_key_exists('ppl_data_' . $method, $orderData) &&
+                    empty($orderData['ppl_data_' . $method])
                 ) {
                     $event->getForm()->addError(new FormError($this->translator->trans('threebrs.shop.checkout.pplBranch', [], 'validators')));
                 }
@@ -143,7 +83,7 @@ class ShipmentPplExtension extends AbstractTypeExtension
                 // Try to get more accurate coordinates from address
                 // In production, you might want to geocode the address
                 if ($shippingAddress) {
-                    // For Czech Republic, use approximate coordinates based on postal code prefix
+                    // For the Czech Republic, use approximate coordinates based on postal code prefix
                     // This is a simple approximation - for better accuracy, use a geocoding service
                     $postcode = $shippingAddress->getPostcode();
                     if ($postcode && \preg_match('/^(\d{3})/', $postcode, $matches)) {
@@ -168,20 +108,21 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         if ($selectedMethodCode !== null && $selectedMethodCode === $method->getCode()) {
                             // Try to get stored JSON data first
                             if (\method_exists($shipment, 'getPplData') && $shipment->getPplData() !== null) {
-                                $pplJsonData = $shipment->getPplData();
-                                $pplArray = \json_decode($pplJsonData, true);
-                                if ($pplArray && isset($pplArray['name'])) {
-                                    $labelParts = [$pplArray['name']];
-                                    if (isset($pplArray['address']['street'])) {
-                                        $labelParts[] = $pplArray['address']['street'];
+                                $pplData = $shipment->getPplData();
+                                // Store the JSON data for the hidden field
+                                $pplJsonData = \json_encode($pplData);
+
+                                if ($pplData && isset($pplData['name'])) {
+                                    $labelParts = [$pplData['name']];
+                                    if (isset($pplData['street'])) {
+                                        $labelParts[] = $pplData['street'];
                                     }
-                                    if (isset($pplArray['address']['city'])) {
-                                        $labelParts[] = $pplArray['address']['city'];
+                                    if (isset($pplData['city'])) {
+                                        $labelParts[] = $pplData['city'];
                                     }
                                     $dataLabel = \implode(', ', $labelParts);
                                 }
-                            }
-                            // Fallback to deprecated fields
+                            } // Fallback to deprecated fields
                             elseif ($shipment->getPplKTMID() !== null) {
                                 $dataLabel = $shipment->getPplKTMname() . ', ' . $shipment->getPplKTMaddress();
                             }
@@ -189,7 +130,7 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
                         $this->pplMethodsCodes[] = $method->getCode();
 
-                        // Add new JSON data field
+                        // Add JSON data field
                         $form->add('ppl_data_' . $method->getCode(), HiddenType::class, [
                             'attr' => [
                                 'data-country' => $method->getPplOptionCountry(),
@@ -201,28 +142,6 @@ class ShipmentPplExtension extends AbstractTypeExtension
                             'required' => false,
                             'mapped' => false,
                         ]);
-
-                        // Add deprecated fields for backward compatibility
-                        $form
-                            ->add('pplKTMID_' . $method->getCode(), HiddenType::class, [
-                                'attr' => [
-                                    'data-country' => $method->getPplOptionCountry(),
-                                    'data-label' => $dataLabel,
-                                ],
-                                'data' => $shipment->getPplKTMID(),
-                                'required' => false,
-                                'mapped' => false,
-                            ])
-                            ->add('pplKTMname_' . $method->getCode(), HiddenType::class, [
-                                'required' => false,
-                                'mapped' => false,
-                                'data' => $shipment->getPplKTMname(),
-                            ])
-                            ->add('pplKTMaddress_' . $method->getCode(), HiddenType::class, [
-                                'required' => false,
-                                'mapped' => false,
-                                'data' => $shipment->getPplKTMaddress(),
-                            ]);
                     }
                 }
             })
@@ -247,7 +166,12 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         $pplJsonData = $pplDataField->getData();
 
                         if ($pplJsonData && \is_string($pplJsonData)) {
-                            $shipment->setPplData($pplJsonData);
+                            try {
+                                $pplData = \json_decode($pplJsonData, true, 512, \JSON_THROW_ON_ERROR);
+                                $shipment->setPplData($pplData);
+                            } catch (JsonException $jsonException) {
+                                trigger_error($jsonException->getMessage(), \E_USER_WARNING);
+                            }
                         }
                     }
                 }

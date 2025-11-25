@@ -87,7 +87,7 @@ Form extensions augment existing Sylius forms:
 
 - **`ShipmentPplExtension`**: Extends checkout shipment form to include PPL parcelshop selection widget
 - **`AdminPplShippingMethodExtension`**: Extends admin shipping method form to configure PPL settings
-  - Configured with `mango_sylius_ppl_parcelshops_plugin_ppl_countries` parameter (defaults: CZ, PL)
+  - Configured with `threebrs_sylius_ppl_parcelshops_plugin_ppl_countries` parameter (defaults: CZ, PL)
 
 #### 4. CSV Export System
 
@@ -133,7 +133,7 @@ The `tests/Application/` directory contains a minimal Sylius application for tes
 Key parameters in `src/Resources/config/services.yml`:
 
 - `pplShippingMethodsCodes`: Array of shipping method codes that should export to PPL (default: `['ppl_parcel_shop']`)
-- `mango_sylius_ppl_parcelshops_plugin_ppl_countries`: Array of country codes for PPL service (default: `['CZ', 'PL']`)
+- `threebrs_sylius_ppl_parcelshops_plugin_ppl_countries`: Array of country codes for PPL service (default: `['CZ', 'PL']`)
 
 ## PHPStan Configuration
 

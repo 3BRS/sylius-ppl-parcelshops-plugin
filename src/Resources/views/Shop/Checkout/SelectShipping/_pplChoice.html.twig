@@ -42,16 +42,4 @@
 
     {# Hidden field for JSON data #}
     {{ form_widget(form.parent.parent['ppl_data_' ~ method.code]) }}
-
-    {# Deprecated fields for backward compatibility #}
-    {% if form.parent.parent['pplKTMID_' ~ method.code] is defined %}
-        {{ form_widget(form.parent.parent['pplKTMID_' ~ method.code]) }}
-        {{ form_widget(form.parent.parent['pplKTMname_' ~ method.code]) }}
-        {{ form_widget(form.parent.parent['pplKTMaddress_' ~ method.code]) }}
-    {% endif %}
 {% endif %}
-
-{# Deprecated main fields for backward compatibility #}
-{#{{ form_widget(form.parent.parent.pplKTMID) }}#}
-{#{{ form_widget(form.parent.parent.pplKTMname) }}#}
-{#{{ form_widget(form.parent.parent.pplKTMaddress) }}#}

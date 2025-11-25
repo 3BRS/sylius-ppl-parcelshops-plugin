@@ -6,17 +6,24 @@ namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
 use Doctrine\ORM\EntityManagerInterface;
+use SM\Factory\FactoryInterface;
+use Sylius\Component\Core\OrderCheckoutTransitions;
+use Sylius\Component\Shipping\ShipmentTransitions;
 use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
 use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Core\Model\ShippingMethodInterface;
 
 final class ShippingMethodContext implements Context
 {
-	public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SharedStorageInterface $sharedStorage)
- {
- }
+	public function __construct(
+		private readonly EntityManagerInterface $entityManager,
+		private readonly SharedStorageInterface $sharedStorage,
+		private readonly FactoryInterface $stateMachineFactory,
+	) {
+	}
 
 	/**
 	 * @Given /^(this shipping method) is enabled PPL parcelshops$/
@@ -45,6 +52,12 @@ final class ShippingMethodContext implements Context
 		$shipment->setPplKTMname($name);
 		$shipment->setPplKTMaddress($address);
 		$shipment->setPplKTMID($id);
+
+		// Complete the order so shipment transitions to ready state
+		$stateMachine = $this->stateMachineFactory->get($order, OrderCheckoutTransitions::GRAPH);
+		if ($stateMachine->can(OrderCheckoutTransitions::TRANSITION_COMPLETE)) {
+			$stateMachine->apply(OrderCheckoutTransitions::TRANSITION_COMPLETE);
+		}
 
 		$this->entityManager->persist($order);
 		$this->entityManager->flush();

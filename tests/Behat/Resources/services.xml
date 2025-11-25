@@ -29,6 +29,7 @@
 				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup\ShippingMethodContext">
 			<argument type="service" id="doctrine.orm.entity_manager"/>
 			<argument type="service" id="sylius.behat.shared_storage"/>
+			<argument type="service" id="sm.factory"/>
 		</service>
 
 		<service id="sylius_ppl_parcelshops_plugin.context.ui.shop.managing_ppl_context"
@@ -43,6 +44,19 @@
 				 parent="sylius.behat.page.admin.crud.update" public="false">
 			<argument type="string">sylius_admin_channel_update</argument>
 		</service>
+
+	<service id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface"
+			 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPage"
+			 parent="sylius.behat.symfony_page" public="false">
+	</service>
+
+	<service id="sylius_ppl_parcelshops_plugin.context.ui.admin.managing_shipment_export"
+			 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShipmentExportContext">
+		<argument type="service"
+				  id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface"/>
+		<argument type="service" id="sylius.behat.shared_storage"/>
+		<argument type="service" id="behat.mink.default_session"/>
+	</service>
 
 	</services>
 </container>
