@@ -1,6 +1,7 @@
 parameters:
-    pplShippingMethodsCodes: [ 'ppl_parcel_shop' ]
-    threebrs_sylius_ppl_parcelshops_plugin_ppl_countries: [ 'CZ', 'PL' ]
+    threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes: [ 'ppl_parcel_shop' ]
+    # https://ppl-widget-e.apidog.io/configuration-parameters-863668m0
+    threebrs_sylius_ppl_parcelshops_plugin_ppl_countries: [ 'CZ', 'SK', 'DE', 'PL', 'HU', 'BG' , 'RO', 'NL', 'AT' ]
 
 services:
     _defaults:
@@ -10,9 +11,10 @@ services:
 
     ThreeBRS\SyliusPplParcelshopsPlugin\Form\Extension\ShipmentPplExtension:
         arguments:
-            - '@sylius.shipping_methods_resolver'
-            - '@sylius.repository.shipping_method'
-            - '@translator'
+            $shippingMethodsResolver: '@sylius.shipping_methods_resolver'
+            $shippingMethodRepository: '@sylius.repository.shipping_method'
+            $translator: '@translator'
+            $allowedCountries: '%threebrs_sylius_ppl_parcelshops_plugin_ppl_countries%'
         tags:
             -   name: form.type_extension
                 extended_type: Sylius\Bundle\CoreBundle\Form\Type\Checkout\ShipmentType
@@ -23,12 +25,13 @@ services:
                 extended_type: Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType
         arguments:
             $countryChoices: '%threebrs_sylius_ppl_parcelshops_plugin_ppl_countries%'
+            $translator: '@translator'
 
     ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentExporter:
         public: true
         arguments:
             $currencyConverter: '@sylius.currency_converter'
-            $pplShippingMethodsCodes: '%pplShippingMethodsCodes%'
+            $pplShippingMethodsCodes: '%threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes%'
         tags:
             -   name: threebrs.shipment_exporter_type
                 type: 'ppl_parcel_shop'

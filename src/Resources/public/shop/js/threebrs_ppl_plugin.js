@@ -1,6 +1,7 @@
 /**
  * PPL Parcelshop Widget Integration
  * Handles parcelshop selection via PPL's modal widget
+ * https://ppl-widget-e.apidog.io/-inserting-and-displaying-a-map-863666m0
  */
 
 function initPplParcelshopWidget(inputId, buttonId, modalId) {
@@ -115,8 +116,7 @@ function updatePplButtonsForShipment(shipmentContainer) {
 
     pplButtons.forEach(button => {
         const buttonMethodCode = button.dataset.methodCode;
-        const shouldDisable = (buttonMethodCode !== selectedMethodCode);
-        button.disabled = shouldDisable;
+        button.disabled = (buttonMethodCode !== selectedMethodCode);
     });
 }
 

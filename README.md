@@ -199,14 +199,14 @@ parameters:
     # Shipping method codes that should be exported to PPL CSV format
     # Default: ['ppl_parcel_shop']
     # IMPORTANT: Only shipments using shipping methods with these codes will be exported
-    pplShippingMethodsCodes: ['ppl_parcel_shop', 'your_custom_ppl_method']
+    threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes: ['ppl_parcel_shop', 'your_custom_ppl_method']
 
     # Country codes where PPL parcelshop service is available
-    # Default: ['CZ', 'PL']
-    threebrs_sylius_ppl_parcelshops_plugin_ppl_countries: ['CZ', 'PL']
+    # Default: ['CZ', 'SK', 'DE', 'PL', 'HU', 'BG', 'RO', 'NL', 'AT']
+    threebrs_sylius_ppl_parcelshops_plugin_ppl_countries: ['CZ', 'SK', 'DE', 'PL', 'HU', 'BG', 'RO', 'NL', 'AT']
 ```
 
-**Note:** The `pplShippingMethodsCodes` parameter determines which shipments will appear in the export list. Make sure your shipping method code matches one of the codes in this array, otherwise the shipments won't be available for export.
+**Note:** The `threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes` parameter determines which shipments will appear in the export list. Make sure your shipping method code matches one of the codes in this array, otherwise the shipments won't be available for export.
 
 ## Usage
 
@@ -214,14 +214,16 @@ parameters:
 
 1. Go to the admin panel: **Shipping Methods** → **Create**
 2. Fill in the basic information:
-   - **Code**: Use `ppl_parcel_shop` (default) or a custom code that matches the `pplShippingMethodsCodes` parameter
+   - **Code**: Use `ppl_parcel_shop` (default) or a custom code that matches the `threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes` parameter
    - **Zone**: Select appropriate shipping zone
    - **Calculator**: Choose your preferred shipping calculator
 3. Check the **"To PPL ParcelShop enabled"** option
-4. Select the countries where this shipping method should be available
+4. Configure PPL country options:
+   - **Display ParcelShops from selected countries**: Choose which countries' parcelshops should be available for selection (multiple selection allowed)
+   - **Default selected country on the map with ParcelShops**: Choose which country will be pre-selected when the parcelshop map opens
 5. Save the shipping method
 
-**Important:** The shipping method code must be listed in the `pplShippingMethodsCodes` parameter (see Configuration section above). If using a custom code, add it to this parameter in your configuration.
+**Important:** The shipping method code must be listed in the `threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes` parameter (see Configuration section above). If using a custom code, add it to this parameter in your configuration.
 
 ### 2. Customer Checkout Flow
 

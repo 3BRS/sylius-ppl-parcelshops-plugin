@@ -13,7 +13,7 @@ Feature: Select PPL parcelshop branch in checkout
 		And the store allows paying with "CSOB"
 		And I am a logged in customer
 
-	@ui
+	@ui @mink:panther
 	Scenario: Complete order with non PPL parcelshop shipping method
 		Given I have product "PHP T-Shirt" in the cart
 		And I specified the billing address as "Ankh Morpork", "Frost Alley", "90210", "United States" for "Jon Snow"

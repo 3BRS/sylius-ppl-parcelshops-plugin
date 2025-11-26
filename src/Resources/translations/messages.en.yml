@@ -12,7 +12,8 @@ threebrs:
             title: PPL ParcelShop
             form:
                 pplParcelshopsShippingMethod: To PPL ParcelShop enabled
-                pplOptionCountry: Show ParcelShops from country
+                pplOptionCountries: Display ParcelShops from selected countries
+                pplDefaultCountry: Default selected country on the map with ParcelShops
             export:
                 toPplBranch: To PPL ParcelShop
                 toAddress: To address

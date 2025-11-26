@@ -2,7 +2,8 @@
     {% set inputId = form.parent.parent['ppl_data_' ~ method.code].vars.id %}
     {% set buttonId = inputId ~ '_button' %}
     {% set modalId = inputId ~ '_modal' %}
-    {% set countryOption = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-country'] %}
+    {% set countriesOption = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-allowed-countries']|lower %}
+    {% set defaultCountry = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-default-country']|lower %}
     {% set latitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lat'] %}
     {% set longitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lng'] %}
     {% set language = app.request.locale in ['cs', 'en'] ? app.request.locale : 'cs' %}
@@ -44,7 +45,8 @@
                  data-lat="{{ latitude }}"
                  data-lng="{{ longitude }}"
                  data-language="{{ language }}"
-                 data-country="{{ countryOption|lower }}"
+                 data-countries="{{ countriesOption }}"
+                 data-country="{{ defaultCountry }}"
                  style="height: 100%; width: 100%;"></div>
         </div>
     </div>

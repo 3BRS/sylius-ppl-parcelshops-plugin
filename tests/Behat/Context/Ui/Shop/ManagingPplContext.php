@@ -27,7 +27,7 @@ final class ManagingPplContext implements Context
 	}
 
 	/**
-	 * @Then I choose PPL parcelshop with ID ":id", name ":name" and address ":address"
+	 * @When I choose PPL parcelshop with ID :id, name :name and address :address
 	 */
 	public function iSelectPplBranch(string $id, string $name, string $address)
 	{

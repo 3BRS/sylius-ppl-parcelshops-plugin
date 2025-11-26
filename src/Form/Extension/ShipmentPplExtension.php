@@ -32,6 +32,8 @@ class ShipmentPplExtension extends AbstractTypeExtension
         /** @var ShippingMethodRepositoryInterface<ShippingMethodInterface> */
         private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
         private readonly TranslatorInterface $translator,
+        /** @var array<string>|null */
+        private readonly ?array $allowedCountries,
     ) {
     }
 
@@ -149,7 +151,8 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         // Add JSON data field
                         $form->add('ppl_data_' . $method->getCode(), HiddenType::class, [
                             'attr' => [
-                                'data-country' => $method->getPplOptionCountry(),
+                                'data-allowed-countries' => $this->getAllowedCountriesForMethod($method),
+                                'data-default-country' => $method->getPplDefaultCountry(),
                                 'data-lat' => $latitude,
                                 'data-lng' => $longitude,
                                 'data-label' => $dataLabel,
@@ -203,5 +206,21 @@ class ShipmentPplExtension extends AbstractTypeExtension
         return [
             ShipmentType::class,
         ];
+    }
+
+    private function getAllowedCountriesForMethod(PplShippingMethodInterface $pplShippingMethod): ?string
+    {
+        $allowedCountriesForMethod = $pplShippingMethod->getPplOptionCountries();
+        if (!$allowedCountriesForMethod) {
+            return null;
+        }
+        $allowedCountries = $this->allowedCountries;
+        if ($allowedCountries === null) {
+            return null;
+        }
+        $loweredAllowedCountriesForMethod = array_map('strtolower', $allowedCountriesForMethod);
+        $loweredAllowedCountries = array_map('strtolower', $allowedCountries);
+
+        return implode(', ', array_intersect($loweredAllowedCountries, $loweredAllowedCountriesForMethod));
     }
 }

@@ -13,7 +13,11 @@ trait PplShippingMethodTrait
     private ?bool $pplParcelshopsShippingMethod = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    private ?string $pplOptionCountry = null;
+    private ?string $pplDefaultCountry = null;
+
+    /** @var array<string>|null */
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
+    private ?array $pplOptionCountries = null;
 
     public function getPplParcelshopsShippingMethod(): ?bool
     {
@@ -25,13 +29,29 @@ trait PplShippingMethodTrait
         $this->pplParcelshopsShippingMethod = $pplParcelshopsShippingMethod;
     }
 
-    public function getPplOptionCountry(): ?string
+    public function getPplDefaultCountry(): ?string
     {
-        return $this->pplOptionCountry;
+        return $this->pplDefaultCountry;
     }
 
-    public function setPplOptionCountry(?string $pplOptionCountry): void
+    public function setPplDefaultCountry(?string $pplDefaultCountry): void
     {
-        $this->pplOptionCountry = $pplOptionCountry;
+        $this->pplDefaultCountry = $pplDefaultCountry;
+    }
+
+    /**
+     * @return array<string>|null
+     */
+    public function getPplOptionCountries(): ?array
+    {
+        return $this->pplOptionCountries;
+    }
+
+    /**
+     * @param array<string>|null $pplOptionCountries
+     */
+    public function setPplOptionCountries(?array $pplOptionCountries): void
+    {
+        $this->pplOptionCountries = $pplOptionCountries;
     }
 }
