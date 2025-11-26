@@ -192,6 +192,7 @@ The plugin can be configured using the following parameters in your `config/pack
 parameters:
     # Shipping method codes that should be exported to PPL CSV format
     # Default: ['ppl_parcel_shop']
+    # IMPORTANT: Only shipments using shipping methods with these codes will be exported
     pplShippingMethodsCodes: ['ppl_parcel_shop', 'your_custom_ppl_method']
 
     # Country codes where PPL parcelshop service is available
@@ -199,15 +200,22 @@ parameters:
     threebrs_sylius_ppl_parcelshops_plugin_ppl_countries: ['CZ', 'PL']
 ```
 
+**Note:** The `pplShippingMethodsCodes` parameter determines which shipments will appear in the export list. Make sure your shipping method code matches one of the codes in this array, otherwise the shipments won't be available for export.
+
 ## Usage
 
 ### 1. Create a PPL Parcelshop Shipping Method
 
 1. Go to the admin panel: **Shipping Methods** → **Create**
-2. Fill in the basic information (code, zone, calculator, etc.)
+2. Fill in the basic information:
+   - **Code**: Use `ppl_parcel_shop` (default) or a custom code that matches the `pplShippingMethodsCodes` parameter
+   - **Zone**: Select appropriate shipping zone
+   - **Calculator**: Choose your preferred shipping calculator
 3. Check the **"To PPL ParcelShop enabled"** option
 4. Select the countries where this shipping method should be available
 5. Save the shipping method
+
+**Important:** The shipping method code must be listed in the `pplShippingMethodsCodes` parameter (see Configuration section above). If using a custom code, add it to this parameter in your configuration.
 
 ### 2. Customer Checkout Flow
 

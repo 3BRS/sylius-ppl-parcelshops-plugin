@@ -18,7 +18,7 @@ init:
 	./bin-docker/php ./bin/console doctrine:migrations:migrate --no-interaction
 	./bin-docker/php ./bin/console doctrine:schema:update --force --complete --no-interaction
 	./bin-docker/php ./bin/console doctrine:migration:sync-metadata-storage
-	./bin-docker/php ./bin/console assets:install
+	./bin-docker/php ./bin/console assets:install --symlink --relative
 	./bin-docker/yarn --cwd=tests/Application install --pure-lockfile
 	GULP_ENV=prod ./bin-docker/yarn --cwd=tests/Application build
 	./bin-docker/php ./bin/console lexik:jwt:generate-keypair --skip-if-exists --no-interaction
