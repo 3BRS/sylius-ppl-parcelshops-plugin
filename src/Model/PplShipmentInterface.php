@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Model;
 
-interface PplShipmentInterface
+use Sylius\Component\Core\Model\ShipmentInterface;
+
+interface PplShipmentInterface extends ShipmentInterface
 {
     /**
      * Full PPL parcelshop data as JSON
@@ -16,10 +18,10 @@ interface PplShipmentInterface
      *      dhlPsId: string,
      *      depot: string,
      *      depotName: string,
-     *      name: string,
-     *      street: string,
-     *      city: string,
-     *      zipCode: string,
+     *      name: string|null,
+     *      street: string|null,
+     *      city: string|null,
+     *      zipCode: string|null,
      *      country: string,
      *      parcelshopName: string,
      *      gps: array{
@@ -60,6 +62,56 @@ interface PplShipmentInterface
      */
     public function getPplData(): ?array;
 
+    /**
+     * @param array{
+     *      id: int,
+     *      accessPointType: string,
+     *      code: string,
+     *      dhlPsId: string,
+     *      depot: string,
+     *      depotName: string,
+     *      name: string|null,
+     *      street: string|null,
+     *      city: string|null,
+     *      zipCode: string|null,
+     *      country: string,
+     *      parcelshopName: string,
+     *      gps: array{
+     *          latitude: float,
+     *          longitude: float
+     *      },
+     *      www: string,
+     *      ktmNote: string,
+     *      openHours: list<string>,
+     *      capacityStatus: string,
+     *      externalNumbers: list<array{
+     *          type: string,
+     *          value: string
+     *      }>,
+     *      capacitySettings: list<array{
+     *          size: string,
+     *          sizeId: int,
+     *          forYouDeliveryToAccessPoint: list<string>,
+     *          height: int,
+     *          length: int,
+     *          width: int
+     *      }>,
+     *      visiblePs: bool,
+     *      activeCardPayment: bool,
+     *      tribalServicePoint: bool,
+     *      dimensionForced: bool,
+     *      pickupEnabled: bool,
+     *      activeCashPayment: bool,
+     *      newPs: bool,
+     *      accessPointTypeInternal: array{
+     *          id: int,
+     *          name: string
+     *      },
+     *      distance: float,
+     *      isCapacityAvailable: bool,
+     *      availableCmCodes: list<string>
+     *  }|null $pplData
+     */
     public function setPplData(?array $pplData): void;
 
     public function getPplPickupPointId(): ?string;

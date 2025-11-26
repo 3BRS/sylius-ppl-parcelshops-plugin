@@ -12,17 +12,17 @@ trait PplShipmentTrait
     /**
      * Full PPL parcelshop data as JSON
      *
-     * @param array{
+     * @var array{
      *      id: int,
      *      accessPointType: string,
      *      code: string,
      *      dhlPsId: string,
      *      depot: string,
      *      depotName: string,
-     *      name: string,
-     *      street: string,
-     *      city: string,
-     *      zipCode: string,
+     *      name: string|null,
+     *      street: string|null,
+     *      city: string|null,
+     *      zipCode: string|null,
      *      country: string,
      *      parcelshopName: string,
      *      gps: array{
@@ -59,7 +59,7 @@ trait PplShipmentTrait
      *      distance: float,
      *      isCapacityAvailable: bool,
      *      availableCmCodes: list<string>
-     *  } $pplData
+     *  }|null
      */
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $pplData = null;
@@ -75,11 +75,17 @@ trait PplShipmentTrait
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplKTMID = null;
 
+    /**
+     * @inheritdoc
+     */
     public function getPplData(): ?array
     {
         return $this->pplData;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setPplData(?array $pplData): void
     {
         $this->pplData = $pplData;

@@ -138,7 +138,8 @@ Key parameters in `src/Resources/config/services.yml`:
 ## PHPStan Configuration
 
 - Level: max
-- Container XML path: `tests/Application/var/cache/test/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelTestDebugContainer.xml`
+- Container XML path: `tests/Application/var/cache/dev/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelDevDebugContainer.xml`
+- 
 - Excludes:
   - `src/DependencyInjection/Configuration.php` (too slow to analyze)
   - Test files in `tests/Behat/`

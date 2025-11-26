@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface;
 use ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShippingMethodInterface;
+use Traversable;
 
 class ShipmentPplExtension extends AbstractTypeExtension
 {
@@ -28,6 +29,7 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
     public function __construct(
         private readonly ShippingMethodsResolverInterface $shippingMethodsResolver,
+        /** @var ShippingMethodRepositoryInterface<ShippingMethodInterface> */
         private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
         private readonly TranslatorInterface $translator,
     ) {
@@ -43,6 +45,18 @@ class ShipmentPplExtension extends AbstractTypeExtension
                 FormEvent $event,
             ): void {
                 $orderData = $event->getData();
+
+                if (empty($orderData)) {
+                    return;
+                }
+
+                if ($orderData instanceof Traversable) {
+                    $orderData = iterator_to_array($orderData);
+                }
+
+                if (!\is_array($orderData)) {
+                    return;
+                }
 
                 assert(\array_key_exists('method', $orderData));
                 $method = $orderData['method'];
@@ -61,16 +75,18 @@ class ShipmentPplExtension extends AbstractTypeExtension
             ) {
                 $form = $event->getForm();
                 $shipment = $event->getData();
-                if ($shipment && $this->shippingMethodsResolver->supports($shipment)) {
+
+                if ($shipment instanceof ShipmentInterface && $this->shippingMethodsResolver->supports($shipment)) {
                     $shippingMethods = $this->shippingMethodsResolver->getSupportedMethods($shipment);
                 } else {
                     $shippingMethods = $this->shippingMethodRepository->findAll();
                 }
 
-                assert($shipment instanceof ShipmentInterface);
-                assert($shipment instanceof PplShipmentInterface);
+                if (!$shipment instanceof PplShipmentInterface) {
+                    return;
+                }
 
-                $selectedMethodCode = $shipment !== null && $shipment->getMethod() instanceof \Sylius\Component\Shipping\Model\ShippingMethodInterface
+                $selectedMethodCode = $shipment->getMethod() instanceof ShippingMethodInterface
                     ? $shipment->getMethod()->getCode()
                     : null;
 
@@ -107,12 +123,12 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
                         if ($selectedMethodCode !== null && $selectedMethodCode === $method->getCode()) {
                             // Try to get stored JSON data first
-                            if (\method_exists($shipment, 'getPplData') && $shipment->getPplData() !== null) {
-                                $pplData = $shipment->getPplData();
+                            $pplData = $shipment->getPplData();
+                            if ($pplData !== null) {
                                 // Store the JSON data for the hidden field
                                 $pplJsonData = \json_encode($pplData);
 
-                                if ($pplData && isset($pplData['name'])) {
+                                if (isset($pplData['name'])) {
                                     $labelParts = [$pplData['name']];
                                     if (isset($pplData['street'])) {
                                         $labelParts[] = $pplData['street'];
@@ -168,10 +184,13 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         if ($pplJsonData && \is_string($pplJsonData)) {
                             try {
                                 $pplData = \json_decode($pplJsonData, true, 512, \JSON_THROW_ON_ERROR);
-                                $shipment->setPplData($pplData);
                             } catch (JsonException $jsonException) {
                                 trigger_error($jsonException->getMessage(), \E_USER_WARNING);
+
+                                return;
                             }
+                            // @phpstan-ignore argument.type
+                            $shipment->setPplData($pplData);
                         }
                     }
                 }

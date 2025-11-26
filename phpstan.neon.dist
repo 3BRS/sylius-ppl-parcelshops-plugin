@@ -7,13 +7,12 @@ includes:
 
 parameters:
     symfony:
-        container_xml_path: tests/Application/var/cache/test/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelTestDebugContainer.xml
+        container_xml_path: tests/Application/var/cache/dev/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelDevDebugContainer.xml
 
-    excludes_analyse:
-        # Too slow
-        - 'src/DependencyInjection/Configuration.php'
+    excludePaths:
+        - tests/Application/node_modules/*
 
         # Test dependencies
-        - '*/tests/Application/var/*'
+        - tests/Application/var/*
 
-        - '*/tests/Behat/*'
+        - tests/Behat/*

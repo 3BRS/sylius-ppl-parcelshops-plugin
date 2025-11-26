@@ -28,9 +28,11 @@ final class PplController
 
     public function __construct(
         private readonly RouterInterface $router,
+        /** @var ShipmentRepositoryInterface<ShipmentInterface> */
         private readonly ShipmentRepositoryInterface $shipmentRepository,
         private readonly CartContextInterface $cartContext,
         private readonly TranslatorInterface $translator,
+        /** @var ShippingMethodRepositoryInterface<ShippingMethodInterface> */
         private readonly ShippingMethodRepositoryInterface $shippingMethodRepository,
     ) {
     }

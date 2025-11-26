@@ -15,9 +15,15 @@
 ## Features
 
  - Enables sending shipments via <a href="https://www.ppl.cz/co-jsou-vydejni-mista">PPL</a> to PPL parcelshops.
- - The user can choose the PPL parcelshops from the <a href="https://www.ppl.cz/mapa-vydejnich-mist?utm_source=landing_page&amp;amp;utm_medium=button_head_najit_VM&amp;amp;utm_campaign=vydejni_mista">map</a> during checkout in the Shipment step. 
+ - The user can choose the PPL parcelshops from the <a href="https://www.ppl.cz/mapa-vydejnich-mist">map</a> during checkout in the Shipment step
+ ![PPL_modal.png](docs/PPL_modal.png)
  - See PPL parcelshop in final checkout step and also in the admin panel.
  - Export CSV with the PPL parcelshops shipments and import it easily into PPL's system.
+
+## PPL CSV import configuration
+
+- Configure CSV structure in your client zone https://klient.ppl.cz
+  - Navigation (in Czech) https://webkv.cz/faq/jak-nastavit-sablonu-pro-import-objednavek-z-e-shopu-do-ppl-klient.html
 
 ## Installation
 
