@@ -5,8 +5,8 @@
 	"license": "MIT",
 	"require": {
 		"php": "^8.1",
-		"sylius/sylius": "^1.13.0",
-		"3brs/sylius-shipment-export-plugin": "^0.8.0"
+		"3brs/sylius-shipment-export-plugin": "^0.8.0",
+		"sylius/sylius": "^1.13.0"
 	},
 	"require-dev": {
 		"behat/behat": "^3.9.0",
@@ -33,6 +33,7 @@
 		"polishsymfonycommunity/symfony-mocker-container": "^1.0",
 		"rector/rector": "^1.2",
 		"robertfausk/behat-panther-extension": "^1.2",
+		"slevomat/coding-standard": "^7.0.15",
 		"sylius-labs/coding-standard": "^4.2",
 		"symfony/browser-kit": "^6.4",
 		"symfony/debug-bundle": "^6.4",
@@ -42,7 +43,8 @@
 		"symfony/http-foundation": "^6.4",
 		"symfony/http-kernel": "^6.4",
 		"symfony/intl": "^6.4",
-		"symfony/web-profiler-bundle": "^6.4"
+		"symfony/web-profiler-bundle": "^6.4",
+		"symplify/easy-coding-standard": "^10.3.0"
 	},
 	"conflict": {
 		"api-platform/core": "<2.7.13",
@@ -62,7 +64,6 @@
 		"symfony/framework-bundle": ">=5.4.0 <=5.4.20|>=6.0.0 <=6.0.16|>=6.1.0 <=6.1.8|>=6.2.0 <=6.2.2|6.2.8",
 		"symfony/mime": "<5.4.0",
 		"symfony/web-link": "<5.3.0",
-		"symplify/easy-coding-standard": "<10.2.0",
 		"twig/twig": "<2.14.7",
 		"webmozart/assert": "<1.11.0",
 		"willdurand/negotiation": "<3.0"
@@ -84,6 +85,13 @@
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": false,
 			"symfony/flex": false
+		},
+		"audit": {
+			"ignore": [
+				"PKSA-gs8r-6kz6-pp56",
+				"PKSA-gnn4-pxdg-q76m",
+				"PKSA-4g5g-4rkv-myqs"
+			]
 		}
 	}
 }

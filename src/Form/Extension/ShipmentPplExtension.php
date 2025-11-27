@@ -24,7 +24,7 @@ use Traversable;
 
 class ShipmentPplExtension extends AbstractTypeExtension
 {
-    /** @var string[]; */
+    /** @var string[] */
     private array $pplMethodsCodes = [];
 
     public function __construct(
