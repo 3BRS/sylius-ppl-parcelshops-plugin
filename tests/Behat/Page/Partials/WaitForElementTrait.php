@@ -38,8 +38,9 @@ trait WaitForElementTrait
         return parent::hasElement($name, $parameters);
     }
 
-    public static function waitForPageToLoad(Session $session): void
+    private function waitForPageToLoad(Session $session = null): void
     {
+        $session ??= $this->getSession();
         if (DriverHelper::isJavascript($session->getDriver())) {
             $session->wait(500, "document.readyState === 'complete'");
         }

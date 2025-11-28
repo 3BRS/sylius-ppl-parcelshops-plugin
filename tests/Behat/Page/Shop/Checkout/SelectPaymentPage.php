@@ -15,7 +15,7 @@ final class SelectPaymentPage extends BaseSelectPaymentPage
     {
         $this->getElement('next_step')->press();
 
-        self::waitForPageToLoad($this->getSession());
+        $this->waitForPageToLoad();
     }
 
     public function selectPaymentMethod(string $paymentMethod): void

@@ -15,7 +15,7 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     {
         parent::saveChanges();
 
-        self::waitForPageToLoad($this->getSession());
+        $this->waitForPageToLoad();
     }
 
     public function enablePplParcelshops(): void
@@ -99,8 +99,12 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 
     public function hasValidationErrorFor(string $field): bool
     {
-        $fieldElement = $this->getElement($field . 'Select');
-        $formGroup    = $fieldElement->getParent();
+        $elementName = $field . 'Select';
+        $this->waitForElement(5, $elementName);
+
+        $fieldElement = $this->getElement($elementName);
+
+        $formGroup = $fieldElement->getParent();
 
         return $formGroup->hasClass('error') || $formGroup->find('css', '.sylius-validation-error') !== null;
     }
