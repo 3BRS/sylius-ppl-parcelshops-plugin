@@ -39,13 +39,13 @@ jobs:
                 run: docker compose up --detach --wait
 
             -   name: Update Composer
-                run: docker compose exec --no-TTY php composer self-update
+                run: docker compose exec php composer self-update
 
             -   name: Install Sylius version
-                run: docker compose exec --no-TTY php composer require "sylius/sylius:${{ matrix.sylius_version }}.*" --no-interaction --no-update --no-scripts
+                run: docker compose exec php composer require "sylius/sylius:${{ matrix.sylius_version }}.*" --no-interaction --no-update --no-scripts
 
             -   name: Install Symfony version
-                run: docker compose exec --no-TTY php bash -c '
+                run: docker compose exec php bash -c '
                     grep -o -E "\"(symfony/[^\"]+)\"" composer.json |
                     grep -v -E "(symfony/flex|symfony/webpack-encore-bundle|symfony/panther)" |
                     xargs printf "%s:${{ matrix.symfony_version }}.* " |
@@ -53,13 +53,13 @@ jobs:
                     '
 
             -   name: Wait for database
-                run: docker compose exec --no-TTY php timeout 60s sh -c 'while ! nc -z mysql 3306; do sleep 0.1; done'
+                run: docker compose exec php timeout 60s sh -c 'while ! nc -z mysql 3306; do sleep 0.1; done'
 
             -   name: Install dependencies (prefer-dist)
                 run: |
-                    docker compose exec --no-TTY php rm -fr vendor composer.lock
-                    docker compose exec --no-TTY php composer update --no-interaction --prefer-dist --no-plugins
-                    docker compose exec --no-TTY php bash -c '
+                    docker compose exec php rm -fr vendor composer.lock
+                    docker compose exec php composer update --no-interaction --prefer-dist --no-plugins
+                    docker compose exec php bash -c '
                         cd tests/Application &&
                         bin/console assets:install --env=test -vvv &&
                         yarn install &&
@@ -71,16 +71,16 @@ jobs:
                         '
 
             -   name: PHPStan (prefer-dist)
-                run: docker compose exec --no-TTY php bash -c 'APP_ENV=test bin/phpstan.sh'
+                run: docker compose exec php bash -c 'APP_ENV=test bin/phpstan.sh'
 
             -   name: ECS (prefer-dist)
-                run: docker compose exec --no-TTY php bash -c 'APP_ENV=test bin/ecs.sh --clear-cache'
+                run: docker compose exec php bash -c 'APP_ENV=test bin/ecs.sh --clear-cache'
 
             -   name: Symfony lint (prefer-dist)
-                run: docker compose exec --no-TTY php bash -c 'APP_ENV=test bin/symfony-lint.sh'
+                run: docker compose exec php bash -c 'APP_ENV=test bin/symfony-lint.sh'
 
             -   name: Behat tests (prefer-dist)
-                run: docker compose exec --no-TTY php bash -c 'rm -f tests/Application/var/log/test.log && APP_ENV=test bin/behat.sh || grep CRITICAL tests/Application/var/log/test.log'
+                run: docker compose exec php bash -c 'rm -f tests/Application/var/log/test.log && APP_ENV=test php -d memory_limit=1G -d error_reporting="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED" vendor/bin/behat || grep CRITICAL tests/Application/var/log/test.log'
 
             -   name: Upload prefer-dist composer.lock artifacts
                 uses: actions/upload-artifact@v4
@@ -98,9 +98,9 @@ jobs:
 
             -   name: Install dependencies (prefer-lowest)
                 run: |
-                    docker compose exec --no-TTY php rm -fr vendor composer.lock
-                    docker compose exec --no-TTY php composer update --no-interaction --prefer-lowest --no-plugins
-                    docker compose exec --no-TTY php bash -c '
+                    docker compose exec php rm -fr vendor composer.lock
+                    docker compose exec php composer update --no-interaction --prefer-lowest --no-plugins
+                    docker compose exec php bash -c '
                         cd tests/Application &&
                         bin/console assets:install --env=test -vvv &&
                         yarn install &&
@@ -112,16 +112,16 @@ jobs:
                         '
 
             -   name: PHPStan (prefer-lowest)
-                run: docker compose exec --no-TTY php bash -c 'APP_ENV=test bin/phpstan.sh'
+                run: docker compose exec php bash -c 'APP_ENV=test bin/phpstan.sh'
 
             -   name: ECS (prefer-lowest)
-                run: docker compose exec --no-TTY php bash -c 'APP_ENV=test bin/ecs.sh --clear-cache'
+                run: docker compose exec php bash -c 'APP_ENV=test bin/ecs.sh --clear-cache'
 
             -   name: Symfony lint (prefer-lowest)
-                run: docker compose exec --no-TTY php bash -c 'APP_ENV=test bin/symfony-lint.sh'
+                run: docker compose exec php bash -c 'APP_ENV=test bin/symfony-lint.sh'
 
             -   name: Behat tests (prefer-lowest)
-                run: docker compose exec --no-TTY php bash -c 'rm -f tests/Application/var/log/test.log && APP_ENV=test php -d memory_limit=1G -d error_reporting="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED" vendor/bin/behat || grep CRITICAL tests/Application/var/log/test.log'
+                run: docker compose exec php bash -c 'rm -f tests/Application/var/log/test.log && APP_ENV=test php -d memory_limit=1G -d error_reporting="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED" vendor/bin/behat || grep CRITICAL tests/Application/var/log/test.log'
 
             -   name: Upload prefer-lowest composer.lock artifacts
                 uses: actions/upload-artifact@v4
