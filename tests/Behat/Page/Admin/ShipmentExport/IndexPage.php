@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport;
 
-use Behat\Mink\Element\NodeElement;
-use Sylius\Behat\Page\SymfonyPage;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 
 class IndexPage extends SymfonyPage implements IndexPageInterface
 {
