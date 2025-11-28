@@ -12,9 +12,11 @@ use Webmozart\Assert\Assert;
 
 final class ManagingPplContext implements Context
 {
-	public function __construct(private readonly PplPagesInterface $pplPages, private readonly CheckoutShippingContext $checkoutShippingContext)
- {
- }
+	public function __construct(
+		private readonly PplPagesInterface $pplPages,
+		private readonly CheckoutShippingContext $checkoutShippingContext,
+	) {
+	}
 
 	/**
 	 * @Then I should not be able to go to the payment step again

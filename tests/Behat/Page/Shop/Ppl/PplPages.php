@@ -22,6 +22,16 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
         string $name,
         string $address,
     ): void {
+        // Wait for button to be enabled and clickable
+        // The button starts with disabled="disabled" and JavaScript removes this attribute when enabled
+        $this->getDocument()->waitFor(20, function () {
+            if (!$this->hasElement('ppl_select_button')) {
+                return false;
+            }
+            $button = $this->getElement('ppl_select_button');
+            return $button->isVisible() && !$button->hasAttribute('disabled');
+        });
+
         // Click the "Choose PPL ParcelShop" button to open modal
         $button = $this->getElement('ppl_select_button');
         $button->click();

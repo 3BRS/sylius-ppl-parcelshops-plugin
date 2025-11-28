@@ -61,6 +61,7 @@ jobs:
                     docker compose exec --no-TTY php composer update --no-interaction --prefer-dist --no-plugins
                     docker compose exec --no-TTY php bash -c '
                         cd tests/Application &&
+                        bin/console assets:install --env=test -vvv &&
                         yarn install &&
                         yarn build &&
                         bin/console doctrine:database:create --if-not-exists --env=test -vvv &&
@@ -101,6 +102,7 @@ jobs:
                     docker compose exec --no-TTY php composer update --no-interaction --prefer-lowest --no-plugins
                     docker compose exec --no-TTY php bash -c '
                         cd tests/Application &&
+                        bin/console assets:install --env=test -vvv &&
                         yarn install &&
                         yarn build &&
                         bin/console doctrine:database:create --if-not-exists --env=test -vvv &&

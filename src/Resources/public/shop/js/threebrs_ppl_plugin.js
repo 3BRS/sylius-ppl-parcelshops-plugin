@@ -116,7 +116,7 @@ function updatePplButtonsForShipment(shipmentContainer) {
 
     pplButtons.forEach(button => {
         const buttonMethodCode = button.dataset.methodCode;
-        button.disabled = (buttonMethodCode !== selectedMethodCode);
+        button.disabled = buttonMethodCode !== selectedMethodCode;
     });
 }
 

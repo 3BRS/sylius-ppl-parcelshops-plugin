@@ -39,6 +39,12 @@
 			<argument type="string">sylius_admin_channel_update</argument>
 		</service>
 
+		<!-- Override Sylius SelectPaymentPage to add waiting for payment methods to load -->
+		<service id="sylius.behat.page.shop.checkout.select_payment"
+				 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Checkout\SelectPaymentPage"
+				 parent="sylius.behat.symfony_page" public="false">
+		</service>
+
 	<service id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface"
 			 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPage"
 			 parent="sylius.behat.symfony_page" public="false">
