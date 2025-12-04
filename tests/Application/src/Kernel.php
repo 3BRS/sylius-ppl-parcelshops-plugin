@@ -107,7 +107,9 @@ final class Kernel extends BaseKernel
         $contents = require $bundlesFile;
         foreach ($contents as $class => $envs) {
             if (isset($envs['all']) || isset($envs[$this->environment])) {
-                yield new $class();
+                $bundle = new $class();
+                assert($bundle instanceof BundleInterface);
+                yield $bundle;
             }
         }
     }

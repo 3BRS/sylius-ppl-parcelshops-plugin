@@ -1,4 +1,7 @@
-mangoweb:
+threebrs:
     shop:
         checkout:
             pplBranch: Choose PPL ParcelShop
+    admin:
+        shippingMethod:
+            defaultCountryInNotAllowed: The default country is not among the selected allowed ones

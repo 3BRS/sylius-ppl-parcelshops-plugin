@@ -1,4 +1,7 @@
-mangoweb:
+threebrs:
     shop:
         checkout:
             pplBranch: Vyberte PPL ParcelShop
+    admin:
+        shippingMethod:
+            defaultCountryInNotAllowed: Výchozí země není mezi vybranými povolenými

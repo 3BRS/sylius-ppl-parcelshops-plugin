@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl;
 
-use Sylius\Behat\Page\Admin\Channel\UpdatePageInterface as BaseUpdatePageInterface;
+use FriendsOfBehat\PageObjectExtension\Page\PageInterface;
 
-interface PplPagesInterface extends BaseUpdatePageInterface
+interface PplPagesInterface extends PageInterface
 {
-	public function selectPplBranch(int $id, string $name, string $address): void;
+	public function selectPplBranch(string $id, string $name, string $address): void;
 
 	public function iSeePplBranchInsteadOfShippingAddress(): bool;
 }

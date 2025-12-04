@@ -3,7 +3,17 @@
 <div class="item" {{ sylius_test_html_attribute('shipping-item') }}>
     <div class="field">
         <div class="ui radio checkbox" {{ sylius_test_html_attribute('shipping-method-checkbox') }}>
-            {{ form_widget(form, sylius_test_form_attribute('shipping-method-select')) }}
+            {% set attrs = sylius_test_form_attribute('shipping-method-select')|merge({
+                'attr': {
+                    'data-method-code': form.vars.value
+                }
+            }) %}
+            {% if form.parent.parent['ppl_data_' ~ method.code] is defined %}
+                {% set attrs = attrs|merge({
+                    'attr': attrs.attr|merge({'data-method-ppl': 'true'})
+                }) %}
+            {% endif %}
+            {{ form_widget(form, attrs) }}
         </div>
     </div>
     <div class="content">
@@ -21,4 +31,4 @@
     </div>
 </div>
 
-{{ include('@ThreeBRSPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig') }}
+{{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig') }}

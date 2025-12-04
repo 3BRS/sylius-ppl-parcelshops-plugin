@@ -1,4 +1,4 @@
-.PHONY: run init var ci
+.PHONY: run init var yarn ci fix ecs bash static cache behat tests
 
 MAKEFLAGS += --no-print-directory # to disable "make: Entering directory ..." messages
 
@@ -11,16 +11,17 @@ init:
 		direnv allow; \
 	fi
 	docker compose up -d
-	./bin-docker/composer install
-	rm -fr "tests/Application/var/$(APP_ENV)"
+	rm -f composer.lock
+	./bin-docker/composer install --no-interaction
 	@make var
 	./bin-docker/php ./bin/console doctrine:database:create --no-interaction --if-not-exists
 	./bin-docker/php ./bin/console doctrine:migrations:migrate --no-interaction
-	./bin-docker/php ./bin/console doctrine:schema:update --no-interaction --complete --force
+	./bin-docker/php ./bin/console doctrine:schema:update --force --complete --no-interaction
 	./bin-docker/php ./bin/console doctrine:migration:sync-metadata-storage
-	./bin-docker/php ./bin/console assets:install
+	./bin-docker/php ./bin/console assets:install --symlink --relative
 	./bin-docker/yarn --cwd=tests/Application install --pure-lockfile
 	GULP_ENV=prod ./bin-docker/yarn --cwd=tests/Application build
+	./bin-docker/php ./bin/console lexik:jwt:generate-keypair --skip-if-exists --no-interaction
 	@make var
 
 init-tests:
@@ -30,21 +31,24 @@ init-tests:
 		direnv allow; \
 	fi
 	docker compose up -d
-	./bin-docker/composer install
+	rm -f composer.lock
+	./bin-docker/composer install --no-interaction
 	@make var
 	./bin-docker/php ./bin/console --env=test doctrine:database:drop --no-interaction --force --if-exists
 	./bin-docker/php ./bin/console --env=test doctrine:database:create --no-interaction --if-not-exists
 	./bin-docker/php ./bin/console --env=test doctrine:migrations:migrate --no-interaction
-	./bin-docker/php ./bin/console --env=test doctrine:schema:update --no-interaction --complete --force
+	./bin-docker/php ./bin/console --env=test doctrine:schema:update --force --complete --no-interaction
 	./bin-docker/php ./bin/console --env=test doctrine:migration:sync-metadata-storage
 	./bin-docker/php ./bin/console --env=test assets:install
 	./bin-docker/yarn --cwd=tests/Application install --pure-lockfile
 	GULP_ENV=prod ./bin-docker/yarn --cwd=tests/Application build
+	./bin-docker/php ./bin/console --env=test lexik:jwt:generate-keypair --skip-if-exists --no-interaction
 	@make var
 
 cache:
-	./bin-docker/php ./bin/console cache:clear
 	@make var
+	./bin-docker/php ./bin/console cache:clear
+	chmod -R 0777 tests/Application/var
 
 static: fix static-only
 
@@ -59,11 +63,11 @@ static-only:
 phpstan:
 	./bin-docker/docker-bash bin/phpstan.sh
 
-phpunit:
-	./bin-docker/docker-bash bin/phpunit.sh --testdox
-
 behat:
 	./bin-docker/docker-bash bin/behat.sh
+
+phpunit:
+	./bin-docker/php bin/phpunit
 
 ecs:
 	./bin-docker/docker-bash bin/ecs.sh
@@ -72,7 +76,7 @@ symfony-lint:
 	./bin-docker/docker-bash bin/symfony-lint.sh
 
 composer-lint:
-	./bin-docker/composer validate
+	./bin-docker/composer validate --no-check-lock
 
 doctrine-lint:
 	./bin-docker/docker-bash bin/doctrine-lint.sh
@@ -80,16 +84,16 @@ doctrine-lint:
 lint: symfony-lint composer-lint doctrine-lint
 
 yarn-build:
-	./bin-docker/yarn install
-	./bin-docker/yarn build
+	./bin-docker/yarn --cwd=tests/Application install --pure-lockfile
+	GULP_ENV=prod ./bin-docker/yarn --cwd=tests/Application build
 
-make yarn: yarn-build
+yarn: yarn-build
 
 schema-reset:
 	./bin-docker/php ./bin/console doctrine:database:drop --force --if-exists
 	./bin-docker/php ./bin/console doctrine:database:create --no-interaction
 	./bin-docker/php ./bin/console doctrine:migrations:migrate --no-interaction
-	./bin-docker/php ./bin/console doctrine:schema:update --no-interaction --complete --force
+	./bin-docker/php ./bin/console doctrine:schema:update --force --complete --no-interaction
 	./bin-docker/php ./bin/console doctrine:migration:sync-metadata-storage
 
 fix:
@@ -100,17 +104,19 @@ bare-fixtures:
 	./bin-docker/php ./bin/console sylius:fixtures:load --no-interaction
 
 var:
-	rm -fr tests/Application/var
+	docker compose run --rm --user root php rm -fr tests/Application/var
 	mkdir -p tests/Application/var/log
+	mkdir -p tests/Application/public/media/image
 	touch tests/Application/var/log/test.log
 	touch tests/Application/var/log/dev.log
 	chmod -R 0777 tests/Application/var
+	docker compose run --rm --user root php chmod -R 0777 tests/Application/public/media
 
-fixtures: schema-reset bare-fixtures
+fixtures: schema-reset bare-fixtures var
 
 static: phpstan ecs lint
 
-tests: static behat
+tests: static phpunit behat
 
 ci: init-tests tests
 

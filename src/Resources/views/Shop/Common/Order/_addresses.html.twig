@@ -1,11 +1,13 @@
 {% set shipment = order.shipments.last %}
 
-{% if shipment.pplKTMID %}
-	<address>
-		{{ 'threebrs.shop.checkout.complete.pplParcelShop'|trans }}<br>
-		<strong>{{ shipment.pplKTMID ~ shipment.pplKTMname }}</strong><br>
-		{{ shipment.pplKTMaddress }}
-	</address>
+{# @var \ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface shipment #}
+
+{% if shipment.pplPickupPointId|default %}
+    <address>
+        {{ 'threebrs.shop.checkout.complete.pplParcelShop'|trans }}<br>
+        <strong>{{ shipment.pplPickupPointName|default }}</strong><br>
+        {{ shipment.pplPickupPointAddress|default }}
+    </address>
 {% else %}
-	{% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}
+    {% include '@SyliusShop/Common/_address.html.twig' with {'address': order.shippingAddress} %}
 {% endif %}

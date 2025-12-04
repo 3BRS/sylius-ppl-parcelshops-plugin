@@ -14,3 +14,4 @@ docker-compose.override.dist.yaml
 docker-compose.yaml
 /deploy/
 /docker/
+/.env

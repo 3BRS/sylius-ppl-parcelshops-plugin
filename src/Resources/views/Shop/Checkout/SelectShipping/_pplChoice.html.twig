@@ -1,33 +1,61 @@
-{% if form.parent.parent['pplKTMID_' ~ method.code] is defined and form.parent.parent['pplKTMID_' ~ method.code] %}
-	{% set inputId = form.parent.parent['pplKTMID_' ~ method.code].vars.id %}
-	{% set labelId = inputId ~ '_title' %}
-	{% set countrOption = form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-country'] %}
-	{% set prefillAdress = order.shippingAddress.postcode ~ ',' ~ order.shippingAddress.street %}
-	{% set returnUrl = url('mango_sylius_ppl_parcelshop_return', {
-		'methodCode': method.code,
-		'sessid': shipment.id
-	})|url_encode ~ '%26KTMID%3d{0}%26KTMaddress%3d{1}%26KTMname%3d{2}' %}
+{% if form.parent.parent['ppl_data_' ~ method.code] is defined and form.parent.parent['ppl_data_' ~ method.code] %}
+    {% set inputId = form.parent.parent['ppl_data_' ~ method.code].vars.id %}
+    {% set buttonId = inputId ~ '_button' %}
+    {% set modalId = inputId ~ '_modal' %}
+    {% set countriesOption = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-allowed-countries']|lower %}
+    {% set defaultCountry = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-default-country']|lower %}
+    {% set latitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lat'] %}
+    {% set longitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lng'] %}
+    {% set language = app.request.locale in ['cs', 'en'] ? app.request.locale : 'cs' %}
 
-	<div class="ui hidden divider"></div>
-	<div class="center aligned ui grid">
-		<a id="{{ labelId }}"
-		   class="ui secondary basic button"
-		   href="https://www.pplbalik.cz/Main3.aspx?cls=KTMMap&CountryCode={{ countrOption }}&KTMAddress={{ prefillAdress|url_encode }}&ReturnUrl={{ returnUrl }}"
-		>
-			{% if form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] is not empty %}
-				{{ form.parent.parent['pplKTMID_' ~ method.code].vars.attr['data-label'] }}
-			{% else %}
-				{{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
-			{% endif %}
-		</a>
-	</div>
-	<div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="center aligned ui grid">
+        {# Check if this method is currently selected #}
+        {% set isMethodSelected = form.parent.parent.vars.data
+            and form.parent.parent.vars.data.method
+            and form.parent.parent.vars.data.method.code == method.code %}
 
-	{{ form_widget(form.parent.parent['pplKTMID_' ~ method.code]) }}
-	{{ form_widget(form.parent.parent['pplKTMname_' ~ method.code]) }}
-	{{ form_widget(form.parent.parent['pplKTMaddress_' ~ method.code]) }}
+        <button type="button"
+                id="{{ buttonId }}"
+                class="ui secondary basic button"
+                data-ppl-button
+                data-method-code="{{ method.code }}"
+                {{ not isMethodSelected ? 'disabled' : '' }}
+                onclick="openPplModal('{{ modalId }}')">
+            {% if form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] is not empty %}
+                {{ form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] }}
+            {% else %}
+                {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
+            {% endif %}
+        </button>
+    </div>
+    <div class="ui hidden divider"></div>
+
+    {# Modal for PPL widget #}
+    <div id="{{ modalId }}" class="ui modal"
+         style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90vw; max-height: 99vh; z-index: 1001;"
+         data-ppl-input-id="{{ inputId }}" data-ppl-button-id="{{ buttonId }}" data-ppl-modal-id="{{ modalId }}">
+        <i class="close icon" onclick="closePplModal('{{ modalId }}')" style="top: 0; right: 0; color: black"></i>
+        <div class="header">
+            {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
+        </div>
+        <div class="content" style="height: 720px;">
+            <div id="ppl-parcelshop-map"
+                 data-mode="default"
+                 data-lat="{{ latitude }}"
+                 data-lng="{{ longitude }}"
+                 data-language="{{ language }}"
+                 data-countries="{{ countriesOption }}"
+                 data-country="{{ defaultCountry }}"
+                 style="height: 100%; width: 100%;"></div>
+        </div>
+    </div>
+
+    {# Modal backdrop #}
+    <div id="{{ modalId }}_backdrop" class="ui dimmer"
+         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
+         onclick="closePplModal('{{ modalId }}')"></div>
+
+    {# Hidden field for JSON data #}
+    {{ form_widget(form.parent.parent['ppl_data_' ~ method.code]) }}
 {% endif %}
-
-{{ form_widget(form.parent.parent.pplKTMID) }}
-{{ form_widget(form.parent.parent.pplKTMname) }}
-{{ form_widget(form.parent.parent.pplKTMaddress) }}

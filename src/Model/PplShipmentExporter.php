@@ -4,180 +4,179 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Model;
 
-use ThreeBRS\ShipmentExportPlugin\Model\ShipmentExporterInterface;
+use Payum\Core\Model\GatewayConfigInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Currency\Converter\CurrencyConverter;
+use Sylius\Component\Order\Model\OrderInterface;
+use ThreeBRS\SyliusShipmentExportPlugin\Model\ShipmentExporterInterface;
 
 class PplShipmentExporter implements ShipmentExporterInterface
 {
-	/** @var string[] */
-	private $pplShippingMethodsCodes;
+    /**
+     * @param array<string> $pplShippingMethodsCodes
+     */
+    public function __construct(
+        private readonly CurrencyConverter $currencyConverter,
+        private readonly array $pplShippingMethodsCodes,
+    ) {
+    }
 
-	/** @var CurrencyConverter */
-	private $currencyConverter;
+    private function convert(
+        int $amount,
+        string $sourceCurrencyCode,
+        string $targetCurrencyCode,
+    ): int {
+        return $this->currencyConverter->convert($amount, $sourceCurrencyCode, $targetCurrencyCode);
+    }
 
-	/**
-	 * @param array<string> $pplShippingMethodsCodes
-	 */
-	public function __construct(
-		CurrencyConverter $currencyConverter,
-		array $pplShippingMethodsCodes
-	) {
-		$this->pplShippingMethodsCodes = $pplShippingMethodsCodes;
-		$this->currencyConverter = $currencyConverter;
-	}
+    /**
+     * @return array<string>
+     */
+    public function getShippingMethodsCodes(): array
+    {
+        return $this->pplShippingMethodsCodes;
+    }
 
-	private function convert(int $amount, string $sourceCurrencyCode, string $targetCurrencyCode): int
-	{
-		return $this->currencyConverter->convert($amount, $sourceCurrencyCode, $targetCurrencyCode);
-	}
+    /**
+     * @param array<mixed> $questionsArray
+     *
+     * @return array<mixed>
+     */
+    public function getRow(
+        ShipmentInterface $shipment,
+        array $questionsArray,
+    ): array {
+        assert($shipment instanceof PplShipmentInterface);
 
-	/**
-	 * @return array<string>
-	 */
-	public function getShippingMethodsCodes(): array
-	{
-		return $this->pplShippingMethodsCodes;
-	}
+        $order = $shipment->getOrder();
+        assert($order instanceof OrderInterface);
+        $channel = $order->getChannel();
+        assert($channel !== null);
+        $address = $order->getShippingAddress();
+        assert($address !== null);
+        $customer = $order->getCustomer();
+        assert($customer !== null);
 
-	/**
-	 * @param array<mixed> $questionsArray
-	 *
-	 * @return array<mixed>
-	 */
-	public function getRow(ShipmentInterface $shipment, array $questionsArray): array
-	{
-		assert($shipment instanceof PplShipmentInterface);
+        $shippingMethod = $shipment->getMethod();
+        assert($shippingMethod instanceof PplShippingMethodInterface);
+        $payment = $order->getPayments()->first();
+        assert($payment instanceof PaymentInterface);
+        $paymentMethod = $payment->getMethod();
+        assert($paymentMethod instanceof PaymentMethodInterface);
+        assert($paymentMethod->getGatewayConfig() instanceof GatewayConfigInterface);
 
-		$order = $shipment->getOrder();
-		assert($order !== null);
-		$channel = $order->getChannel();
-		assert($channel !== null);
-		$address = $order->getShippingAddress();
-		assert($address !== null);
-		$customer = $order->getCustomer();
-		assert($customer !== null);
+        $isCashOnDelivery = $paymentMethod->getGatewayConfig()->getFactoryName() === 'offline';
 
-		$shippingMethod = $shipment->getMethod();
-		assert($shippingMethod instanceof PplShippingMethodInterface);
-		$payment = $order->getPayments()->first();
-		assert($payment instanceof PaymentInterface);
-		$paymentMethod = $payment->getMethod();
-		assert($paymentMethod instanceof PaymentMethodInterface);
-		assert($paymentMethod->getGatewayConfig() !== null);
+        $currencyCode = $order->getCurrencyCode();
+        assert($currencyCode !== null);
 
-		$isCashOnDelivery = $paymentMethod->getGatewayConfig()->getFactoryName() === 'offline';
+        $targetCurrencyCode = 'CZK';
+        $totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
 
-		$currencyCode = $order->getCurrencyCode();
-		assert($currencyCode !== null);
+        $totalAmount = \number_format(
+            $totalAmount / 100,
+            0,
+            '.',
+            '',
+        );
 
-		$targetCurrencyCode = 'CZK';
-		$totalAmount = $this->convert($order->getTotal(), $currencyCode, $targetCurrencyCode);
+        $weight = 0;
+        foreach ($order->getItems() as $item) {
+            /** @var OrderItemInterface $item */
+            $variant = $item->getVariant();
+            if ($variant !== null) {
+                $weight += $variant->getWeight();
+            }
+        }
 
-		if ($totalAmount !== null) {
-			$totalAmount = number_format(
-				$totalAmount / 100,
-				0,
-				'.',
-				''
-			);
-		}
+        $pplId = $shipment->getPplKTMID();
 
-		$weight = 0;
-		foreach ($order->getItems() as $item) {
-			/** @var OrderItemInterface $item */
-			$variant = $item->getVariant();
-			if ($variant !== null) {
-				$weight += $variant->getWeight();
-			}
-		}
+        return [
+            /* 1 - version 5 */
+            '',
 
-		$pplId = $shipment->getPplKTMID();
+            /* 2 - Číslo obj.* */
+            $order->getNumber(),
 
-		return [
-			/* 1 - version 5 */
-			'',
+            /* 3 - Jméno* */
+            $address->getFirstName(),
 
-			/* 2 - Číslo obj.* */
-			$order->getNumber(),
+            /* 4 - Příjmení* */
+            $address->getLastName(),
 
-			/* 3 - Jméno* */
-			$address->getFirstName(),
+            /* 5 - Firma */
+            $address->getCompany(),
 
-			/* 4 - Příjmení* */
-			$address->getLastName(),
+            /* 6 - E-mail** */
+            $customer->getEmail(),
 
-			/* 5 - Firma */
-			$address->getCompany(),
+            /* 7 - Mobil** */
+            $address->getPhoneNumber(),
 
-			/* 6 - E-mail** */
-			$customer->getEmail(),
+            /* 8 - Dobírka */
+            $isCashOnDelivery
+                ? $totalAmount
+                : '',
 
-			/* 7 - Mobil** */
-			$address->getPhoneNumber(),
+            /* 9 - Měna */
+            $targetCurrencyCode,
 
-			/* 8 - Dobírka */
-			$isCashOnDelivery ? $totalAmount : '',
+            /* 10 - Hodnota **/
+            $totalAmount,
 
-			/* 9 - Měna */
-			$targetCurrencyCode,
+            /* 11 - Hmotnost */
+            $weight,
 
-			/* 10 - Hodnota **/
-			$totalAmount,
+            /* 12 - Cílová pobočka* */
+            $pplId,
 
-			/* 11 - Hmotnost */
-			$weight,
+            /* 13 - Doména e-shopu*** */
+            '',
 
-			/* 12 - Cílová pobočka* */
-			$pplId,
+            /* 14 - Obsah 18+ */
+            '',
 
-			/* 13 - Doména e-shopu*** */
-			'',
+            /* 15 - Plánovaný výdej */
+            '',
 
-			/* 14 - Obsah 18+ */
-			'',
+            /* 16 - Ulice */
+            '',
 
-			/* 15 - Plánovaný výdej */
-			'',
+            /* 17 - Č. domu */
+            '',
 
-			/* 16 - Ulice */
-			'',
+            /* 18 - Obec */
+            '',
 
-			/* 17 - Č. domu */
-			'',
+            /* 19 - PSČ */
+            '',
 
-			/* 18 - Obec */
-			'',
+            /* 20 - Unique ID of the carrier pickup point */
+            '',
+        ];
+    }
 
-			/* 19 - PSČ */
-			'',
+    public function getDelimiter(): string
+    {
+        return ',';
+    }
 
-			/* 20 - Unique ID of the carrier pickup point */
-			'',
-		];
-	}
+    /**
+     * @return array<mixed>|null
+     */
+    public function getQuestionsArray(): ?array
+    {
+        return null;
+    }
 
-	public function getDelimiter(): string
-	{
-		return ',';
-	}
-
-	/**
-	 * @return array<mixed>|null
-	 */
-	public function getQuestionsArray(): ?array
-	{
-		return null;
-	}
-
-	/**
-	 * @return array<mixed>|null
-	 */
-	public function getHeaders(): ?array
-	{
-		return null;
-	}
+    /**
+     * @return array<mixed>|null
+     */
+    public function getHeaders(): ?array
+    {
+        return null;
+    }
 }

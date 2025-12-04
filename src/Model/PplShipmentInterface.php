@@ -4,17 +4,149 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Model;
 
-interface PplShipmentInterface
+use Sylius\Component\Core\Model\ShipmentInterface;
+
+interface PplShipmentInterface extends ShipmentInterface
 {
-	public function setPplKTMname(?string $pplKTMname): void;
+    /**
+     * Full PPL parcelshop data as JSON
+     *
+     * @return array{
+     *      id: int,
+     *      accessPointType: string,
+     *      code: string,
+     *      dhlPsId: string,
+     *      depot: string,
+     *      depotName: string,
+     *      name: string|null,
+     *      street: string|null,
+     *      city: string|null,
+     *      zipCode: string|null,
+     *      country: string,
+     *      parcelshopName: string,
+     *      gps: array{
+     *          latitude: float,
+     *          longitude: float
+     *      },
+     *      www: string,
+     *      ktmNote: string,
+     *      openHours: list<string>,
+     *      capacityStatus: string,
+     *      externalNumbers: list<array{
+     *          type: string,
+     *          value: string
+     *      }>,
+     *      capacitySettings: list<array{
+     *          size: string,
+     *          sizeId: int,
+     *          forYouDeliveryToAccessPoint: list<string>,
+     *          height: int,
+     *          length: int,
+     *          width: int
+     *      }>,
+     *      visiblePs: bool,
+     *      activeCardPayment: bool,
+     *      tribalServicePoint: bool,
+     *      dimensionForced: bool,
+     *      pickupEnabled: bool,
+     *      activeCashPayment: bool,
+     *      newPs: bool,
+     *      accessPointTypeInternal: array{
+     *          id: int,
+     *          name: string
+     *      },
+     *      distance: float,
+     *      isCapacityAvailable: bool,
+     *      availableCmCodes: list<string>
+     *  }|null
+     */
+    public function getPplData(): ?array;
 
-	public function getPplKTMname(): ?string;
+    /**
+     * @param array{
+     *      id: int,
+     *      accessPointType: string,
+     *      code: string,
+     *      dhlPsId: string,
+     *      depot: string,
+     *      depotName: string,
+     *      name: string|null,
+     *      street: string|null,
+     *      city: string|null,
+     *      zipCode: string|null,
+     *      country: string,
+     *      parcelshopName: string,
+     *      gps: array{
+     *          latitude: float,
+     *          longitude: float
+     *      },
+     *      www: string,
+     *      ktmNote: string,
+     *      openHours: list<string>,
+     *      capacityStatus: string,
+     *      externalNumbers: list<array{
+     *          type: string,
+     *          value: string
+     *      }>,
+     *      capacitySettings: list<array{
+     *          size: string,
+     *          sizeId: int,
+     *          forYouDeliveryToAccessPoint: list<string>,
+     *          height: int,
+     *          length: int,
+     *          width: int
+     *      }>,
+     *      visiblePs: bool,
+     *      activeCardPayment: bool,
+     *      tribalServicePoint: bool,
+     *      dimensionForced: bool,
+     *      pickupEnabled: bool,
+     *      activeCashPayment: bool,
+     *      newPs: bool,
+     *      accessPointTypeInternal: array{
+     *          id: int,
+     *          name: string
+     *      },
+     *      distance: float,
+     *      isCapacityAvailable: bool,
+     *      availableCmCodes: list<string>
+     *  }|null $pplData
+     */
+    public function setPplData(?array $pplData): void;
 
-	public function getPplKTMaddress(): ?string;
+    public function getPplPickupPointId(): ?string;
 
-	public function setPplKTMaddress(?string $pplKTMaddress): void;
+    public function pplPickupPointName(): ?string;
 
-	public function getPplKTMID(): ?string;
+    public function pplPickupPointAddress(): ?string;
 
-	public function setPplKTMID(?string $pplKTMID): void;
+    /**
+     * @deprecated Kept for backward compatibility. Use setPplData() instead.
+     */
+    public function setPplKTMname(?string $pplKTMname): void;
+
+    /**
+     * @deprecated Kept for backward compatibility. Use getPplData() instead.
+     */
+    public function getPplKTMname(): ?string;
+
+    /**
+     * @deprecated Kept for backward compatibility. Use getPplData() instead.
+     */
+    public function getPplKTMaddress(): ?string;
+
+    /**
+     * @deprecated Kept for backward compatibility. Use setPplData() instead.
+     */
+    public function setPplKTMaddress(?string $pplKTMaddress): void;
+
+    /**
+     * @deprecated Kept for backward compatibility. Use setPplData() instead.
+     */
+    public function getPplKTMID(): ?string;
+
+    /**
+     * @deprecated Kept for backward compatibility. Use setPplData() instead.
+     */
+    public function setPplKTMID(?string $pplKTMID): void;
 }

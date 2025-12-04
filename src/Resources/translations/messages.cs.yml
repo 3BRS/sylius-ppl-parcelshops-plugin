@@ -11,8 +11,9 @@ threebrs:
         pplParcelShop:
             title: PPL ParcelShop
             form:
-                pplParcelshopsShippingMethod: To PPL ParcelShop enabled
-                pplOptionCountry: Zobrazovat ParcelShopy z dané země
+                pplParcelshopsShippingMethod: Povoleno pro PPL ParcelShop
+                pplOptionCountries: Zobrazovat ParcelShopy z vybraných zemí
+                pplDefaultCountry: Výchozí vybraná země na mapě s ParcelShopy
             export:
                 toPplBranch: Na PPL ParcelShop
                 toAddress: Na addressu

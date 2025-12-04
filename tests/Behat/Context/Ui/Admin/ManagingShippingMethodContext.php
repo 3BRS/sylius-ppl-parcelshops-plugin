@@ -10,14 +10,9 @@ use Webmozart\Assert\Assert;
 
 final class ManagingShippingMethodContext implements Context
 {
-	/** @var UpdatePageInterface */
-	private $updatePage;
-
-	public function __construct(
-		UpdatePageInterface $updatePage
-	) {
-		$this->updatePage = $updatePage;
-	}
+	public function __construct(private readonly UpdatePageInterface $updatePage)
+ {
+ }
 
 	/**
 	 * @Then it should be shipped to PPL parcelshop
@@ -36,9 +31,9 @@ final class ManagingShippingMethodContext implements Context
 	}
 
 	/**
-	 * @Then the PPL parcelshops shoul be enabled
+	 * @Then the PPL parcelshops should be enabled
 	 */
-	public function thePplParcelshopsShoulBeEnabled()
+	public function thePplParcelshopsShouldBeEnabled()
 	{
 		Assert::true((bool) $this->updatePage->isSingleResourceOnPage('pplCheckbox'));
 	}
@@ -52,10 +47,57 @@ final class ManagingShippingMethodContext implements Context
 	}
 
 	/**
-	 * @Then the PPL parcelshops shoul be disabled
+	 * @Then the PPL parcelshops should be disabled
 	 */
-	public function thePplParcelshopsShoulBeDisabled()
+	public function thePplParcelshopsShouldBeDisabled()
 	{
 		Assert::false((bool) $this->updatePage->isSingleResourceOnPage('pplCheckbox'));
+	}
+
+	/**
+	 * @When I select :countryCodes as allowed PPL countries
+	 */
+	public function iSelectAllowedPplCountries(string $countryCodes)
+	{
+		$countryList = array_map('trim', explode(',', $countryCodes));
+		$this->updatePage->selectPplAllowedCountries($countryList);
+	}
+
+	/**
+	 * @When I select :countryCode as default PPL country
+	 */
+	public function iSelectDefaultPplCountry(string $countryCode)
+	{
+		$this->updatePage->selectPplDefaultCountry($countryCode);
+	}
+
+	/**
+	 * @Then the allowed PPL countries should be :countryCodes
+	 */
+	public function theAllowedPplCountriesShouldBe(string $countryCodes)
+	{
+		$expectedCountries = array_map('trim', explode(',', $countryCodes));
+		$actualCountries = $this->updatePage->getSelectedPplAllowedCountries();
+
+		sort($expectedCountries);
+		sort($actualCountries);
+
+		Assert::eq($actualCountries, $expectedCountries);
+	}
+
+	/**
+	 * @Then the default PPL country should be :countryCode
+	 */
+	public function theDefaultPplCountryShouldBe(string $countryCode)
+	{
+		Assert::eq($this->updatePage->getSelectedPplDefaultCountry(), $countryCode);
+	}
+
+	/**
+	 * @Then I should see a validation error for the default country field
+	 */
+	public function iShouldSeeValidationErrorForDefaultCountry()
+	{
+		Assert::true($this->updatePage->hasValidationErrorFor('pplDefaultCountry'));
 	}
 }

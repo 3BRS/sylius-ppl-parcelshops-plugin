@@ -1,8 +1,9 @@
-{% if row.pplKTMID %}
-	<address>
-		{{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
-		<strong>{{ row.pplKTMname }}</strong><br>
-		{{ row.pplKTMaddress }}<br>
-		ID: {{ row.pplKTMID }}
-	</address>
+{# @var \ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface row #}
+{% if row.pplPickupPointId %}
+    <address>
+        {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
+        <strong>{{ row.pplPickupPointName }}</strong><br>
+        {{ row.pplPickupPointAddress }}<br>
+        ID: {{ row.pplPickupPointId }}
+    </address>
 {% endif %}

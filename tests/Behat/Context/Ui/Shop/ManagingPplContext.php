@@ -12,18 +12,10 @@ use Webmozart\Assert\Assert;
 
 final class ManagingPplContext implements Context
 {
-	/** @var CheckoutShippingContext */
-	private $checkoutShippingContext;
-
-	/** @var PplPagesInterface */
-	private $pplPages;
-
 	public function __construct(
-		PplPagesInterface $pplPages,
-		CheckoutShippingContext $checkoutShippingContext
+		private readonly PplPagesInterface $pplPages,
+		private readonly CheckoutShippingContext $checkoutShippingContext,
 	) {
-		$this->checkoutShippingContext = $checkoutShippingContext;
-		$this->pplPages = $pplPages;
 	}
 
 	/**
@@ -37,9 +29,9 @@ final class ManagingPplContext implements Context
 	}
 
 	/**
-	 * @Then I choose PPL parcelshop with ID ":id", name ":name" and address ":address"
+	 * @When I choose PPL parcelshop with ID :id, name :name and address :address
 	 */
-	public function iSelectPplBranch(int $id, string $name, string $address)
+	public function iSelectPplBranch(string $id, string $name, string $address)
 	{
 		$this->pplPages->selectPplBranch($id, $name, $address);
 	}
