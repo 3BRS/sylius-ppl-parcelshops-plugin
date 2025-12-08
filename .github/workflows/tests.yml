@@ -82,20 +82,6 @@ jobs:
             -   name: Behat tests (prefer-dist)
                 run: docker compose exec php bash -c 'rm -f tests/Application/var/log/test.log && APP_ENV=test php -d memory_limit=1G -d error_reporting="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED" vendor/bin/behat || grep CRITICAL tests/Application/var/log/test.log'
 
-            -   name: Upload prefer-dist composer.lock artifacts
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: composer-prefer-dist-locks-php${{ matrix.php_version }}-sylius${{ matrix.sylius_version }}-symfony${{ matrix.symfony_version }}
-                    path: composer.lock
-
-            -   name: Upload prefer-dist logs artifacts
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: composer-prefer-dist-logs-php${{ matrix.php_version }}-sylius${{ matrix.sylius_version }}-symfony${{ matrix.symfony_version }}
-                    path: tests/Application/var/log/*
-
             -   name: Install dependencies (prefer-lowest)
                 run: |
                     docker compose exec php rm -fr vendor composer.lock
@@ -122,21 +108,3 @@ jobs:
 
             -   name: Behat tests (prefer-lowest)
                 run: docker compose exec php bash -c 'rm -f tests/Application/var/log/test.log && APP_ENV=test php -d memory_limit=1G -d error_reporting="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED" vendor/bin/behat || grep CRITICAL tests/Application/var/log/test.log'
-
-            -   name: Upload prefer-lowest composer.lock artifacts
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: composer-prefer-lowest-locks-php${{ matrix.php_version }}-sylius${{ matrix.sylius_version }}-symfony${{ matrix.symfony_version }}
-                    path: composer.lock
-
-            -   name: Upload prefer-lowest logs artifacts
-                uses: actions/upload-artifact@v4
-                if: always()
-                with:
-                    name: composer-prefer-lowest-logs-php${{ matrix.php_version }}-sylius${{ matrix.sylius_version }}-symfony${{ matrix.symfony_version }}
-                    path: tests/Application/var/log/*
-
-            -   name: Stop services
-                if: always()
-                run: docker compose down

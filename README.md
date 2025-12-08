@@ -7,9 +7,9 @@
     <a href="https://packagist.org/packages/3BRS/sylius-ppl-parcelshops-plugin" title="Version" target="_blank">
         <img src="https://img.shields.io/packagist/v/3BRS/sylius-ppl-parcelshops-plugin.svg" />
     </a>
-    <a href="https://circleci.com/gh/3BRS/sylius-ppl-parcelshops-plugin" title="Build status" target="_blank">
-       <img src="https://circleci.com/gh/3BRS/sylius-ppl-parcelshops-plugin.svg?style=shield" />
-   </a>
+    <a href="https://github.com/3BRS/sylius-ppl-parcelshops/actions/workflows/tests.yml" title="Build status" target="_blank">
+        <img src="https://github.com/3BRS/sylius-ppl-parcelshops/actions/workflows/tests.yml/badge.svg" />
+    </a>
 </h1>
 
 ## Features
@@ -181,6 +181,17 @@ Override `templates/bundles/SyliusAdminBundle/Order/Show/_addresses.html.twig` a
 {# ... billing address and other content ... #}
 ```
 
+#### Shop Layout (JavaScript)
+
+Include the PPL JavaScript in your shop layout (e.g., `templates/bundles/SyliusShopBundle/layout.html.twig`):
+
+```twig
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/_javascripts.html.twig') }}
+{% endblock %}
+```
+
 ### 7. Create and run database migrations
 
 Generate and run doctrine migrations to add the required database columns:
@@ -275,4 +286,5 @@ This library is under the MIT license.
 
 Credits
 -------
-Developed by [manGoweb](https://www.threebrs.eu/).
+Developed by [3BRS](https://3brs.com)<br>
+Forked from [manGoweb](https://github.com/mangoweb-sylius/SyliusPplParcelshopsPlugin).
