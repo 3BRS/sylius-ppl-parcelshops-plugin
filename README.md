@@ -1,7 +1,12 @@
+<p align="center">
+    <a href="https://www.3brs.com" target="_blank">
+        <img src="https://3brs1.fra1.cdn.digitaloceanspaces.com/3brs/logo/3BRS-logo-sylius-200.png"/>
+    </a>
+</p>
 <h1 align="center">
     PPL parcelshop plugin
     <br />
-    <a href="https://packagist.org/packages/3BRS/sylius-ppl-parcelshop-plugin" title="License" target="_blank">
+    <a href="https://packagist.org/packages/3BRS/sylius-ppl-parcelshops-plugin" title="License" target="_blank">
         <img src="https://img.shields.io/packagist/l/3BRS/sylius-ppl-parcelshops-plugin.svg" />
     </a>
     <a href="https://packagist.org/packages/3BRS/sylius-ppl-parcelshops-plugin" title="Version" target="_blank">
