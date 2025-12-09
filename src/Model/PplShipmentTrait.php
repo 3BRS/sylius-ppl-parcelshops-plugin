@@ -82,9 +82,7 @@ trait PplShipmentTrait
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplKTMaddress = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    /** @ORM\Column(type="string", nullable=true) */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplKTMID = null;
 

@@ -9,15 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait PplShippingMethodTrait
 {
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    /** @ORM\Column(type="boolean", nullable=true) */
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $pplParcelshopsShippingMethod = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    /** @ORM\Column(type="string", nullable=true) */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplDefaultCountry = null;
 
