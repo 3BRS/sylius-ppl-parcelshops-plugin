@@ -56,7 +56,7 @@ Add routing to `config/routes.yaml`:
 
 ```yaml
 threebrs_sylius_shipment_export_plugin:
-    resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/routing.y*ml"
+    resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/routing.yaml"
     prefix: '/%sylius_admin.path_name%'
 
 threebrs_sylius_ppl_parcelshops_plugin:

@@ -60,18 +60,31 @@ trait PplShipmentTrait
      *      isCapacityAvailable: bool,
      *      availableCmCodes: list<string>
      *  }|null
+     *
+     * @ORM\Column(type="json", nullable=true)
      */
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $pplData = null;
 
-    /** @deprecated Kept for backward compatibility. Use $pplData instead. */
+    /**
+     * @deprecated Kept for backward compatibility. Use $pplData instead.
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplKTMname = null;
 
-    /** @deprecated Kept for backward compatibility. Use $pplData instead. */
+    /**
+     * @deprecated Kept for backward compatibility. Use $pplData instead.
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplKTMaddress = null;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $pplKTMID = null;
 
