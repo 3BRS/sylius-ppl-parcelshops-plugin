@@ -186,17 +186,6 @@ Override `templates/bundles/SyliusAdminBundle/Order/Show/_addresses.html.twig` a
 {# ... billing address and other content ... #}
 ```
 
-#### Shop Layout (JavaScript)
-
-Include the PPL JavaScript in your shop layout (e.g., `templates/bundles/SyliusShopBundle/layout.html.twig`):
-
-```twig
-{% block javascripts %}
-    {{ parent() }}
-    {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/_javascripts.html.twig') }}
-{% endblock %}
-```
-
 ### 7. Create and run database migrations
 
 Generate and run doctrine migrations to add the required database columns:

@@ -1,5 +1,16 @@
+{# @var \ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface shipment #}
 {% set shipment = order.shipments.last %}
-{% if shipment.pplKTMID %}
+
+{% if shipment.pplData  %}
+    <address>
+        {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
+        <strong>{{ shipment.pplData.parcelshopName }}</strong><br>
+        {{ shipment.pplData.street }}<br>
+        {{ shipment.pplData.city }}, {{ shipment.pplData.zipCode }}<br>
+        <i class="{{ shipment.pplData.country|lower }} flag"></i>
+        {{ shipment.pplData.country|upper|sylius_country_name|upper }}
+    </address>
+{% elseif shipment.pplKTMID %}
     <address>
         {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
         <strong>{{ shipment.pplKTMname }}</strong><br>
