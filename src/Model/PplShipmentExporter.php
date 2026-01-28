@@ -92,7 +92,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
             }
         }
 
-        $pplId = $shipment->getPplKTMID();
+        $pplId = $shipment->getPplPickupPointId();
 
         return [
             /* 1 - version 5 */

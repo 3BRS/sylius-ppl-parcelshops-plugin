@@ -80,9 +80,10 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     {
         // Use JavaScript to get selected values to avoid Mink validation
         $script = "return $('#sylius_shipping_method_pplOptionCountries').val() || [];";
+        /** @var mixed $result */
         $result = $this->getSession()->evaluateScript($script);
 
-        return is_array($result)
+        return \is_array($result)
             ? $result
             : [];
     }
