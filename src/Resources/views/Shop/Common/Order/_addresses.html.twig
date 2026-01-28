@@ -4,6 +4,7 @@
 {% if shipment.pplData  %}
     <address>
         {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
+        <strong>{{ shipment.pplData.name }}</strong><br>
         <strong>{{ shipment.pplData.parcelshopName }}</strong><br>
         {{ shipment.pplData.street }}<br>
         {{ shipment.pplData.city }}, {{ shipment.pplData.zipCode }}<br>
