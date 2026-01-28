@@ -6,6 +6,7 @@
     {% set defaultCountry = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-default-country']|lower %}
     {% set latitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lat'] %}
     {% set longitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lng'] %}
+    {% set selectedCode = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-selected-code']|default(null) %}
     {% set language = app.request.locale in ['cs', 'en'] ? app.request.locale : 'cs' %}
 
     <div class="ui hidden divider"></div>
@@ -47,6 +48,7 @@
                  data-language="{{ language }}"
                  data-countries="{{ countriesOption }}"
                  data-country="{{ defaultCountry }}"
+                 {% if selectedCode %}data-code="{{ selectedCode }}"{% endif %}
                  style="height: 100%; width: 100%;"></div>
         </div>
     </div>

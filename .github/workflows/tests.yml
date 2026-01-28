@@ -84,7 +84,7 @@ jobs:
 
             -   name: Install dependencies (prefer-lowest)
                 run: |
-                    docker compose exec php rm -fr vendor composer.lock
+                    docker compose exec php rm -fr vendor composer.lock tests/Application/var/cache
                     docker compose exec php composer update --no-interaction --prefer-lowest --no-plugins
                     docker compose exec php bash -c '
                         cd tests/Application &&

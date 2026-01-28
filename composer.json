@@ -46,9 +46,11 @@
 		"symfony/intl": "^6.4",
 		"symfony/panther": "^2.3",
 		"symfony/web-profiler-bundle": "^6.4",
-		"symplify/easy-coding-standard": "^10.3.0"
+		"symplify/easy-coding-standard": "^10.3.0",
+		"symfony/cache": "^6.4.17"
 	},
 	"conflict": {
+		"symfony/cache": "<6.4.17",
 		"api-platform/core": "<2.7.13",
 		"babdev/pagerfanta-bundle": "<3.6.1",
 		"doctrine/collections": "<1.7.0",

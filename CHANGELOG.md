@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1 (2026-01-28)
+
+### Fixed
+
+- [SLS-97] Fixed PPL parcelshop pre-selection when returning to checkout shipping step - button now shows only parcelshop name instead of full address
+- [SLS-97] Added `data-code` attribute to PPL widget for proper parcelshop pre-selection in popup
+- Fixed CI prefer-lowest compatibility by requiring `symfony/cache ^6.4.17`
+
 ## v1.0.0 (2025-12-09)
 
 ### Changed
