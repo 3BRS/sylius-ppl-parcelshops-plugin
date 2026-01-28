@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl;
 
-use Behat\Mink\Exception\ElementNotFoundException;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
-use Webmozart\Assert\Assert;
 
 final class PplPages extends SymfonyPage implements PplPagesInterface
 {
@@ -29,6 +27,7 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
                 return false;
             }
             $button = $this->getElement('ppl_select_button');
+
             return $button->isVisible() && !$button->hasAttribute('disabled');
         });
 
@@ -50,15 +49,15 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
         // In a real scenario, this would interact with the PPL widget
         // For testing purposes, we create a mock JSON response matching PPL's format
         $mockPplData = [
-            'code'            => $id, // PPL parcelshop code (e.g., "KM10833808" or just "1" for testing)
-            'name'            => $name,
-            'street'          => explode(',', $address)[0] ?? $address,
-            'city'            => 'Prague',
-            'zipCode'         => '12345',
-            'country'         => 'CZ',
+            'code' => $id, // PPL parcelshop code (e.g., "KM10833808" or just "1" for testing)
+            'name' => $name,
+            'street' => explode(',', $address)[0] ?? $address,
+            'city' => 'Prague',
+            'zipCode' => '12345',
+            'country' => 'CZ',
             'accessPointType' => 'ParcelShop',
-            'gps'             => [
-                'latitude'  => 50.0755,
+            'gps' => [
+                'latitude' => 50.0755,
                 'longitude' => 14.4378,
             ],
         ];
@@ -102,11 +101,11 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'ppl_select_button'    => 'button[id*="_button"][onclick*="openPplModal"]',
-            'ppl_modal'            => 'div[id*="_modal"].ui.modal',
-            'ppl_modal_close'      => 'div[id*="_modal"] i.close.icon',
+            'ppl_select_button' => 'button[id*="_button"][onclick*="openPplModal"]',
+            'ppl_modal' => 'div[id*="_modal"].ui.modal',
+            'ppl_modal_close' => 'div[id*="_modal"] i.close.icon',
             'ppl_widget_container' => '#ppl-parcelshop-map',
-            'shippingAddress'      => '#sylius-shipping-address',
+            'shippingAddress' => '#sylius-shipping-address',
         ]);
     }
 }

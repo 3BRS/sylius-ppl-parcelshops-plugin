@@ -20,14 +20,14 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShippingMethodContext">
             <argument type="service"
                       id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod\UpdatePageInterface"/>
-            <argument type="service" id="sylius.behat.notification_checker"/>
+            <argument type="service" id="sylius.behat.notification_checker.admin"/>
         </service>
 
         <service id="sylius_ppl_parcelshops_plugin.context.setup.shipping_method"
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup\ShippingMethodContext">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sylius.behat.shared_storage"/>
-            <argument type="service" id="sm.factory"/>
+            <argument type="service" id="state_machine.sylius_order_checkout"/>
         </service>
 
         <service id="sylius_ppl_parcelshops_plugin.context.ui.shop.managing_ppl_context"
@@ -49,12 +49,6 @@
                  parent="sylius.behat.symfony_page" public="false">
         </service>
 
-        <!-- Override Sylius SelectPaymentPage to add waiting for payment methods to load -->
-        <service id="sylius.behat.page.shop.checkout.select_payment"
-                 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Checkout\SelectPaymentPage"
-                 parent="sylius.behat.symfony_page" public="false">
-        </service>
-
         <service id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface"
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPage"
                  parent="sylius.behat.symfony_page" public="false">
@@ -64,7 +58,6 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShipmentExportContext">
             <argument type="service"
                       id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface"/>
-            <argument type="service" id="sylius.behat.shared_storage"/>
             <argument type="service" id="behat.mink.default_session"/>
         </service>
 

@@ -1,0 +1,21 @@
+imports:
+    - { resource: "@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/config.yaml" }
+    - { resource: "services_test.php" }
+
+doctrine:
+    orm:
+        mappings:
+            TestsPplPlugin:
+                type: attribute
+                dir: '%threebrs_sylius_ppl_parcelshops_plugin.plugin_dir%/tests/Entity'
+                prefix: 'Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity'
+                is_bundle: false
+
+sylius_shipping:
+    resources:
+        shipping_method:
+            classes:
+                model: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity\ShippingMethod
+        shipment:
+            classes:
+                model: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity\Shipment

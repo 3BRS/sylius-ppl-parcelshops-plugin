@@ -3,7 +3,14 @@ imports:
     - tests/Behat/Resources/suites.yml
 
 default:
+    formatters:
+        pretty:
+            verbose: true
+            paths: false
+            snippets: false
+
     extensions:
+        DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
         Robertfausk\Behat\PantherExtension: ~
 
         FriendsOfBehat\MinkDebugExtension:
@@ -12,29 +19,31 @@ default:
             screenshot: true
 
         Behat\MinkExtension:
-            base_url: "http://127.0.0.1:9080"
+            files_path: "%paths.base%/vendor/sylius/sylius/src/Sylius/Behat/Resources/fixtures/"
+            base_url: "%env(BEHAT_BASE_URL)%"
             default_session: symfony
             javascript_session: panther
             sessions:
                 symfony:
                     symfony: ~
+                chrome:
+                    chrome:
+                        api_url: http://127.0.0.1:9222
+                        validate_certificate: false
                 panther:
                     panther:
                         manager_options:
                             connection_timeout_in_ms: 5000
                             request_timeout_in_ms: 120000
-                            chromedriver_binary: '/usr/bin/chromedriver'
                             chromedriver_arguments:
-                                - --log-path=tests/Application/var/log/chromedriver.log
+                                - --log-path=etc/build/chromedriver.log
                                 - --verbose
                             capabilities:
                                 acceptSslCerts: true
                                 acceptInsecureCerts: true
                                 unexpectedAlertBehaviour: accept
                         options:
-                            webServerDir: '%paths.base%/tests/Application/public'
-                            env:
-                                APP_ENV: test
+                            webServerDir: '%paths.base%/vendor/sylius/test-application/public'
                             browser_arguments:
                                 - --window-size=1200,1000
                                 - --headless
@@ -54,12 +63,15 @@ default:
             show_auto: false
 
         FriendsOfBehat\SymfonyExtension:
-            bootstrap: tests/Application/config/bootstrap.php
+            bootstrap: vendor/sylius/test-application/config/bootstrap.php
             kernel:
-                class: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Kernel
+                class: Sylius\TestApplication\Kernel
+                environment: test
 
         FriendsOfBehat\VariadicExtension: ~
 
         FriendsOfBehat\SuiteSettingsExtension:
             paths:
                 - "features"
+
+        SyliusLabs\SuiteTagsExtension: ~

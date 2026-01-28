@@ -8,27 +8,27 @@ use Sylius\Behat\Page\Admin\ShippingMethod\UpdatePageInterface as BaseUpdatePage
 
 interface UpdatePageInterface extends BaseUpdatePageInterface
 {
-	public function enablePplParcelshops(): void;
+    public function enablePplParcelshops(): void;
 
-	public function disablePplParcelshops(): void;
+    public function disablePplParcelshops(): void;
 
-	public function isSingleResourceOnPage(string $elementName);
+    public function isSingleResourceOnPage(string $elementName): mixed;
 
-	public function iSeePplParcelshopInsteadOfShippingAddress(): bool;
+    public function iSeePplParcelshopInsteadOfShippingAddress(): bool;
 
-	/**
-	 * @param array<string> $countries
-	 */
-	public function selectPplAllowedCountries(array $countries): void;
+    /**
+     * @param array<string> $countries
+     */
+    public function selectPplAllowedCountries(array $countries): void;
 
-	public function selectPplDefaultCountry(string $country): void;
+    public function selectPplDefaultCountry(string $country): void;
 
-	/**
-	 * @return array<string>
-	 */
-	public function getSelectedPplAllowedCountries(): array;
+    /**
+     * @return array<string>
+     */
+    public function getSelectedPplAllowedCountries(): array;
 
-	public function getSelectedPplDefaultCountry(): ?string;
+    public function getSelectedPplDefaultCountry(): ?string;
 
-	public function hasValidationErrorFor(string $field): bool;
+    public function hasValidationErrorFor(string $field): bool;
 }

@@ -30,7 +30,7 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         $this->getSession()->executeScript("document.getElementById('sylius_shipping_method_pplParcelshopsShippingMethod').checked = false;");
     }
 
-    public function isSingleResourceOnPage(string $elementName)
+    public function isSingleResourceOnPage(string $elementName): mixed
     {
         return $this->getElement($elementName)->getValue();
     }
@@ -49,12 +49,12 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     {
         // Set the values directly on the select element
         $countriesJson = json_encode($countries);
-        $script        = sprintf(
+        $script = sprintf(
             "var select = document.getElementById('sylius_shipping_method_pplOptionCountries'); " .
-            "var values = %s; " .
-            "Array.from(select.options).forEach(function(option) { " .
-            "  option.selected = values.includes(option.value); " .
-            "}); " .
+            'var values = %s; ' .
+            'Array.from(select.options).forEach(function(option) { ' .
+            '  option.selected = values.includes(option.value); ' .
+            '}); ' .
             "$(select).trigger('change');",
             $countriesJson,
         );
@@ -80,9 +80,10 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     {
         // Use JavaScript to get selected values to avoid Mink validation
         $script = "return $('#sylius_shipping_method_pplOptionCountries').val() || [];";
+        /** @var mixed $result */
         $result = $this->getSession()->evaluateScript($script);
 
-        return is_array($result)
+        return \is_array($result)
             ? $result
             : [];
     }
@@ -112,9 +113,9 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'pplCheckbox'              => '#sylius_shipping_method_pplParcelshopsShippingMethod',
-            'shippingAddress'          => '#shipping-address',
-            'pplDefaultCountrySelect'  => 'select#sylius_shipping_method_pplDefaultCountry',
+            'pplCheckbox' => '#sylius_shipping_method_pplParcelshopsShippingMethod',
+            'shippingAddress' => '#shipping-address',
+            'pplDefaultCountrySelect' => 'select#sylius_shipping_method_pplDefaultCountry',
             'pplOptionCountriesSelect' => 'select#sylius_shipping_method_pplOptionCountries',
         ]);
     }
