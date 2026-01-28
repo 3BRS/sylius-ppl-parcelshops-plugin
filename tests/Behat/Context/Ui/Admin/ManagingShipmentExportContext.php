@@ -25,7 +25,6 @@ final class ManagingShipmentExportContext implements Context
     public function iBrowsePplParcelshopShipmentsReadyForExport(): void
     {
         $this->indexPage->open(['exporterName' => 'ppl_parcel_shop']);
-
     }
 
     /**
@@ -36,7 +35,7 @@ final class ManagingShipmentExportContext implements Context
         Assert::eq(
             $this->indexPage->countShipments(),
             $count,
-            sprintf('Expected %d shipments, but found %d', $count, $this->indexPage->countShipments())
+            sprintf('Expected %d shipments, but found %d', $count, $this->indexPage->countShipments()),
         );
     }
 
@@ -47,7 +46,7 @@ final class ManagingShipmentExportContext implements Context
     {
         Assert::true(
             $this->indexPage->hasShipmentForOrder($orderNumber),
-            sprintf('Shipment for order "%s" should be visible in the list', $orderNumber)
+            sprintf('Shipment for order "%s" should be visible in the list', $orderNumber),
         );
     }
 
@@ -86,7 +85,7 @@ final class ManagingShipmentExportContext implements Context
             Assert::contains(
                 $contentType,
                 'text/csv',
-                sprintf('Expected CSV content type, got: %s', $contentType)
+                sprintf('Expected CSV content type, got: %s', $contentType),
             );
         }
     }
@@ -100,7 +99,7 @@ final class ManagingShipmentExportContext implements Context
         Assert::contains(
             $this->csvContent,
             $orderNumber,
-            sprintf('CSV should contain order number "%s"', $orderNumber)
+            sprintf('CSV should contain order number "%s"', $orderNumber),
         );
     }
 
@@ -117,7 +116,7 @@ final class ManagingShipmentExportContext implements Context
         Assert::eq(
             $actualCount,
             $count,
-            sprintf('Expected %d CSV records, but found %d', $count, $actualCount)
+            sprintf('Expected %d CSV records, but found %d', $count, $actualCount),
         );
     }
 
@@ -154,13 +153,14 @@ final class ManagingShipmentExportContext implements Context
         foreach ($lines as $line) {
             if ((str_contains($line, $orderNumber) || str_contains($line, $orderNumberClean)) && str_contains($line, $pplId)) {
                 $found = true;
+
                 break;
             }
         }
 
         Assert::true(
             $found,
-            sprintf('CSV should contain PPL parcelshop ID "%s" for order "%s"', $pplId, $orderNumber)
+            sprintf('CSV should contain PPL parcelshop ID "%s" for order "%s"', $pplId, $orderNumber),
         );
     }
 
@@ -173,7 +173,7 @@ final class ManagingShipmentExportContext implements Context
         Assert::contains(
             $this->csvContent,
             $email,
-            sprintf('CSV should contain customer email "%s"', $email)
+            sprintf('CSV should contain customer email "%s"', $email),
         );
     }
 }

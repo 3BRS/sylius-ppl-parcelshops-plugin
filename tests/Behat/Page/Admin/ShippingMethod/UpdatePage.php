@@ -49,7 +49,7 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     {
         // Set the values directly on the select element
         $countriesJson = json_encode($countries);
-        $script        = sprintf(
+        $script = sprintf(
             "var select = document.getElementById('sylius_shipping_method_pplOptionCountries'); " .
             "var values = %s; " .
             "Array.from(select.options).forEach(function(option) { " .
@@ -113,9 +113,9 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'pplCheckbox'              => '#sylius_shipping_method_pplParcelshopsShippingMethod',
-            'shippingAddress'          => '#shipping-address',
-            'pplDefaultCountrySelect'  => 'select#sylius_shipping_method_pplDefaultCountry',
+            'pplCheckbox' => '#sylius_shipping_method_pplParcelshopsShippingMethod',
+            'shippingAddress' => '#shipping-address',
+            'pplDefaultCountrySelect' => 'select#sylius_shipping_method_pplDefaultCountry',
             'pplOptionCountriesSelect' => 'select#sylius_shipping_method_pplOptionCountries',
         ]);
     }
