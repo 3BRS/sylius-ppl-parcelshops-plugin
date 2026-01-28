@@ -9,7 +9,7 @@ use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
-use Sylius\Component\Currency\Converter\CurrencyConverter;
+use Sylius\Component\Currency\Converter\CurrencyConverterInterface;
 use Sylius\Component\Order\Model\OrderInterface;
 use ThreeBRS\SyliusShipmentExportPlugin\Model\ShipmentExporterInterface;
 
@@ -19,7 +19,7 @@ class PplShipmentExporter implements ShipmentExporterInterface
      * @param array<string> $pplShippingMethodsCodes
      */
     public function __construct(
-        private readonly CurrencyConverter $currencyConverter,
+        private readonly CurrencyConverterInterface $currencyConverter,
         private readonly array $pplShippingMethodsCodes,
     ) {
     }
