@@ -17,5 +17,11 @@ class ThreeBRSSyliusPplParcelshopsExtension extends Extension
     ): void {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
+
+        // Expose plugin directory as parameter for test entity mapping
+        $container->setParameter(
+            'threebrs_sylius_ppl_parcelshops_plugin.plugin_dir',
+            dirname(__DIR__, 2),
+        );
     }
 }
