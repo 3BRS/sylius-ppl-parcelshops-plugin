@@ -1,5 +1,22 @@
 # Changelog
 
+## v2.0.0 (2026-01-28)
+
+### Changed
+
+- [SLS-97] Upgraded to Sylius 2.0 compatibility
+- PHP requirement raised to ^8.2
+- Switched to `sylius/test-application` package for testing (removed local tests/Application)
+- Updated to autowire/autoconfigure for service configuration
+- Updated workflow to use GitHub Actions native runners instead of Docker
+- Updated dependencies to Sylius 2.0 compatible versions
+
+### Removed
+
+- Removed deprecated `getPplKTMID()`, `getPplKTMname()`, `getPplKTMaddress()` methods
+- Removed deprecated `setPplKTMID()`, `setPplKTMname()`, `setPplKTMaddress()` methods
+- Removed Docker-based development environment
+
 ## v1.0.1 (2026-01-28)
 
 ### Fixed
