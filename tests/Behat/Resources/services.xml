@@ -20,7 +20,7 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShippingMethodContext">
             <argument type="service"
                       id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod\UpdatePageInterface"/>
-            <argument type="service" id="sylius.behat.notification_checker"/>
+            <argument type="service" id="sylius.behat.notification_checker.admin"/>
         </service>
 
         <service id="sylius_ppl_parcelshops_plugin.context.setup.shipping_method"
