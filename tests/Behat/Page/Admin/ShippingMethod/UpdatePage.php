@@ -51,10 +51,10 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         $countriesJson = json_encode($countries);
         $script = sprintf(
             "var select = document.getElementById('sylius_shipping_method_pplOptionCountries'); " .
-            "var values = %s; " .
-            "Array.from(select.options).forEach(function(option) { " .
-            "  option.selected = values.includes(option.value); " .
-            "}); " .
+            'var values = %s; ' .
+            'Array.from(select.options).forEach(function(option) { ' .
+            '  option.selected = values.includes(option.value); ' .
+            '}); ' .
             "$(select).trigger('change');",
             $countriesJson,
         );

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl;
 
-use Behat\Mink\Exception\ElementNotFoundException;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
-use Webmozart\Assert\Assert;
 
 final class PplPages extends SymfonyPage implements PplPagesInterface
 {
@@ -29,6 +27,7 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
                 return false;
             }
             $button = $this->getElement('ppl_select_button');
+
             return $button->isVisible() && !$button->hasAttribute('disabled');
         });
 
