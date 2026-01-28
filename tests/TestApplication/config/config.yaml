@@ -7,7 +7,7 @@ doctrine:
         mappings:
             TestsPplPlugin:
                 type: attribute
-                dir: '%kernel.project_dir%/tests/Entity'
+                dir: '%kernel.project_dir%/../../../../tests/Entity'
                 prefix: 'Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity'
                 is_bundle: false
 
