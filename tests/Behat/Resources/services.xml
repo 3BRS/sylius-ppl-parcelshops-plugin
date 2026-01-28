@@ -58,7 +58,6 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShipmentExportContext">
             <argument type="service"
                       id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface"/>
-            <argument type="service" id="sylius.behat.shared_storage"/>
             <argument type="service" id="behat.mink.default_session"/>
         </service>
 
