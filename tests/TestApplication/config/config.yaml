@@ -6,7 +6,7 @@ sylius_shipping:
     resources:
         shipping_method:
             classes:
-                model: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\TestApplication\Entity\ShippingMethod
+                model: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity\ShippingMethod
         shipment:
             classes:
-                model: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\TestApplication\Entity\Shipment
+                model: Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity\Shipment

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\TestApplication\Entity;
+namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Core\Model\ShippingMethod as BaseShippingMethod;

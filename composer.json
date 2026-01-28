@@ -63,7 +63,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Tests\\ThreeBRS\\SyliusPplParcelshopsPlugin\\": ["tests/", "tests/TestApplication/src/"],
+			"Tests\\ThreeBRS\\SyliusPplParcelshopsPlugin\\": "tests/",
 			"Tests\\ThreeBRS\\SyliusPplParcelshopsPlugin\\Behat\\": "tests/Behat/"
 		}
 	}
