@@ -83,7 +83,7 @@ class IndexPage extends SymfonyPage implements IndexPageInterface
 
         // Build export URL properly
         $exporterName = 'ppl_parcel_shop';
-        $baseUrl = rtrim($this->getParameter('base_url'), '/');
+        $baseUrl = rtrim((string) $this->getParameter('base_url'), '/');
         $url = sprintf('%s/admin/shipment-exports/export/%s', $baseUrl, $exporterName);
 
         if (!empty($ids)) {
@@ -122,7 +122,7 @@ class IndexPage extends SymfonyPage implements IndexPageInterface
 
         // Build mark-as-shipped URL properly
         $exporterName = 'ppl_parcel_shop';
-        $baseUrl = rtrim($this->getParameter('base_url'), '/');
+        $baseUrl = rtrim((string) $this->getParameter('base_url'), '/');
         $url = sprintf('%s/admin/shipment-exports/mark/%s', $baseUrl, $exporterName);
 
         if (!empty($ids)) {

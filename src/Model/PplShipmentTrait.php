@@ -104,19 +104,19 @@ trait PplShipmentTrait
 
     public function getPplPickupPointId(): ?string
     {
-        return $this->getPplData()['code'] ?? $this->getPplKTMID();
+        return $this->getPplData()['code'] ?? $this->pplKTMID;
     }
 
     public function pplPickupPointName(): ?string
     {
-        return $this->getPplData()['name'] ?? $this->getPplKTMname();
+        return $this->getPplData()['name'] ?? $this->pplKTMname;
     }
 
     public function pplPickupPointAddress(): ?string
     {
         $pplData = $this->getPplData();
         if ($pplData === null) {
-            return $this->getPplKTMaddress();
+            return $this->pplKTMaddress;
         }
 
         // PPL API returns flat structure with street, city, zipCode at top level
@@ -127,53 +127,5 @@ trait PplShipmentTrait
         ]);
 
         return !empty($parts) ? implode(', ', $parts) : null;
-    }
-
-    /**
-     * @deprecated Kept for backward compatibility. Use getPplData() instead.
-     */
-    public function getPplKTMname(): ?string
-    {
-        return $this->pplKTMname;
-    }
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function setPplKTMname(?string $pplKTMname): void
-    {
-        $this->pplKTMname = $pplKTMname;
-    }
-
-    /**
-     * @deprecated Kept for backward compatibility. Use getPplData() instead.
-     */
-    public function getPplKTMaddress(): ?string
-    {
-        return $this->pplKTMaddress;
-    }
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function setPplKTMaddress(?string $pplKTMaddress): void
-    {
-        $this->pplKTMaddress = $pplKTMaddress;
-    }
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function getPplKTMID(): ?string
-    {
-        return $this->pplKTMID;
-    }
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function setPplKTMID(?string $pplKTMID): void
-    {
-        $this->pplKTMID = $pplKTMID;
     }
 }

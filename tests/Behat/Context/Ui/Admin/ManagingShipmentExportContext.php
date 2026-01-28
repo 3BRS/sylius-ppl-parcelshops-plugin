@@ -6,7 +6,6 @@ namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
 use Behat\Mink\Session;
-use Sylius\Behat\Service\SharedStorageInterface;
 use Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface;
 use Webmozart\Assert\Assert;
 
@@ -16,7 +15,6 @@ final class ManagingShipmentExportContext implements Context
 
     public function __construct(
         private readonly IndexPageInterface $indexPage,
-        private readonly SharedStorageInterface $sharedStorage,
         private readonly Session $session,
     ) {
     }

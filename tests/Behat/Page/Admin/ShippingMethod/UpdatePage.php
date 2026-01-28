@@ -30,7 +30,7 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         $this->getSession()->executeScript("document.getElementById('sylius_shipping_method_pplParcelshopsShippingMethod').checked = false;");
     }
 
-    public function isSingleResourceOnPage(string $elementName)
+    public function isSingleResourceOnPage(string $elementName): mixed
     {
         return $this->getElement($elementName)->getValue();
     }

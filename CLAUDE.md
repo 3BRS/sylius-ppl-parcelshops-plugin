@@ -8,10 +8,10 @@ This is a Sylius plugin that enables shipping to PPL parcelshops. It integrates 
 
 ## Technology Stack
 
-- **Framework**: Sylius 1.13+ (Symfony-based e-commerce platform)
-- **PHP**: 8.1+
-- **Testing**: Behat for behavioral tests
-- **Code Quality**: PHPStan (max level), ECS (Easy Coding Standard), Rector
+- **Framework**: Sylius 2.0+ (Symfony-based e-commerce platform)
+- **PHP**: 8.2+
+- **Testing**: Behat for behavioral tests via `sylius/test-application`
+- **Code Quality**: PHPStan (max level), ECS (Easy Coding Standard)
 - **Dependencies**: Requires `3brs/sylius-shipment-export-plugin` (v0.8.0+)
 
 ## Development Commands
@@ -21,37 +21,29 @@ This is a Sylius plugin that enables shipping to PPL parcelshops. It integrates 
 # Install dependencies
 composer install
 
-# Create test database schema
-bin/console doctrine:schema:create -e test
-
-# Run Behat tests (behavioral tests)
-bin/behat
-# or
-bin/behat.sh
+# Run Behat tests (via sylius/test-application)
+vendor/bin/behat
 
 # Run specific Behat suite/feature
-bin/behat.sh features/path/to/feature.feature
+vendor/bin/behat features/path/to/feature.feature
 ```
 
 ### Code Quality Checks
 ```bash
 # Static analysis with PHPStan (level max)
-bin/phpstan.sh
+vendor/bin/phpstan analyse
 
 # Coding standards check with ECS
-bin/ecs.sh
+vendor/bin/ecs check
 
 # Fix coding standards automatically
-vendor/bin/ecs check --config=ecs.php --fix
-
-# Run Rector for automated refactoring
-vendor/bin/rector process
+vendor/bin/ecs check --fix
 ```
 
 ### Console Access
-The Symfony console is available via symlink:
+The Symfony console is available via:
 ```bash
-bin/console <command>
+vendor/bin/console <command>
 ```
 
 ## Architecture
@@ -69,27 +61,20 @@ The plugin follows Sylius plugin conventions with namespace `ThreeBRS\SyliusPplP
 
 The plugin extends Sylius entities through interfaces and traits (not direct inheritance):
 
-- **`PplShipmentInterface`** and **`PplShipmentTrait`**: Add PPL parcelshop data (KTMID, KTMaddress, KTMname) to Shipment entities
+- **`PplShipmentInterface`** and **`PplShipmentTrait`**: Add PPL parcelshop data as JSON to Shipment entities
 - **`PplShippingMethodInterface`** and **`PplShippingMethodTrait`**: Mark shipping methods as PPL parcelshop-enabled
 
 These must be implemented by the host application's entities (see README.md installation steps).
 
-#### 2. Controllers
-
-- **`PplController`**: Handles callback from PPL parcelshop selection widget
-  - `pplReturn()`: Processes the parcelshop selection and saves it to the shipment
-  - Receives KTMID, KTMaddress, KTMname from query parameters
-  - Validates shipment belongs to current cart before saving
-
-#### 3. Form Extensions
+#### 2. Form Extensions
 
 Form extensions augment existing Sylius forms:
 
 - **`ShipmentPplExtension`**: Extends checkout shipment form to include PPL parcelshop selection widget
 - **`AdminPplShippingMethodExtension`**: Extends admin shipping method form to configure PPL settings
-  - Configured with `threebrs_sylius_ppl_parcelshops_plugin_ppl_countries` parameter (defaults: CZ, PL)
+  - Configured with `threebrs_sylius_ppl_parcelshops_plugin_ppl_countries` parameter
 
-#### 4. CSV Export System
+#### 3. CSV Export System
 
 - **`PplShipmentExporter`**: Implements `ShipmentExporterInterface` from the base shipment export plugin
   - Generates CSV rows with 20 columns matching PPL's import format
@@ -97,13 +82,12 @@ Form extensions augment existing Sylius forms:
   - Calculates weight from order items
   - Determines cash-on-delivery status from payment method
   - Configured via `pplShippingMethodsCodes` parameter (default: `['ppl_parcel_shop']`)
-  - Tagged as `mango_sylius.shipment_exporter_type` with type `ppl_parcel_shop`
+  - Tagged as `threebrs.shipment_exporter_type` with type `ppl_parcel_shop`
 
 ### Service Configuration
 
-Services are defined in `src/Resources/config/services.yml`:
-- All services have `autowire: false` and `autoconfigure: false` by default
-- Dependencies are explicitly configured
+Services are defined in `src/Resources/config/services.yaml`:
+- Uses autowire and autoconfigure by default
 - Form extensions are registered via `form.type_extension` tags
 
 ### View Templates
@@ -123,29 +107,23 @@ Templates in `src/Resources/views/` are designed to be included in host applicat
 
 ### Test Application
 
-The `tests/Application/` directory contains a minimal Sylius application for testing:
-- **`tests/Application/src/Entity/`**: Contains example entity implementations with PPL traits
-- **`tests/Application/config/`**: Symfony configuration for the test app
-- Uses environment variable `APP_ENV=test`
+This plugin uses `sylius/test-application` package for testing:
+- Configuration is in `config/` directory
+- Tests are in `tests/Behat/`
 
 ## Configuration Parameters
 
-Key parameters in `src/Resources/config/services.yml`:
+Key parameters in `src/Resources/config/services.yaml`:
 
-- `pplShippingMethodsCodes`: Array of shipping method codes that should export to PPL (default: `['ppl_parcel_shop']`)
-- `threebrs_sylius_ppl_parcelshops_plugin_ppl_countries`: Array of country codes for PPL service (default: `['CZ', 'PL']`)
+- `threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes`: Array of shipping method codes that should export to PPL (default: `['ppl_parcel_shop']`)
+- `threebrs_sylius_ppl_parcelshops_plugin_ppl_countries`: Array of country codes for PPL service
 
 ## PHPStan Configuration
 
 - Level: max
-- Container XML path: `tests/Application/var/cache/dev/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelDevDebugContainer.xml`
-- 
 - Excludes:
-  - `src/DependencyInjection/Configuration.php` (too slow to analyze)
-  - Test files in `tests/Behat/`
+  - `src/DependencyInjection/Configuration.php` (causes PHPStan crash)
 
 ## Code Style
 
 - Uses `sylius-labs/coding-standard` as base
-- Additional rules: `NoUnusedImportsFixer`, `SingleImportPerStatementFixer`
-- Visibility not required in Spec files

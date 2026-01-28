@@ -24,17 +24,17 @@ trait WaitForElementTrait
         }
 
         // Retry mechanism for stale element references and other timing issues
-        $attempts    = 0;
         $maxAttempts = 5;
 
-        while ($attempts < $maxAttempts) {
+        for ($attempts = 0; $attempts < $maxAttempts; $attempts++) {
             try {
                 return parent::hasElement($name, $parameters);
             } catch (StaleElementReferenceException) {
                 // Wait progressively longer before retrying
-                $this->getSession()->wait(200 * $attempts);
+                $this->getSession()->wait(200 * ($attempts + 1));
             }
         }
+
         return parent::hasElement($name, $parameters);
     }
 

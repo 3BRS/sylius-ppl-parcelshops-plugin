@@ -12,7 +12,7 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
 
 	public function disablePplParcelshops(): void;
 
-	public function isSingleResourceOnPage(string $elementName);
+	public function isSingleResourceOnPage(string $elementName): mixed;
 
 	public function iSeePplParcelshopInsteadOfShippingAddress(): bool;
 

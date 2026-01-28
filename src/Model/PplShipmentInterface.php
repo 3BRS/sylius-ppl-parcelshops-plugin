@@ -119,34 +119,4 @@ interface PplShipmentInterface extends ShipmentInterface
     public function pplPickupPointName(): ?string;
 
     public function pplPickupPointAddress(): ?string;
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function setPplKTMname(?string $pplKTMname): void;
-
-    /**
-     * @deprecated Kept for backward compatibility. Use getPplData() instead.
-     */
-    public function getPplKTMname(): ?string;
-
-    /**
-     * @deprecated Kept for backward compatibility. Use getPplData() instead.
-     */
-    public function getPplKTMaddress(): ?string;
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function setPplKTMaddress(?string $pplKTMaddress): void;
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function getPplKTMID(): ?string;
-
-    /**
-     * @deprecated Kept for backward compatibility. Use setPplData() instead.
-     */
-    public function setPplKTMID(?string $pplKTMID): void;
 }

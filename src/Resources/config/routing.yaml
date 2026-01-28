@@ -1,6 +1,3 @@
-# Deprecated route - kept only for backward compatibility with old orders using redirect-based parcelshop selection
-# New orders use the modal widget integration and do not require this route
-mango_sylius_ppl_parcelshop_return:
-    path: /{_locale}/ppl/return-from-ppl/{methodCode}
-    defaults:
-        _controller: ThreeBRS\SyliusPplParcelshopsPlugin\Controller\PplController::pplReturn
+# PPL Parcelshops Plugin routes
+# The redirect-based parcelshop selection was removed in v2.0.0
+# All parcelshop selection now uses the modal widget integration

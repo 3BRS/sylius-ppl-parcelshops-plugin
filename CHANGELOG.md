@@ -13,9 +13,11 @@
 
 ### Removed
 
-- Removed deprecated `getPplKTMID()`, `getPplKTMname()`, `getPplKTMaddress()` methods
-- Removed deprecated `setPplKTMID()`, `setPplKTMname()`, `setPplKTMaddress()` methods
+- Removed deprecated `getPplKTMID()`, `getPplKTMname()`, `getPplKTMaddress()` methods from `PplShipmentInterface`
+- Removed deprecated `setPplKTMID()`, `setPplKTMname()`, `setPplKTMaddress()` methods from `PplShipmentInterface`
+- Removed deprecated `PplController` (redirect-based parcelshop selection route)
 - Removed Docker-based development environment
+- Replaced `winzou/state-machine` with Symfony Workflow in Behat tests
 
 ## v1.0.1 (2026-01-28)
 

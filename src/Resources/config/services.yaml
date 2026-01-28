@@ -31,8 +31,3 @@ services:
             -   name: threebrs.shipment_exporter_type
                 type: 'ppl_parcel_shop'
                 label: 'PPL ParcelShop'
-
-    ThreeBRS\SyliusPplParcelshopsPlugin\Controller\PplController:
-        public: true
-        tags:
-            - 'controller.service_arguments'
