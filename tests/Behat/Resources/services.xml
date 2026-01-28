@@ -27,7 +27,7 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup\ShippingMethodContext">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sylius.behat.shared_storage"/>
-            <argument type="service" id="sm.factory"/>
+            <argument type="service" id="state_machine.sylius_order_checkout"/>
         </service>
 
         <service id="sylius_ppl_parcelshops_plugin.context.ui.shop.managing_ppl_context"
@@ -41,12 +41,6 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Ppl\PplPages"
                  parent="sylius.behat.page.admin.crud.update" public="false">
             <argument type="string">sylius_admin_channel_update</argument>
-        </service>
-
-        <!-- Override Sylius SelectPaymentPage to add waiting for payment methods to load -->
-        <service id="sylius.behat.page.shop.checkout.select_payment"
-                 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Shop\Checkout\SelectPaymentPage"
-                 parent="sylius.behat.symfony_page" public="false">
         </service>
 
         <!-- Override Sylius SelectPaymentPage to add waiting for payment methods to load -->

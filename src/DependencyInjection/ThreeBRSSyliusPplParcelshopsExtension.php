@@ -17,10 +17,5 @@ class ThreeBRSSyliusPplParcelshopsExtension extends Extension
     ): void {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yaml');
-
-        $env = $container->getParameter('kernel.environment');
-        if ($env === 'test' && file_exists(__DIR__ . '/../Resources/config/services_test.yaml')) {
-            $loader->load('services_test.yaml');
-        }
     }
 }

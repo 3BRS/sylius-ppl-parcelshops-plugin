@@ -1,0 +1,2 @@
+threebrs_sylius_ppl_parcelshops:
+    resource: "@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.yaml"
