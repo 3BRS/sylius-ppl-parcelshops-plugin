@@ -122,6 +122,7 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
                         $dataLabel = null;
                         $pplJsonData = null;
+                        $selectedPplCode = null;
 
                         if ($selectedMethodCode !== null && $selectedMethodCode === $method->getCode()) {
                             // Try to get stored JSON data first
@@ -131,15 +132,11 @@ class ShipmentPplExtension extends AbstractTypeExtension
                                 $pplJsonData = \json_encode($pplData);
 
                                 if (isset($pplData['name'])) {
-                                    $labelParts = [$pplData['name']];
-                                    if (isset($pplData['street'])) {
-                                        $labelParts[] = $pplData['street'];
-                                    }
-                                    if (isset($pplData['city'])) {
-                                        $labelParts[] = $pplData['city'];
-                                    }
-                                    $dataLabel = \implode(', ', $labelParts);
+                                    $dataLabel = $pplData['name'];
                                 }
+
+                                // Store code for pre-selection in widget
+                                $selectedPplCode = $pplData['code'];
                             } // Fallback to deprecated fields
                             elseif ($shipment->getPplKTMID() !== null) {
                                 $dataLabel = $shipment->getPplKTMname() . ', ' . $shipment->getPplKTMaddress();
@@ -156,6 +153,7 @@ class ShipmentPplExtension extends AbstractTypeExtension
                                 'data-lat' => $latitude,
                                 'data-lng' => $longitude,
                                 'data-label' => $dataLabel,
+                                'data-selected-code' => $selectedPplCode,
                             ],
                             'data' => $pplJsonData,
                             'required' => false,
