@@ -1,2 +1,6 @@
 threebrs_sylius_ppl_parcelshops:
     resource: "@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/routing.yaml"
+
+threebrs_sylius_shipment_export_admin:
+    resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/admin_routing.yml"
+    prefix: /admin

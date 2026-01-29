@@ -10,7 +10,7 @@ class IndexPage extends SymfonyPage implements IndexPageInterface
 {
     public function getRouteName(): string
     {
-        return 'threebrs_admin_Shipment_export';
+        return 'threebrs_admin_shipment_export';
     }
 
     public function countShipments(): int
