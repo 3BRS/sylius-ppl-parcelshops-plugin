@@ -15,14 +15,6 @@ final class ManagingShippingMethodContext implements Context
     }
 
     /**
-     * @Then it should be shipped to PPL parcelshop
-     */
-    public function ttShouldBeShippedToPplParcelshop(): void
-    {
-        Assert::true($this->updatePage->iSeePplParcelshopInsteadOfShippingAddress());
-    }
-
-    /**
      * @When I enable PPL parcelshops
      */
     public function iEnablePplParcelshops(): void

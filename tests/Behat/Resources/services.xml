@@ -61,5 +61,16 @@
             <argument type="service" id="behat.mink.default_session"/>
         </service>
 
+        <service id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\Order\ShowPageInterface"
+                 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\Order\ShowPage"
+                 parent="sylius.behat.page.admin.order.show" public="false">
+        </service>
+
+        <service id="sylius_ppl_parcelshops_plugin.context.ui.admin.managing_order"
+                 class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingOrderContext">
+            <argument type="service"
+                      id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\Order\ShowPageInterface"/>
+        </service>
+
     </services>
 </container>

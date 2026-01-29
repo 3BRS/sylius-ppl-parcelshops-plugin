@@ -39,15 +39,6 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         return $this->getElement($elementName)->getValue();
     }
 
-    public function iSeePplParcelshopInsteadOfShippingAddress(): bool
-    {
-        $shippingAddress = $this->getElement('shippingAddress')->getText();
-
-        return str_contains($shippingAddress, 'PPL ParcelShop') ||
-            str_contains($shippingAddress, 'PPL 1') ||
-            str_contains($shippingAddress, 'PPL Address');
-    }
-
     /**
      * @param array<string> $countries
      */
@@ -126,7 +117,6 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
             'pplCheckbox' => '#sylius_admin_shipping_method_pplParcelshopsShippingMethod',
             'pplDefaultCountrySelect' => 'select#sylius_admin_shipping_method_pplDefaultCountry',
             'pplOptionCountriesSelect' => 'select#sylius_admin_shipping_method_pplOptionCountries',
-            'shippingAddress' => '[data-test-shipping-address], #shipping-address',
         ]);
     }
 }
