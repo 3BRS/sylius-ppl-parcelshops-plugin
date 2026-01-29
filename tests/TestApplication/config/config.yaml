@@ -1,5 +1,6 @@
 imports:
     - { resource: "@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/config.yaml" }
+    - { resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/config.yml" }
     - { resource: "services_test.php" }
 
 doctrine:
