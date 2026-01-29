@@ -23,15 +23,21 @@ class ThreeBRSSyliusPplParcelshopsExtension extends Extension implements Prepend
         );
 
         // Load twig hooks configuration
-        $configFile = __DIR__ . '/../Resources/config/app/twig_hooks/shipping_method.yaml';
-        if (file_exists($configFile)) {
-            $config = Yaml::parseFile($configFile);
-            if (
-                \is_array($config) &&
-                isset($config['sylius_twig_hooks']) &&
-                \is_array($config['sylius_twig_hooks'])
-            ) {
-                $container->prependExtensionConfig('sylius_twig_hooks', $config['sylius_twig_hooks']);
+        $hookFiles = [
+            __DIR__ . '/../Resources/config/app/twig_hooks/shipping_method.yaml',
+            __DIR__ . '/../Resources/config/app/twig_hooks/admin_order.yaml',
+        ];
+
+        foreach ($hookFiles as $configFile) {
+            if (file_exists($configFile)) {
+                $config = Yaml::parseFile($configFile);
+                if (
+                    \is_array($config) &&
+                    isset($config['sylius_twig_hooks']) &&
+                    \is_array($config['sylius_twig_hooks'])
+                ) {
+                    $container->prependExtensionConfig('sylius_twig_hooks', $config['sylius_twig_hooks']);
+                }
             }
         }
     }
