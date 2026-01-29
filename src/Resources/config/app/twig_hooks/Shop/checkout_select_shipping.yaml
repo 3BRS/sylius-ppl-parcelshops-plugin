@@ -1,0 +1,11 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_shop.checkout.select_shipping.content.form.shipments.shipment.choice.details':
+            ppl:
+                template: '@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplSelector.html.twig'
+                priority: 0
+
+        'sylius_shop.checkout.select_shipping':
+            ppl_javascript:
+                template: '@ThreeBRSSyliusPplParcelshopsPlugin/Shop/_javascripts.html.twig'
+                priority: -100

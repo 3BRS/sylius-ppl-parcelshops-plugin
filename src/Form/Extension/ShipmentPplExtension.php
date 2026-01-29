@@ -125,7 +125,6 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         $selectedPplCode = null;
 
                         if ($selectedMethodCode !== null && $selectedMethodCode === $method->getCode()) {
-                            // Try to get stored JSON data first
                             $pplData = $shipment->getPplData();
                             if ($pplData !== null) {
                                 // Store the JSON data for the hidden field
@@ -137,9 +136,6 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
                                 // Store code for pre-selection in widget
                                 $selectedPplCode = $pplData['code'];
-                            } // Fallback to deprecated fields
-                            elseif ($shipment->getPplKTMID() !== null) {
-                                $dataLabel = $shipment->getPplKTMname() . ', ' . $shipment->getPplKTMaddress();
                             }
                         }
 

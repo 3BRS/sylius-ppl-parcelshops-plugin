@@ -1,0 +1,34 @@
+{% set order = hookable_metadata.context.resource %}
+{% set shipment = order.shipments.last %}
+
+{% if shipment is not null and shipment.pplData is defined and shipment.pplData %}
+    {% set pplData = shipment.pplData %}
+    <div>
+        <strong>{{ 'sylius.ui.shipping_address'|trans }}:</strong>
+    </div>
+    <div class="mb-3" {{ sylius_test_html_attribute('shipping-address') }}>
+        <address>
+            PPL ParcelShop<br>
+            {% if pplData.name is defined and pplData.name %}
+                <strong>{{ pplData.name }}</strong><br>
+            {% endif %}
+            {% if pplData.street is defined and pplData.street %}
+                {{ pplData.street }}<br>
+            {% endif %}
+            {% if pplData.city is defined and pplData.city %}
+                {% if pplData.zipCode is defined and pplData.zipCode %}
+                    {{ pplData.zipCode }}
+                {% endif %}
+                {{ pplData.city }}<br>
+            {% endif %}
+            {% if pplData.country is defined and pplData.country %}
+                {{ pplData.country }}<br>
+            {% endif %}
+            {% if pplData.code is defined and pplData.code %}
+                <small class="text-muted">ID: {{ pplData.code }}</small>
+            {% endif %}
+        </address>
+    </div>
+{% else %}
+    {% include '@SyliusAdmin/order/show/content/sections/customer/shipping_address.html.twig' %}
+{% endif %}

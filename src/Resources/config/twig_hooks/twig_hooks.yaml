@@ -1,0 +1,2 @@
+imports:
+    - { resource: "@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/app/twig_hooks/*/**/*.yaml" }

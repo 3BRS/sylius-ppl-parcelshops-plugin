@@ -1,0 +1,76 @@
+{# PPL Parcelshop selector for Sylius 2.0 (Bootstrap 5) #}
+{% set method = hookable_metadata.context.method %}
+{% set choiceForm = hookable_metadata.context.form %}
+
+{# Get the parent shipment form which contains ppl_data_* fields #}
+{% set shipmentForm = choiceForm.parent.parent %}
+
+{# Check if this shipping method has PPL parcelshops enabled #}
+{% if method.pplParcelshopsShippingMethod is defined and method.pplParcelshopsShippingMethod %}
+    {% set methodCode = method.code %}
+    {% set pplFieldName = 'ppl_data_' ~ methodCode %}
+
+    {% if shipmentForm[pplFieldName] is defined %}
+        {% set pplField = shipmentForm[pplFieldName] %}
+        {% set inputId = pplField.vars.id %}
+        {% set buttonId = inputId ~ '_button' %}
+        {% set modalId = inputId ~ '_modal' %}
+        {% set countriesOption = pplField.vars.attr['data-allowed-countries']|default('')|lower %}
+        {% set defaultCountry = pplField.vars.attr['data-default-country']|default('cz')|lower %}
+        {% set latitude = pplField.vars.attr['data-lat']|default('50.0755') %}
+        {% set longitude = pplField.vars.attr['data-lng']|default('14.4378') %}
+        {% set selectedCode = pplField.vars.attr['data-selected-code']|default(null) %}
+        {% set dataLabel = pplField.vars.attr['data-label']|default(null) %}
+        {% set language = app.request.locale in ['cs', 'en'] ? app.request.locale : 'cs' %}
+
+        {# Break out of flex layout and show PPL selector below #}
+        <div class="w-100 mt-3 ppl-selector-container" data-ppl-method-code="{{ methodCode }}">
+            <button type="button"
+                    id="{{ buttonId }}"
+                    class="btn btn-outline-secondary btn-sm"
+                    data-ppl-button
+                    data-method-code="{{ methodCode }}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#{{ modalId }}">
+                {% if dataLabel %}
+                    {{ dataLabel }}
+                {% else %}
+                    {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
+                {% endif %}
+            </button>
+
+            {# Hidden field for JSON data #}
+            {{ form_widget(pplField) }}
+        </div>
+
+        {# Modal for PPL widget - rendered outside the form flow #}
+        <div class="modal fade" id="{{ modalId }}" tabindex="-1" aria-labelledby="{{ modalId }}_label" aria-hidden="true"
+             data-ppl-input-id="{{ inputId }}" data-ppl-button-id="{{ buttonId }}" data-ppl-modal-id="{{ modalId }}">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="{{ modalId }}_label">
+                            {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="height: 600px;">
+                        <div id="ppl-parcelshop-map-{{ methodCode }}"
+                             class="ppl-map-container"
+                             data-mode="default"
+                             data-lat="{{ latitude }}"
+                             data-lng="{{ longitude }}"
+                             data-language="{{ language }}"
+                             data-countries="{{ countriesOption }}"
+                             data-country="{{ defaultCountry }}"
+                             {% if selectedCode %}data-code="{{ selectedCode }}"{% endif %}
+                             data-input-id="{{ inputId }}"
+                             data-button-id="{{ buttonId }}"
+                             data-modal-id="{{ modalId }}"
+                             style="height: 100%; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

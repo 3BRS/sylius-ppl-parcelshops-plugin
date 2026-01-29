@@ -1,0 +1,28 @@
+{#
+    PPL Parcelshop shipping address for order summary
+    Shows PPL parcelshop info if available, otherwise shows regular shipping address
+#}
+{% set order = hookable_metadata.context.order %}
+{% set shipment = order.shipments.last %}
+
+{% if shipment.pplData is defined and shipment.pplData %}
+    {# PPL Parcelshop address #}
+    <address data-test-shipping-address class="mb-0">
+        <strong>{{ 'threebrs.admin.pplParcelShop.title'|trans }}</strong><br>
+        {% if shipment.pplData.name is defined and shipment.pplData.name %}
+            <strong>{{ shipment.pplData.name }}</strong><br>
+        {% endif %}
+        {% if shipment.pplData.street is defined and shipment.pplData.street %}
+            {{ shipment.pplData.street }}<br>
+        {% endif %}
+        {% if shipment.pplData.city is defined and shipment.pplData.city %}
+            {{ shipment.pplData.city }}{% if shipment.pplData.zipCode is defined and shipment.pplData.zipCode %}, {{ shipment.pplData.zipCode }}{% endif %}<br>
+        {% endif %}
+        {% if shipment.pplData.country is defined and shipment.pplData.country %}
+            {{ shipment.pplData.country|upper }}
+        {% endif %}
+    </address>
+{% else %}
+    {# Regular shipping address - include Sylius default template #}
+    {% include '@SyliusShop/shared/address.html.twig' with {'address': order.shippingAddress} %}
+{% endif %}
