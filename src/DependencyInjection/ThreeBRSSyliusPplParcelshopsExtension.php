@@ -24,7 +24,7 @@ class ThreeBRSSyliusPplParcelshopsExtension extends Extension implements Prepend
 
         // Load twig hooks configuration
         $hookFiles = [
-            __DIR__ . '/../Resources/config/app/twig_hooks/shipping_method.yaml',
+            __DIR__ . '/../Resources/config/app/twig_hooks/Admin/shipping_method.yaml',
             __DIR__ . '/../Resources/config/app/twig_hooks/admin_order.yaml',
         ];
 
