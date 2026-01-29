@@ -14,8 +14,6 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
 
     public function isSingleResourceOnPage(string $elementName): mixed;
 
-    public function iSeePplParcelshopInsteadOfShippingAddress(): bool;
-
     /**
      * @param array<string> $countries
      */
