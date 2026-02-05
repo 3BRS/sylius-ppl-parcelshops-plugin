@@ -52,6 +52,7 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
         $mockPplData = [
             'code'            => $id, // PPL parcelshop code (e.g., "KM10833808" or just "1" for testing)
             'name'            => $name,
+            'parcelshopName'  => $name, // Added for template compatibility
             'street'          => explode(',', $address)[0] ?? $address,
             'city'            => 'Prague',
             'zipCode'         => '12345',

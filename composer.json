@@ -50,6 +50,7 @@
 		"symfony/cache": "^6.4.17"
 	},
 	"conflict": {
+		"twig/intl-extra": "<3.0",
 		"symfony/cache": "<6.4.17",
 		"api-platform/core": "<2.7.13",
 		"babdev/pagerfanta-bundle": "<3.6.1",
