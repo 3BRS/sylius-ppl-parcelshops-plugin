@@ -7,7 +7,7 @@ run: init
 init:
 	which docker > /dev/null || (echo "Please install docker binary" && exit 1)
 	if command -v direnv &> /dev/null; then \
-		cp --update=none .envrc.dist .envrc; \
+		[ -f .envrc ] || cp .envrc.dist .envrc; \
 		direnv allow; \
 	fi
 	docker compose up -d
@@ -27,7 +27,7 @@ init:
 init-tests:
 	which docker > /dev/null || (echo "Please install docker binary" && exit 1)
 	if command -v direnv &> /dev/null; then \
-		cp --update=none .envrc.dist .envrc; \
+		[ -f .envrc ] || cp .envrc.dist .envrc; \
 		direnv allow; \
 	fi
 	docker compose up -d
