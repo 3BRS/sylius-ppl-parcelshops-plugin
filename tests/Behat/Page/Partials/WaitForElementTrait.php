@@ -38,7 +38,7 @@ trait WaitForElementTrait
         return parent::hasElement($name, $parameters);
     }
 
-    private function waitForPageToLoad(Session $session = null): void
+    private function waitForPageToLoad(?Session $session = null): void
     {
         $session ??= $this->getSession();
         if (DriverHelper::isJavascript($session->getDriver())) {

@@ -83,7 +83,9 @@
 		"symplify/easy-coding-standard": "<10.3.0|12.5.10",
 		"twig/twig": "<2.14.7",
 		"webmozart/assert": "<1.11.0",
-		"willdurand/negotiation": "<3.0"
+		"willdurand/negotiation": "<3.0",
+		"symfony/var-exporter": ">=8.0",
+		"symfony/error-handler": ">=8.0"
 	},
 	"prefer-stable": true,
 	"autoload": {
