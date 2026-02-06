@@ -1,16 +1,19 @@
+{% set form = hookable_metadata.context.form %}
+{% set method = hookable_metadata.context.method %}
+
 {% if form.parent.parent['ppl_data_' ~ method.code] is defined and form.parent.parent['ppl_data_' ~ method.code] %}
-    {% set inputId = form.parent.parent['ppl_data_' ~ method.code].vars.id %}
+    {% set pplDataField = form.parent.parent['ppl_data_' ~ method.code] %}
+    {% set inputId = pplDataField.vars.id %}
     {% set buttonId = inputId ~ '_button' %}
     {% set modalId = inputId ~ '_modal' %}
-    {% set countriesOption = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-allowed-countries']|lower %}
-    {% set defaultCountry = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-default-country']|lower %}
-    {% set latitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lat'] %}
-    {% set longitude = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-lng'] %}
-    {% set selectedCode = form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-selected-code']|default(null) %}
+    {% set countriesOption = pplDataField.vars.attr['data-allowed-countries']|default('')|lower %}
+    {% set defaultCountry = pplDataField.vars.attr['data-default-country']|default('cz')|lower %}
+    {% set latitude = pplDataField.vars.attr['data-lat']|default('50.0755') %}
+    {% set longitude = pplDataField.vars.attr['data-lng']|default('14.4378') %}
+    {% set selectedCode = pplDataField.vars.attr['data-selected-code']|default(null) %}
     {% set language = app.request.locale in ['cs', 'en'] ? app.request.locale : 'cs' %}
 
-    <div class="ui hidden divider"></div>
-    <div class="center aligned ui grid">
+    <div class="w-100 mt-3">
         {# Check if this method is currently selected #}
         {% set isMethodSelected = form.parent.parent.vars.data
             and form.parent.parent.vars.data.method
@@ -18,46 +21,43 @@
 
         <button type="button"
                 id="{{ buttonId }}"
-                class="ui secondary basic button"
+                class="btn btn-outline-secondary btn-sm"
                 data-ppl-button
                 data-method-code="{{ method.code }}"
                 {{ not isMethodSelected ? 'disabled' : '' }}
                 onclick="openPplModal('{{ modalId }}')">
-            {% if form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] is defined and form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] is not empty %}
-                {{ form.parent.parent['ppl_data_' ~ method.code].vars.attr['data-label'] }}
+            {% if pplDataField.vars.attr['data-label'] is defined and pplDataField.vars.attr['data-label'] is not empty %}
+                {{ pplDataField.vars.attr['data-label'] }}
             {% else %}
                 {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
             {% endif %}
         </button>
     </div>
-    <div class="ui hidden divider"></div>
 
     {# Modal for PPL widget #}
-    <div id="{{ modalId }}" class="ui modal"
-         style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90vw; max-height: 99vh; z-index: 1001;"
+    <div id="{{ modalId }}" class="modal fade" tabindex="-1" aria-hidden="true"
          data-ppl-input-id="{{ inputId }}" data-ppl-button-id="{{ buttonId }}" data-ppl-modal-id="{{ modalId }}">
-        <i class="close icon" onclick="closePplModal('{{ modalId }}')" style="top: 0; right: 0; color: black"></i>
-        <div class="header">
-            {{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}
-        </div>
-        <div class="content" style="height: 720px;">
-            <div id="ppl-parcelshop-map"
-                 data-mode="default"
-                 data-lat="{{ latitude }}"
-                 data-lng="{{ longitude }}"
-                 data-language="{{ language }}"
-                 data-countries="{{ countriesOption }}"
-                 data-country="{{ defaultCountry }}"
-                 {% if selectedCode %}data-code="{{ selectedCode }}"{% endif %}
-                 style="height: 100%; width: 100%;"></div>
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'threebrs.shop.checkout.shippingStep.choosePplParcelShop'|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closePplModal('{{ modalId }}')"></button>
+                </div>
+                <div class="modal-body" style="height: 70vh; min-height: 500px;">
+                    <div id="ppl-parcelshop-map"
+                         data-mode="default"
+                         data-lat="{{ latitude }}"
+                         data-lng="{{ longitude }}"
+                         data-language="{{ language }}"
+                         data-countries="{{ countriesOption }}"
+                         data-country="{{ defaultCountry }}"
+                         {% if selectedCode %}data-code="{{ selectedCode }}"{% endif %}
+                         style="height: 100%; width: 100%;"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    {# Modal backdrop #}
-    <div id="{{ modalId }}_backdrop" class="ui dimmer"
-         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;"
-         onclick="closePplModal('{{ modalId }}')"></div>
-
     {# Hidden field for JSON data #}
-    {{ form_widget(form.parent.parent['ppl_data_' ~ method.code]) }}
+    {{ form_widget(pplDataField) }}
 {% endif %}

@@ -1,4 +1,12 @@
-<h4 class="ui dividing header">{{ 'threebrs.admin.pplParcelShop.title'|trans }}</h4>
-{{ form_row(form.pplParcelshopsShippingMethod) }}
-{{ form_row(form.pplOptionCountries) }}
-{{ form_row(form.pplDefaultCountry) }}
+{% set form = hookable_metadata.context.form %}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="card-title mb-0">{{ 'threebrs.admin.pplParcelShop.title'|trans }}</h5>
+    </div>
+    <div class="card-body">
+        {{ form_row(form.pplParcelshopsShippingMethod) }}
+        {{ form_row(form.pplOptionCountries) }}
+        {{ form_row(form.pplDefaultCountry) }}
+    </div>
+</div>

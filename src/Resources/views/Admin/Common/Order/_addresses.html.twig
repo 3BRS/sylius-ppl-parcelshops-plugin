@@ -1,23 +1,34 @@
-{# @var \ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface shipment #}
+{% set order = hookable_metadata.context.resource %}
 {% set shipment = order.shipments.last %}
 
-{% if shipment.pplData  %}
-    <address>
-        {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
-        <strong>{{ shipment.pplData.name }}</strong><br>
-        <strong>{{ shipment.pplData.parcelshopName }}</strong><br>
-        {{ shipment.pplData.street }}<br>
-        {{ shipment.pplData.city }}, {{ shipment.pplData.zipCode }}<br>
-        <i class="{{ shipment.pplData.country|lower }} flag"></i>
-        {{ shipment.pplData.country|upper|sylius_country_name|upper }}
-    </address>
-{% elseif shipment.pplKTMID %}
-    <address>
-        {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
-        <strong>{{ shipment.pplKTMname }}</strong><br>
-        {{ shipment.pplKTMaddress }}<br>
-        ID: {{ shipment.pplKTMID }}
-    </address>
-{% else %}
-    {% include '@SyliusAdmin/Common/_address.html.twig' with {'address': order.shippingAddress} %}
+{% if shipment is not null and (shipment.pplData is defined and shipment.pplData) %}
+    <div>
+        <strong>{{ 'threebrs.admin.pplParcelShop.title'|trans }}:</strong>
+    </div>
+    <div class="mb-3">
+        <address class="mb-0">
+            <strong>{{ shipment.pplData.name|default('') }}</strong><br>
+            {% if shipment.pplData.parcelshopName is defined and shipment.pplData.parcelshopName %}
+                {{ shipment.pplData.parcelshopName }}<br>
+            {% endif %}
+            {% if shipment.pplData.street is defined %}{{ shipment.pplData.street }}<br>{% endif %}
+            {% if shipment.pplData.city is defined or shipment.pplData.zipCode is defined %}
+                {{ shipment.pplData.city|default('') }}{% if shipment.pplData.zipCode is defined %}, {{ shipment.pplData.zipCode }}{% endif %}<br>
+            {% endif %}
+            {% if shipment.pplData.country is defined and shipment.pplData.country %}
+                {{ shipment.pplData.country|upper|sylius_country_name|default(shipment.pplData.country|upper) }}
+            {% endif %}
+        </address>
+    </div>
+{% elseif shipment is not null and (shipment.pplKTMID is defined and shipment.pplKTMID) %}
+    <div>
+        <strong>{{ 'threebrs.admin.pplParcelShop.title'|trans }}:</strong>
+    </div>
+    <div class="mb-3">
+        <address class="mb-0">
+            <strong>{{ shipment.pplKTMname|default('') }}</strong><br>
+            {{ shipment.pplKTMaddress|default('') }}<br>
+            <small class="text-muted">ID: {{ shipment.pplKTMID }}</small>
+        </address>
+    </div>
 {% endif %}
