@@ -3,11 +3,17 @@
 	"type": "sylius-plugin",
 	"description": "PPL parcelshops plugin for Sylius",
 	"license": "MIT",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/3BRS/sylius-shipment-export-plugin.git"
+		}
+	],
 	"require": {
 		"php": "^8.2",
-		"3brs/sylius-shipment-export-plugin": "^2.0",
+		"3brs/sylius-shipment-export-plugin": "dev-SLS-5-sylius-2.0",
 		"nyholm/psr7": "^1.8",
-		"sylius/sylius": "^2.0"
+		"sylius/sylius": "2.0.*"
 	},
 	"require-dev": {
 		"behat/behat": "^3.16",
