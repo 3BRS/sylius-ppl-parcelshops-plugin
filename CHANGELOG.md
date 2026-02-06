@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.1.0 (2026-02-06)
+
+### Changed
+
+- **BREAKING**: Requires Sylius ^2.1 (drop support for Sylius 2.0)
+- **BREAKING**: Requires PHP 8.3+
+- Updated `3brs/sylius-shipment-export-plugin` to ^2.0
+- Updated Symfony dependencies to ^6.4 || ^7.4
+- Added compatibility with Sylius 2.2
+
 ## v2.0.0 (2026-02-06)
 
 ### Changed
