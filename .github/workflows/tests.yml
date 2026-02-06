@@ -13,7 +13,7 @@ on:
 
 jobs:
     run-tests:
-        name: php-${{ matrix.php_version }}-sylius-${{ matrix.sylius_version }}-symfony-${{ matrix.symfony_version }}
+        name: php-${{ matrix.php_version }}-sylius-${{ matrix.sylius_version }}
         # The type of runner that the job will run on
         runs-on: ubuntu-24.04
 
@@ -21,7 +21,6 @@ jobs:
             fail-fast: false
             matrix:
                 sylius_version: [ "2.0" ]
-                symfony_version: [ "6.4", "7.1" ]
                 php_version: [ "8.2", "8.3", "8.4" ]
 
         # Steps represent a sequence of tasks that will be executed as part of the job
@@ -43,14 +42,6 @@ jobs:
 
             -   name: Install Sylius version
                 run: docker compose exec php composer require "sylius/sylius:${{ matrix.sylius_version }}.*" --no-interaction --no-update --no-scripts
-
-            -   name: Install Symfony version
-                run: docker compose exec php bash -c '
-                    grep -o -E "\"(symfony/[^\"]+)\"" composer.json |
-                    grep -v -E "(symfony/flex|symfony/webpack-encore-bundle|symfony/panther)" |
-                    xargs printf "%s:${{ matrix.symfony_version }}.* " |
-                    xargs composer require --no-interaction --no-update
-                    '
 
             -   name: Wait for database
                 run: docker compose exec php timeout 60s sh -c 'while ! nc -z mysql 3306; do sleep 0.1; done'
