@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.0.0 (2026-02-06)
+
+### Changed
+
+- **BREAKING**: Requires Sylius 2.0.* (drop support for Sylius 1.x)
+- **BREAKING**: Requires PHP 8.2+
+- Migrated from `sylius_ui` events to Twig Hooks
+- Updated admin templates for Bootstrap 5 (Sylius 2.0 admin UI)
+- Form type extension now extends `Sylius\Bundle\AdminBundle\Form\Type\ShippingMethodType`
+
+### Removed
+
+- Deprecated `getPplKTMID()`, `getPplKTMname()`, `getPplKTMaddress()` methods removed
+- Deprecated `setPplKTMID()`, `setPplKTMname()`, `setPplKTMaddress()` methods removed
+
+### Fixed
+
+- PPL parcelshop widget compatibility with Sylius 2.0 checkout flow
+
 ## v1.0.1 (2026-01-28)
 
 ### Fixed
