@@ -17,6 +17,15 @@
     </a>
 </h1>
 
+## Requirements
+
+| Package | Version |
+|---------|---------|
+| PHP | ^8.2 |
+| Sylius | ^2.0 |
+
+> For Sylius 1.x support, use version 1.x of this plugin.
+
 ## Features
 
  - Enables sending shipments via <a href="https://www.ppl.cz/co-jsou-vydejni-mista">PPL</a> to PPL parcelshops.
@@ -56,7 +65,7 @@ Add routing to `config/routes.yaml`:
 
 ```yaml
 threebrs_sylius_shipment_export_plugin:
-    resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/routing.yaml"
+    resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/admin_routing.yml"
     prefix: '/%sylius_admin.path_name%'
 
 threebrs_sylius_ppl_parcelshops_plugin:
@@ -71,6 +80,7 @@ Add config import to `config/packages/_sylius.yaml`:
 ```yaml
 imports:
     # ...
+    - { resource: "@ThreeBRSSyliusShipmentExportPlugin/Resources/config/config.yml" }
     - { resource: "@ThreeBRSSyliusPplParcelshopsPlugin/Resources/config/config.yaml" }
 ```
 
@@ -122,71 +132,9 @@ class ShippingMethod extends BaseShippingMethod implements PplShippingMethodInte
 }
 ```
 
-For more details on entity customization, see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.13/customization/model.html).
+For more details on entity customization, see [Sylius docs - Customizing Models](https://docs.sylius.com/en/latest/customization/model.html).
 
-### 6. Override templates
-
-#### Admin Shipping Method Form
-
-Override `templates/bundles/SyliusAdminBundle/ShippingMethod/_form.html.twig` and include the PPL form:
-
-```twig
-{# @SyliusAdmin/ShippingMethod/_form.html.twig #}
-{# ... existing form content ... #}
-{{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Admin/ShippingMethod/_pplForm.html.twig') }}
-{# ... rest of the form ... #}
-```
-  - see `tests/Application/templates/bundles/SyliusAdminBundle/ShippingMethod/_form.html.twig` for example
-
-#### Shop Checkout Shipping Choice
-
-Override `templates/bundles/SyliusShopBundle/Checkout/SelectShipping/_choice.html.twig` and include the PPL widget at the end:
-
-```twig
-{# @SyliusShop/Checkout/SelectShipping/_choice.html #}
-{# ... existing shipping choice content ... #}
-{{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Checkout/SelectShipping/_pplChoice.html.twig') }}
-```
-  - see `tests/Application/templates/bundles/SyliusShopBundle/Checkout/SelectShipping/_choice.html.twig` for example
-
-#### Shop Order Addresses
-
-Override `templates/bundles/SyliusShopBundle/Common/Order/_addresses.html.twig` and replace the shipping address section:
-
-```twig
-{# @SyliusAdmin/Order/Show/_addresses.html.twig #}
-<div class="ui segment">
-    <div class="ui two column divided stackable grid">
-        <div class="column" id="sylius-billing-address" {{ sylius_test_html_attribute('billing-address') }}>
-            <div class="ui small dividing header">{{ 'sylius.ui.billing_address'|trans }}</div>
-            {% include '@SyliusShop/Common/_address.html.twig' with {'address': order.billingAddress} %}
-        </div>
-        <div class="column" id="sylius-shipping-address" {{ sylius_test_html_attribute('shipping-address') }}>
-            <div class="ui small dividing header">{{ 'sylius.ui.shipping_address'|trans }}</div>
-            {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Shop/Common/Order/_addresses.html.twig') }}
-        </div>
-    </div>
-</div>
-```
-
-#### Admin Order Addresses
-
-Override `templates/bundles/SyliusAdminBundle/Order/Show/_addresses.html.twig` and replace the shipping address section:
-
-```twig
-{# @ThreeBRSShipmentExportPlugin/_row.html.twig #}
-{% if order.shippingAddress is not null %}
-    <h4 class="ui top attached styled header">
-        {{ 'sylius.ui.shipping_address'|trans }}
-    </h4>
-    <div class="ui attached segment" id="shipping-address">
-        {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/Admin/Common/Order/_addresses.html.twig') }}
-    </div>
-{% endif %}
-{# ... billing address and other content ... #}
-```
-
-### 7. Create and run database migrations
+### 6. Create and run database migrations
 
 Generate and run doctrine migrations to add the required database columns:
 
