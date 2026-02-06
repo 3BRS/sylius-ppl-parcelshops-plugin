@@ -1,7 +1,8 @@
-sylius_ui:
-    events:
-        sylius.shop.checkout.select_shipping.before_form:
-            blocks:
-                threebrs_sylius.sylius_ppl_plugin.shop.checkout.select_shipping.javascripts:
-                    template: "@ThreeBRSSyliusPplParcelshopsPlugin/Shop/_javascripts.html.twig"
-                    priority: 5
+# TODO: Convert to Twig Hooks for Sylius 2.0
+# sylius_ui:
+#     events:
+#         sylius.shop.checkout.select_shipping.before_form:
+#             blocks:
+#                 threebrs_sylius.sylius_ppl_plugin.shop.checkout.select_shipping.javascripts:
+#                     template: "@ThreeBRSSyliusPplParcelshopsPlugin/Shop/_javascripts.html.twig"
+#                     priority: 5

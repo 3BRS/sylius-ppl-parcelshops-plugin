@@ -1,2 +1,3 @@
-api:
-    resource: '../../../../vendor/api-platform/core/src/Symfony/Bundle/Resources/config/routing/docs.xml'
+# API Platform 4.x handles routing automatically
+# api:
+#     resource: '../../../../vendor/api-platform/core/src/Symfony/Bundle/Resources/config/routing/docs.xml'
