@@ -21,8 +21,8 @@
 
 | Package | Version |
 |---------|---------|
-| PHP | ^8.3 |
-| Sylius | ^2.1 |
+| PHP | ^8.2 |
+| Sylius | ^2.0 |
 
 > For Sylius 1.x support, use version 1.x of this plugin.
 

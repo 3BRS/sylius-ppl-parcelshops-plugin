@@ -4,10 +4,10 @@
 	"description": "PPL parcelshops plugin for Sylius",
 	"license": "MIT",
 	"require": {
-		"php": "^8.3",
+		"php": "^8.2",
 		"3brs/sylius-shipment-export-plugin": "^2.0",
 		"nyholm/psr7": "^1.8",
-		"sylius/sylius": "^2.1"
+		"sylius/sylius": "^2.0"
 	},
 	"require-dev": {
 		"behat/behat": "^3.16",
@@ -96,9 +96,7 @@
 			"ignore": [
 				"PKSA-gs8r-6kz6-pp56",
 				"PKSA-gnn4-pxdg-q76m",
-				"PKSA-4g5g-4rkv-myqs",
-				"PKSA-365x-2zjk-pt47",
-				"PKSA-b35n-565h-rs4q"
+				"PKSA-4g5g-4rkv-myqs"
 			]
 		}
 	}
