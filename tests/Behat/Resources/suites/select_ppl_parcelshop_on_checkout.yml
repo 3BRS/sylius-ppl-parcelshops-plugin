@@ -54,4 +54,4 @@ default:
                 - sylius_ppl_parcelshops_plugin.context.setup.shipping_method
 
             filters:
-                tags: "@select_ppl_parcelshop_on_checkout && @ui"
+                tags: "@select_ppl_parcelshop_on_checkout&&@ui"

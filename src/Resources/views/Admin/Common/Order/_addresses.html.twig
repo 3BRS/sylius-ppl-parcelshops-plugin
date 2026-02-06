@@ -3,10 +3,11 @@
 
 {% if shipment is not null and (shipment.pplData is defined and shipment.pplData) %}
     <div>
-        <strong>{{ 'threebrs.admin.pplParcelShop.title'|trans }}:</strong>
+        <strong>{{ 'sylius.ui.shipping_address'|trans }}:</strong>
     </div>
-    <div class="mb-3">
+    <div class="mb-3" {{ sylius_test_html_attribute('shipping-address') }}>
         <address class="mb-0">
+            PPL ParcelShop<br>
             <strong>{{ shipment.pplData.name|default('') }}</strong><br>
             {% if shipment.pplData.parcelshopName is defined and shipment.pplData.parcelshopName %}
                 {{ shipment.pplData.parcelshopName }}<br>
@@ -22,13 +23,16 @@
     </div>
 {% elseif shipment is not null and (shipment.pplKTMID is defined and shipment.pplKTMID) %}
     <div>
-        <strong>{{ 'threebrs.admin.pplParcelShop.title'|trans }}:</strong>
+        <strong>{{ 'sylius.ui.shipping_address'|trans }}:</strong>
     </div>
-    <div class="mb-3">
+    <div class="mb-3" {{ sylius_test_html_attribute('shipping-address') }}>
         <address class="mb-0">
+            PPL ParcelShop<br>
             <strong>{{ shipment.pplKTMname|default('') }}</strong><br>
             {{ shipment.pplKTMaddress|default('') }}<br>
             <small class="text-muted">ID: {{ shipment.pplKTMID }}</small>
         </address>
     </div>
+{% else %}
+    {% include '@SyliusAdmin/order/show/content/sections/customer/shipping_address.html.twig' %}
 {% endif %}

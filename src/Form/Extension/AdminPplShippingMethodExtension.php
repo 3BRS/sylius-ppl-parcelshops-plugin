@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ThreeBRS\SyliusPplParcelshopsPlugin\Form\Extension;
 
-use Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType;
+use Sylius\Bundle\AdminBundle\Form\Type\ShippingMethodType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
