@@ -11,7 +11,7 @@ services:
 
     ThreeBRS\SyliusPplParcelshopsPlugin\Form\Extension\ShipmentPplExtension:
         arguments:
-            $shippingMethodsResolver: '@sylius.shipping_methods_resolver'
+            $shippingMethodsResolver: '@sylius.resolver.shipping_methods'
             $shippingMethodRepository: '@sylius.repository.shipping_method'
             $translator: '@translator'
             $allowedCountries: '%threebrs_sylius_ppl_parcelshops_plugin_ppl_countries%'
@@ -22,7 +22,7 @@ services:
     ThreeBRS\SyliusPplParcelshopsPlugin\Form\Extension\AdminPplShippingMethodExtension:
         tags:
             -   name: form.type_extension
-                extended_type: Sylius\Bundle\ShippingBundle\Form\Type\ShippingMethodType
+                extended_type: Sylius\Bundle\AdminBundle\Form\Type\ShippingMethodType
         arguments:
             $countryChoices: '%threebrs_sylius_ppl_parcelshops_plugin_ppl_countries%'
             $translator: '@translator'
@@ -30,7 +30,7 @@ services:
     ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentExporter:
         public: true
         arguments:
-            $currencyConverter: '@sylius.currency_converter'
+            $currencyConverter: '@Sylius\Component\Currency\Converter\CurrencyConverterInterface'
             $pplShippingMethodsCodes: '%threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes%'
         tags:
             -   name: threebrs.shipment_exporter_type

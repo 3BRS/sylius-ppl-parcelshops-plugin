@@ -1,0 +1,6 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_admin.shipping_method.update.content.form#left':
+            ppl_settings:
+                template: '@ThreeBRSSyliusPplParcelshopsPlugin/Admin/ShippingMethod/_pplForm.html.twig'
+                priority: -100

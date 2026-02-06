@@ -1,0 +1,4 @@
+framework:
+    http_client:
+        default_options:
+            max_redirects: 7

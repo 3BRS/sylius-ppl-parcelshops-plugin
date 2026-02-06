@@ -42,9 +42,10 @@ default:
                 - sylius.behat.context.transform.shared_storage
 
                 - sylius.behat.context.ui.admin.notification
+                - sylius.behat.context.ui.save
 
                 - sylius_ppl_parcelshops_plugin.context.setup.shipping_method
                 - sylius_ppl_parcelshops_plugin.context.ui.admin.managing_shipment_export
 
             filters:
-                tags: "@export_ppl_parcelshop_shipments && @ui"
+                tags: "@export_ppl_parcelshop_shipments&&@ui"

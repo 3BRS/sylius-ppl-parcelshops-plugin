@@ -9,7 +9,7 @@ Feature: Configure PPL countries in shipping method
 		And the store allows shipping with "PPL parcelshop" identified by "ppl_parcelshop"
 		And I am logged in as an administrator
 
-	@ui @javascript
+	@ui
 	Scenario: Configure allowed countries and default country for PPL shipping method
 		Given I want to modify a shipping method "PPL parcelshop"
 		When I enable PPL parcelshops
@@ -20,7 +20,7 @@ Feature: Configure PPL countries in shipping method
 		And the allowed PPL countries should be "CZ, SK, PL"
 		And the default PPL country should be "CZ"
 
-	@ui @javascript
+	@ui
 	Scenario: Default country must be within allowed countries
 		Given I want to modify a shipping method "PPL parcelshop"
 		When I enable PPL parcelshops
@@ -29,7 +29,7 @@ Feature: Configure PPL countries in shipping method
 		And I save my changes
 		Then I should see a validation error for the default country field
 
-	@ui @javascript
+	@ui
 	Scenario: Can configure PPL without specifying countries
 		Given I want to modify a shipping method "PPL parcelshop"
 		When I enable PPL parcelshops

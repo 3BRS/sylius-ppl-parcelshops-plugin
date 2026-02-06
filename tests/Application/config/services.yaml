@@ -1,4 +1,15 @@
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters:
-    locale: en_US
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Tests\ThreeBRS\SyliusPplParcelshopsPlugin\:
+        resource: '../src/'
+        exclude:
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Fixture\PplShippingMethodFixtureListener:
+        tags:
+            - { name: 'sylius_fixtures.listener' }

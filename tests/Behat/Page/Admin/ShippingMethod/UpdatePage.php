@@ -5,34 +5,34 @@ declare(strict_types=1);
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod;
 
 use Sylius\Behat\Page\Admin\ShippingMethod\UpdatePage as BaseUpdatePage;
-use Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Partials\WaitForElementTrait;
 
 final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 {
-    use WaitForElementTrait;
-
-    public function saveChanges(): void
-    {
-        parent::saveChanges();
-
-        $this->waitForPageToLoad();
-    }
-
     public function enablePplParcelshops(): void
     {
-        // Use JavaScript to check the checkbox (it's hidden by Semantic UI)
-        $this->getSession()->executeScript("document.getElementById('sylius_shipping_method_pplParcelshopsShippingMethod').checked = true;");
+        $checkbox = $this->getElement('pplCheckbox');
+        if (!$checkbox->isChecked()) {
+            $checkbox->check();
+        }
     }
 
     public function disablePplParcelshops(): void
     {
-        // Use JavaScript to uncheck the checkbox (it's hidden by Semantic UI)
-        $this->getSession()->executeScript("document.getElementById('sylius_shipping_method_pplParcelshopsShippingMethod').checked = false;");
+        $checkbox = $this->getElement('pplCheckbox');
+        if ($checkbox->isChecked()) {
+            $checkbox->uncheck();
+        }
     }
 
-    public function isSingleResourceOnPage(string $elementName)
+    public function isSingleResourceOnPage(string $elementName): bool|string|null
     {
-        return $this->getElement($elementName)->getValue();
+        $element = $this->getElement($elementName);
+
+        if ($element->getAttribute('type') === 'checkbox') {
+            return $element->isChecked();
+        }
+
+        return $element->getValue();
     }
 
     public function iSeePplParcelshopInsteadOfShippingAddress(): bool
@@ -47,30 +47,15 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
      */
     public function selectPplAllowedCountries(array $countries): void
     {
-        // Set the values directly on the select element
-        $countriesJson = json_encode($countries);
-        $script        = sprintf(
-            "var select = document.getElementById('sylius_shipping_method_pplOptionCountries'); " .
-            "var values = %s; " .
-            "Array.from(select.options).forEach(function(option) { " .
-            "  option.selected = values.includes(option.value); " .
-            "}); " .
-            "$(select).trigger('change');",
-            $countriesJson,
-        );
-        $this->getSession()->executeScript($script);
+        $select = $this->getElement('pplOptionCountriesSelect');
+        foreach ($countries as $country) {
+            $select->selectOption($country, true);
+        }
     }
 
     public function selectPplDefaultCountry(string $country): void
     {
-        // Set the value directly on the select element
-        $script = sprintf(
-            "var select = document.getElementById('sylius_shipping_method_pplDefaultCountry'); " .
-            "select.value = '%s'; " .
-            "$(select).trigger('change');",
-            $country,
-        );
-        $this->getSession()->executeScript($script);
+        $this->getElement('pplDefaultCountrySelect')->selectOption($country);
     }
 
     /**
@@ -78,44 +63,37 @@ final class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
      */
     public function getSelectedPplAllowedCountries(): array
     {
-        // Use JavaScript to get selected values to avoid Mink validation
-        $script = "return $('#sylius_shipping_method_pplOptionCountries').val() || [];";
-        $result = $this->getSession()->evaluateScript($script);
+        $value = $this->getElement('pplOptionCountriesSelect')->getValue();
 
-        return is_array($result)
-            ? $result
-            : [];
+        return is_array($value) ? $value : [];
     }
 
     public function getSelectedPplDefaultCountry(): ?string
     {
-        // Use JavaScript to get selected value to avoid Mink validation
-        $script = "return document.getElementById('sylius_shipping_method_pplDefaultCountry').value || null;";
-        $result = $this->getSession()->evaluateScript($script);
+        $value = $this->getElement('pplDefaultCountrySelect')->getValue();
 
-        return $result
-            ?: null;
+        return is_string($value) ? $value : null;
     }
 
     public function hasValidationErrorFor(string $field): bool
     {
         $elementName = $field . 'Select';
-        $this->waitForElement(5, $elementName);
-
         $fieldElement = $this->getElement($elementName);
-
         $formGroup = $fieldElement->getParent();
 
-        return $formGroup->hasClass('error') || $formGroup->find('css', '.sylius-validation-error') !== null;
+        // Check for Bootstrap 5 validation classes
+        return $formGroup->hasClass('is-invalid')
+            || $formGroup->find('css', '.invalid-feedback') !== null
+            || $formGroup->find('css', '.sylius-validation-error') !== null;
     }
 
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'pplCheckbox'              => '#sylius_shipping_method_pplParcelshopsShippingMethod',
-            'shippingAddress'          => '#shipping-address',
-            'pplDefaultCountrySelect'  => 'select#sylius_shipping_method_pplDefaultCountry',
-            'pplOptionCountriesSelect' => 'select#sylius_shipping_method_pplOptionCountries',
+            'pplCheckbox' => '#sylius_admin_shipping_method_pplParcelshopsShippingMethod',
+            'shippingAddress' => '[data-test-shipping-address]',
+            'pplDefaultCountrySelect' => '#sylius_admin_shipping_method_pplDefaultCountry',
+            'pplOptionCountriesSelect' => '#sylius_admin_shipping_method_pplOptionCountries',
         ]);
     }
 }

@@ -5,7 +5,7 @@
     <address>
         {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
         <strong>{{ shipment.pplData.name }}</strong><br>
-        <strong>{{ shipment.pplData.parcelshopName }}</strong><br>
+        {% if shipment.pplData.parcelshopName is defined %}<strong>{{ shipment.pplData.parcelshopName }}</strong><br>{% endif %}
         {{ shipment.pplData.street }}<br>
         {{ shipment.pplData.city }}, {{ shipment.pplData.zipCode }}<br>
         <i class="{{ shipment.pplData.country|lower }} flag"></i>

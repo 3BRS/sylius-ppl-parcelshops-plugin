@@ -20,14 +20,14 @@
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin\ManagingShippingMethodContext">
             <argument type="service"
                       id="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShippingMethod\UpdatePageInterface"/>
-            <argument type="service" id="sylius.behat.notification_checker"/>
+            <argument type="service" id="sylius.behat.notification_checker.admin"/>
         </service>
 
         <service id="sylius_ppl_parcelshops_plugin.context.setup.shipping_method"
                  class="Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup\ShippingMethodContext">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="sylius.behat.shared_storage"/>
-            <argument type="service" id="sm.factory"/>
+            <argument type="service" id="Sylius\Abstraction\StateMachine\StateMachineInterface"/>
         </service>
 
         <service id="sylius_ppl_parcelshops_plugin.context.ui.shop.managing_ppl_context"

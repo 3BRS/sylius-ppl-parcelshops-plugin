@@ -42,6 +42,7 @@ default:
                 - sylius.behat.context.transform.shared_storage
 
                 - sylius.behat.context.ui.admin.notification
+                - sylius.behat.context.ui.save
 
                 - sylius.behat.context.ui.admin.managing_orders
 
@@ -49,4 +50,4 @@ default:
                 - sylius_ppl_parcelshops_plugin.context.ui.admin.shipping_method
 
             filters:
-                tags: "@admin_sees_ppl_parcelshop_in_order && @ui"
+                tags: "@admin_sees_ppl_parcelshop_in_order&&@ui"

@@ -9,7 +9,7 @@ Feature: Enable PPL parcelshops in shipping method
 		And the store allows shipping with "PPL parcelshop" identified by "ppl_parcelshop"
 		And I am logged in as an administrator
 
-	@ui @javascript
+	@ui
 	Scenario: Enable PPL parcelshops in shipping method
 		Given I want to modify a shipping method "PPL parcelshop"
 		When I enable PPL parcelshops
@@ -17,7 +17,7 @@ Feature: Enable PPL parcelshops in shipping method
 		Then I should be notified that it has been successfully edited
 		And the PPL parcelshops should be enabled
 
-	@ui @javascript
+	@ui
 	Scenario: Disable PPL parcelshops in shipping method
 		Given I want to modify a shipping method "PPL parcelshop"
 		When I disable PPL parcelshops

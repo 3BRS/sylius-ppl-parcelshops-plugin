@@ -6,6 +6,10 @@ includes:
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
 
 parameters:
+    level: max
+    paths:
+        - src
+
     symfony:
         container_xml_path: tests/Application/var/cache/dev/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelDevDebugContainer.xml
 
@@ -14,5 +18,6 @@ parameters:
 
         # Test dependencies
         - tests/Application/var/*
+        - tests/Application/config/reference.php
 
         - tests/Behat/*

@@ -1,0 +1,6 @@
+sylius_twig_hooks:
+    hooks:
+        sylius_admin.order.show.content.sections.customer:
+            shipping_address:
+                template: '@ThreeBRSSyliusPplParcelshopsPlugin/Admin/Common/Order/_addresses.html.twig'
+                priority: 100

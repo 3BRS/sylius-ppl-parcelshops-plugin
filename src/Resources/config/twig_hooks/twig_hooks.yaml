@@ -1,0 +1,5 @@
+imports:
+    - { resource: "Admin/order/show.yaml" }
+    - { resource: "Admin/shipping_method/create.yaml" }
+    - { resource: "Admin/shipping_method/update.yaml" }
+    - { resource: "Shop/checkout/select_shipping.yaml" }
