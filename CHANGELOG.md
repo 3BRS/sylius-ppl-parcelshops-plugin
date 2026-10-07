@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.2.0 (2026-10-07)
+
+### Changed
+
+- Added compatibility with Sylius 2.3
+- Added compatibility with Symfony 8
+- Updated `3brs/sylius-shipment-export-plugin` to ^2.2
+
 ## v2.1.0 (2026-02-06)
 
 ### Changed

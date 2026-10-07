@@ -9,6 +9,7 @@ services:
         exclude:
             - '../src/Entity/'
             - '../src/Kernel.php'
+            - '../src/Rector/'
 
     Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Fixture\PplShippingMethodFixtureListener:
         tags:
