@@ -12,7 +12,7 @@ parameters:
         - src
 
     symfony:
-        container_xml_path: tests/Application/var/cache/dev/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelDevDebugContainer.xml
+        containerXmlPath: tests/Application/var/cache/dev/Tests_ThreeBRS_SyliusPplParcelshopsPlugin_KernelDevDebugContainer.xml
 
     excludePaths:
         - tests/Application/node_modules/*

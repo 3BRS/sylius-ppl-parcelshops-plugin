@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin;
 
-use PSS\SymfonyMockerContainer\DependencyInjection\MockerContainer;
 use Sylius\Bundle\CoreBundle\SyliusCoreBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -27,7 +26,7 @@ final class Kernel extends BaseKernel
 
     public function getCacheDir(): string
     {
-        return $this->getProjectDir() . '/var/cache/' . $this->environment;
+        return $this->getProjectDir() . '/var/cache/' . $this->getEnvironment();
     }
 
     public function getLogDir(): string
@@ -70,32 +69,18 @@ final class Kernel extends BaseKernel
         }
     }
 
-    protected function getContainerBaseClass(): string
-    {
-        if ($this->isTestEnvironment() && class_exists(MockerContainer::class)) {
-            return MockerContainer::class;
-        }
-
-        return parent::getContainerBaseClass();
-    }
-
-    private function isTestEnvironment(): bool
-    {
-        return str_starts_with($this->getEnvironment(), 'test');
-    }
-
     private function loadContainerConfiguration(LoaderInterface $loader, string $confDir): void
     {
         $loader->load($confDir . '/{packages}/*' . self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir . '/{packages}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir . '/{packages}/' . $this->getEnvironment() . '/**/*' . self::CONFIG_EXTS, 'glob');
         $loader->load($confDir . '/{services}' . self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir . '/{services}_' . $this->environment . self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir . '/{services}_' . $this->getEnvironment() . self::CONFIG_EXTS, 'glob');
     }
 
     private function loadRoutesConfiguration(RoutingConfigurator $routes, string $confDir): void
     {
         $routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS);
-        $routes->import($confDir . '/{routes}/' . $this->environment . '/**/*' . self::CONFIG_EXTS);
+        $routes->import($confDir . '/{routes}/' . $this->getEnvironment() . '/**/*' . self::CONFIG_EXTS);
         $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS);
     }
 
@@ -104,6 +89,7 @@ final class Kernel extends BaseKernel
      */
     private function registerBundlesFromFile(string $bundlesFile): iterable
     {
+        /** @var array<string, array<string, bool>> $contents */
         $contents = require $bundlesFile;
         foreach ($contents as $class => $envs) {
             if (isset($envs['all']) || isset($envs[$this->environment])) {

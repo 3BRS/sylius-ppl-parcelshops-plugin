@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
+use Behat\Step\Given;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
@@ -23,9 +24,7 @@ final class ShippingMethodContext implements Context
     ) {
     }
 
-    /**
-     * @Given /^(this shipping method) is enabled PPL parcelshops$/
-     */
+    #[Given('/^(this shipping method) is enabled PPL parcelshops$/')]
     public function thisPaymentMethodHasZone(ShippingMethodInterface $shippingMethod): void
     {
         assert($shippingMethod instanceof PplShippingMethodInterface);
@@ -36,9 +35,7 @@ final class ShippingMethodContext implements Context
         $this->entityManager->flush();
     }
 
-    /**
-     * @Given choose PPL parcelshop ID ":id", name ":name" and address ":address"
-     */
+    #[Given('choose PPL parcelshop ID ":id", name ":name" and address ":address"')]
     public function choosePplBranch(string $id, string $name, string $address): void
     {
         $order = $this->sharedStorage->get('order');

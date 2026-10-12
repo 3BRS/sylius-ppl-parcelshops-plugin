@@ -54,8 +54,6 @@ final class PplController
 
             return new RedirectResponse($this->router->generate($redirectTo));
         }
-        assert($shippingMethod instanceof ShippingMethodInterface);
-        assert($shipment instanceof ShipmentInterface);
         assert($shipment instanceof PplShipmentInterface);
 
         $ktmId = $request->query->get('KTMID');

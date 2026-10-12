@@ -6,6 +6,8 @@ namespace Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Context\Ui\Admin;
 
 use Behat\Behat\Context\Context;
 use Behat\Mink\Session;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Tests\ThreeBRS\SyliusPplParcelshopsPlugin\Behat\Page\Admin\ShipmentExport\IndexPageInterface;
 use Webmozart\Assert\Assert;
@@ -21,18 +23,14 @@ final class ManagingShipmentExportContext implements Context
     ) {
     }
 
-    /**
-     * @When I browse PPL parcelshop shipments ready for export
-     */
+    #[When('I browse PPL parcelshop shipments ready for export')]
     public function iBrowsePplParcelshopShipmentsReadyForExport(): void
     {
         $this->indexPage->open(['exporterName' => 'ppl_parcel_shop']);
 
     }
 
-    /**
-     * @Then I should see :count shipment(s) ready for export
-     */
+    #[Then('I should see :count shipment(s) ready for export')]
     public function iShouldSeeShipmentsReadyForExport(int $count): void
     {
         Assert::eq(
@@ -42,9 +40,7 @@ final class ManagingShipmentExportContext implements Context
         );
     }
 
-    /**
-     * @Then I should see shipment for order :orderNumber in the list
-     */
+    #[Then('I should see shipment for order :orderNumber in the list')]
     public function iShouldSeeShipmentForOrderInTheList(string $orderNumber): void
     {
         Assert::true(
@@ -53,27 +49,21 @@ final class ManagingShipmentExportContext implements Context
         );
     }
 
-    /**
-     * @When I export selected PPL parcelshop shipments to CSV
-     */
+    #[When('I export selected PPL parcelshop shipments to CSV')]
     public function iExportSelectedPplParcelshopShipmentsToCSV(): void
     {
         $this->indexPage->exportSelectedShipments();
         $this->csvContent = $this->session->getPage()->getContent();
     }
 
-    /**
-     * @When I export all PPL parcelshop shipments to CSV
-     */
+    #[When('I export all PPL parcelshop shipments to CSV')]
     public function iExportAllPplParcelshopShipmentsToCSV(): void
     {
         $this->indexPage->exportAllShipments();
         $this->csvContent = $this->session->getPage()->getContent();
     }
 
-    /**
-     * @Then I should receive a CSV file
-     */
+    #[Then('I should receive a CSV file')]
     public function iShouldReceiveACSVFile(): void
     {
         Assert::notNull($this->csvContent, 'CSV content should not be null');
@@ -93,9 +83,7 @@ final class ManagingShipmentExportContext implements Context
         }
     }
 
-    /**
-     * @Then the CSV should contain shipment data for order :orderNumber
-     */
+    #[Then('the CSV should contain shipment data for order :orderNumber')]
     public function theCSVShouldContainShipmentDataForOrder(string $orderNumber): void
     {
         Assert::notNull($this->csvContent, 'CSV content should not be null');
@@ -106,9 +94,7 @@ final class ManagingShipmentExportContext implements Context
         );
     }
 
-    /**
-     * @Then the CSV should contain :count shipment record(s)
-     */
+    #[Then('the CSV should contain :count shipment record(s)')]
     public function theCSVShouldContainShipmentRecords(int $count): void
     {
         Assert::notNull($this->csvContent, 'CSV content should not be null');
@@ -123,26 +109,20 @@ final class ManagingShipmentExportContext implements Context
         );
     }
 
-    /**
-     * @When I mark selected PPL parcelshop shipments as shipped
-     */
+    #[When('I mark selected PPL parcelshop shipments as shipped')]
     public function iMarkSelectedPplParcelshopShipmentsAsShipped(): void
     {
         $this->indexPage->markSelectedAsShipped();
     }
 
-    /**
-     * @Then I should be notified that shipments have been marked as shipped
-     */
+    #[Then('I should be notified that shipments have been marked as shipped')]
     public function iShouldBeNotifiedThatShipmentsHaveBeenMarkedAsShipped(): void
     {
         $this->indexPage->open(['exporterName' => 'ppl_parcel_shop']);
         // The notification is handled by Sylius flash messages
     }
 
-    /**
-     * @Then the CSV should contain PPL parcelshop ID :pplId for order :orderNumber
-     */
+    #[Then('the CSV should contain PPL parcelshop ID :pplId for order :orderNumber')]
     public function theCSVShouldContainPPLParcelshopIdForOrder(string $pplId, string $orderNumber): void
     {
         Assert::notNull($this->csvContent, 'CSV content should not be null');
@@ -166,9 +146,7 @@ final class ManagingShipmentExportContext implements Context
         );
     }
 
-    /**
-     * @Then the CSV should contain customer email :email
-     */
+    #[Then('the CSV should contain customer email :email')]
     public function theCSVShouldContainCustomerEmail(string $email): void
     {
         Assert::notNull($this->csvContent, 'CSV content should not be null');
