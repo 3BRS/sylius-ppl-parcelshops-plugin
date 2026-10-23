@@ -200,6 +200,9 @@ The plugin replaces these Twig hookables:
 | `sylius_admin.order.show.content.sections.customer` | `shipping_address` |
 | `sylius_shop.shared.order.show.summary.addresses.shipping.body` | `address` |
 
+[3brs/sylius-packeta-plugin](https://github.com/3BRS/sylius-packeta-plugin) replaces the same hookables, so with both plugins installed only the one loaded later is rendered.
+An application using both plugins needs its own override of these hookables that renders the PPL parcelshop and the Packeta pickup point.
+
 ### 3. Export Shipments to PPL
 
 1. Go to the admin panel: **Sales → Export Shipment: PPL ParcelShop**

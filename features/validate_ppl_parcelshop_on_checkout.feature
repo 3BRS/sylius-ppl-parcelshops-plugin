@@ -23,9 +23,11 @@ Feature: Validating PPL parcelshop data in checkout
 		Then I should be notified that I have to choose a PPL parcelshop
 
 		Examples:
-			| data             |
-			| {"code":123}     |
-			| {"code":""}      |
-			| {"name":"PPL 1"} |
-			| 5                |
-			| not json         |
+			| data                             |
+			| {"code":123}                     |
+			| {"code":""}                      |
+			| {"name":"PPL 1"}                 |
+			| {"code":"KM1","name":5}          |
+			| {"code":"KM1","city":["Prague"]} |
+			| 5                                |
+			| not json                         |

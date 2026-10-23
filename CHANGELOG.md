@@ -14,7 +14,7 @@
 ### Fixed
 
 - Changing the shipping method in checkout to a method without PPL ParcelShop enabled clears the stored parcelshop (`pplData` and legacy `pplKTM*` fields)
-- Shipping step rejects parcelshop data that is not a JSON object with a non-empty string `code` instead of storing it
+- Shipping step rejects parcelshop data that is not a JSON object with a non-empty string `code`, or whose `name`, `parcelshopName`, `street`, `city`, `zipCode` or `country` is not a string or null, instead of storing it
 - Admin order detail and `_exporterRow.html.twig` show the parcelshop only when the shipment has a non-empty parcelshop ID and its shipping method has PPL ParcelShop enabled
 - CSV export fills the target parcelshop column for parcelshops chosen in the map widget (`pplData`), not only from the legacy `pplKTMID` field
 

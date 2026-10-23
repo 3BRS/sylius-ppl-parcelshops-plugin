@@ -208,7 +208,7 @@ class ShipmentPplExtension extends AbstractTypeExtension
     }
 
     /**
-     * @return array<mixed>|null null when the value is not a JSON object with a non-empty string `code`
+     * @return array<mixed>|null null when the value is not a JSON object with a non-empty string `code`, or a displayed field is not a string or null
      */
     private function decodePplData(string $pplJsonData): ?array
     {
@@ -220,6 +220,12 @@ class ShipmentPplExtension extends AbstractTypeExtension
 
         if (!\is_array($pplData) || !\is_string($pplData['code'] ?? null) || $pplData['code'] === '') {
             return null;
+        }
+
+        foreach (['name', 'parcelshopName', 'street', 'city', 'zipCode', 'country'] as $key) {
+            if (isset($pplData[$key]) && !\is_string($pplData[$key])) {
+                return null;
+            }
         }
 
         return $pplData;

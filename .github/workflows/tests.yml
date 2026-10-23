@@ -62,7 +62,8 @@ jobs:
                     docker compose exec php composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
             # Sylius 2.1 and 2.2 Behat contexts need Behat 3, their admin and shop assets Encore 5
-            # and webpack below 5.109 (stimulus-bridge 3 fails on webpack 5.112+, Sylius 2.1 does not lock it like 2.2)
+            # and webpack below 5.109, the range Sylius 2.2 locks (Sylius/Sylius#19153);
+            # Sylius 2.1 does not lock webpack and stimulus-bridge 3 fails on webpack 5.112+
             -   name: Require Behat 3, Encore 5 and webpack below 5.109
                 if: contains(fromJSON('["2.1", "2.2"]'), matrix.sylius_version)
                 run: |
