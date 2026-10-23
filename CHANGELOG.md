@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.3.0 (2026-10-23)
+
+### Changed
+
+- **BREAKING**: Added `PplShipmentInterface::hasPplPickupPoint()`; implementations without `PplShipmentTrait` must implement it
+- **BREAKING**: `Shop/Common/Order/_addresses.html.twig` is rendered as a Twig hookable and reads the order from `hookable_metadata.context.order`; it no longer works when included with an `order` variable
+
+### Added
+
+- Selected PPL parcelshop is shown instead of the shipping address in the shop order summary (checkout complete step, customer account order detail); the template replaces the core `address` hookable of `sylius_shop.shared.order.show.summary.addresses.shipping.body`
+
+### Fixed
+
+- Changing the shipping method in checkout to a method without PPL ParcelShop enabled clears the stored parcelshop (`pplData` and legacy `pplKTM*` fields)
+- Shipping step rejects parcelshop data that is not a JSON object with a non-empty string `code` instead of storing it
+- Admin order detail and `_exporterRow.html.twig` show the parcelshop only when the shipment has a non-empty parcelshop ID and its shipping method has PPL ParcelShop enabled
+- CSV export fills the target parcelshop column for parcelshops chosen in the map widget (`pplData`), not only from the legacy `pplKTMID` field
+
 ## v2.2.0 (2026-10-07)
 
 ### Changed

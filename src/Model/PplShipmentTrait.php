@@ -129,6 +129,15 @@ trait PplShipmentTrait
         return !empty($parts) ? implode(', ', $parts) : null;
     }
 
+    public function hasPplPickupPoint(): bool
+    {
+        $method = $this->getMethod();
+
+        return $method instanceof PplShippingMethodInterface
+            && $method->getPplParcelshopsShippingMethod() === true
+            && ($this->getPplPickupPointId() ?? '') !== '';
+    }
+
     /**
      * @deprecated Kept for backward compatibility. Use getPplData() instead.
      */

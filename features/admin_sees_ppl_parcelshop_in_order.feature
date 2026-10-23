@@ -42,3 +42,43 @@ Feature: Admin can see PPL parcelshop in order detail in admin panel
 		And it should be billed to "Mazikeen Lilim", "Pacific Coast Hwy", "90806", "Los Angeles", "United States"
 		And it should be shipped via the "PPL parcelshop" shipping method
 		And it should be paid with "Cash on Delivery"
+
+	@ui
+	Scenario: Displaying an order with PPL parcelshop chosen in the map widget
+		And there is a customer "lucy@teamlucifer.com" that placed an order "#00000666"
+		And the customer bought a single "Angel T-Shirt"
+		And the customer "Lucifer Morningstar" addressed it to "Seaside Fwy", "90802" "Los Angeles" in the "United States"
+		And for the billing address of "Mazikeen Lilim" in the "Pacific Coast Hwy", "90806" "Los Angeles", "United States"
+		And the customer chose "PPL parcelshop" shipping method with "Cash on Delivery" payment
+		And the customer chose PPL parcelshop with code "KM10833808" and name "PPL Parcelshop Frost Alley"
+		And I am logged in as an administrator
+		When I view the summary of the order "#00000666"
+		Then it should be shipped to PPL parcelshop
+		And it should be shipped via the "PPL parcelshop" shipping method
+
+	@ui
+	Scenario: Displaying the shipping address of an order not shipped to PPL parcelshop despite stored PPL parcelshop
+		And there is a customer "lucy@teamlucifer.com" that placed an order "#00000666"
+		And the customer bought a single "Angel T-Shirt"
+		And the customer "Lucifer Morningstar" addressed it to "Seaside Fwy", "90802" "Los Angeles" in the "United States"
+		And for the billing address of "Mazikeen Lilim" in the "Pacific Coast Hwy", "90806" "Los Angeles", "United States"
+		And the customer chose "Free" shipping method with "Cash on Delivery" payment
+		And the shipment keeps PPL parcelshop with code "KM10833808" and name "PPL Parcelshop Frost Alley" from an earlier selection
+		And I am logged in as an administrator
+		When I view the summary of the order "#00000666"
+		Then it should not be shipped to PPL parcelshop
+		And it should be shipped to "Lucifer Morningstar", "Seaside Fwy", "90802", "Los Angeles", "United States"
+		And it should be shipped via the "Free" shipping method
+
+	@ui
+	Scenario: Displaying the shipping address of an order with empty PPL parcelshop ID
+		And there is a customer "lucy@teamlucifer.com" that placed an order "#00000666"
+		And the customer bought a single "Angel T-Shirt"
+		And the customer "Lucifer Morningstar" addressed it to "Seaside Fwy", "90802" "Los Angeles" in the "United States"
+		And for the billing address of "Mazikeen Lilim" in the "Pacific Coast Hwy", "90806" "Los Angeles", "United States"
+		And the customer chose "PPL parcelshop" shipping method with "Cash on Delivery" payment
+		And choose PPL parcelshop ID "", name "" and address ""
+		And I am logged in as an administrator
+		When I view the summary of the order "#00000666"
+		Then it should not be shipped to PPL parcelshop
+		And it should be shipped to "Lucifer Morningstar", "Seaside Fwy", "90802", "Los Angeles", "United States"

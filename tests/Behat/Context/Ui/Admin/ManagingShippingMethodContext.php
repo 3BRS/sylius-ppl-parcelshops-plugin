@@ -22,6 +22,12 @@ final class ManagingShippingMethodContext implements Context
 		Assert::true($this->updatePage->iSeePplParcelshopInsteadOfShippingAddress());
 	}
 
+	#[Then('it should not be shipped to PPL parcelshop')]
+	public function itShouldNotBeShippedToPplParcelshop(): void
+	{
+		Assert::false($this->updatePage->iSeePplParcelshopInsteadOfShippingAddress());
+	}
+
 	#[When('I enable PPL parcelshops')]
 	public function iEnablePplParcelshops()
 	{

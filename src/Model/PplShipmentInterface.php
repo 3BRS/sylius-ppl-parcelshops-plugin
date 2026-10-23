@@ -121,6 +121,11 @@ interface PplShipmentInterface extends ShipmentInterface
     public function pplPickupPointAddress(): ?string;
 
     /**
+     * True when a pickup point is stored and the shipping method has PPL ParcelShop enabled.
+     */
+    public function hasPplPickupPoint(): bool;
+
+    /**
      * @deprecated Kept for backward compatibility. Use setPplData() instead.
      */
     public function setPplKTMname(?string $pplKTMname): void;
