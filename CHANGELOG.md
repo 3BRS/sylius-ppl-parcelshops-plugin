@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.3.0 (2026-10-23)
+## v3.0.0 (2026-10-27)
 
 ### Changed
 
@@ -18,7 +18,7 @@
 - Admin order detail and `_exporterRow.html.twig` show the parcelshop only when the shipment has a non-empty parcelshop ID and its shipping method has PPL ParcelShop enabled
 - CSV export fills the target parcelshop column for parcelshops chosen in the map widget (`pplData`), not only from the legacy `pplKTMID` field
 
-## v2.2.0 (2026-10-07)
+## v2.2.0 (2026-10-12)
 
 ### Changed
 
