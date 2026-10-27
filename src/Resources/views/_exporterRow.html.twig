@@ -1,5 +1,5 @@
 {# @var \ThreeBRS\SyliusPplParcelshopsPlugin\Model\PplShipmentInterface row #}
-{% if row.pplPickupPointId %}
+{% if row.hasPplPickupPoint() %}
     <address>
         {{ 'threebrs.admin.pplParcelShop.title'|trans }}<br>
         <strong>{{ row.pplPickupPointName }}</strong><br>

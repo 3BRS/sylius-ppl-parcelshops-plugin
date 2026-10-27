@@ -12,4 +12,6 @@ return (new Config())
         // JavaScript tests (require panther/selenium) - skipped for now
         // 'suites/select_ppl_parcelshop_on_checkout.php',
         'suites/export_ppl_parcelshop_shipments.php',
+        'suites/see_ppl_parcelshop_in_checkout_summary.php',
+        'suites/validate_ppl_parcelshop_on_checkout.php',
     ]);

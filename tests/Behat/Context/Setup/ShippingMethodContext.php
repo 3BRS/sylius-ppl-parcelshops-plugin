@@ -48,6 +48,34 @@ final class ShippingMethodContext implements Context
         $shipment->setPplKTMaddress($address);
         $shipment->setPplKTMID($id);
 
+        $this->completeOrder($order);
+    }
+
+    #[Given('the customer chose PPL parcelshop with code :code and name :name')]
+    #[Given('the shipment keeps PPL parcelshop with code :code and name :name from an earlier selection')]
+    public function choosePplParcelshop(string $code, string $name): void
+    {
+        $order = $this->sharedStorage->get('order');
+        assert($order instanceof OrderInterface);
+
+        $shipment = $order->getShipments()->last();
+        assert($shipment instanceof PplShipmentInterface);
+
+        $shipment->setPplData([
+            'accessPointType' => 'ParcelShop',
+            'city' => 'Prague',
+            'code' => $code,
+            'country' => 'CZ',
+            'name' => $name,
+            'street' => 'Frost Alley 1',
+            'zipCode' => '11000',
+        ]);
+
+        $this->completeOrder($order);
+    }
+
+    private function completeOrder(OrderInterface $order): void
+    {
         // Complete the order so shipment transitions to ready state
         if ($this->stateMachine->can($order, OrderCheckoutTransitions::GRAPH, OrderCheckoutTransitions::TRANSITION_COMPLETE)) {
             $this->stateMachine->apply($order, OrderCheckoutTransitions::GRAPH, OrderCheckoutTransitions::TRANSITION_COMPLETE);

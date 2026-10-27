@@ -50,6 +50,8 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service(PplPagesInterface::class),
             service('sylius.behat.context.ui.shop.checkout.shipping'),
+            service('sylius.repository.shipment'),
+            service('doctrine.orm.entity_manager'),
         ]);
 
     $services->set(PplPagesInterface::class, PplPages::class)

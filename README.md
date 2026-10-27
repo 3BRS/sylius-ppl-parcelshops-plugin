@@ -33,7 +33,7 @@
  - Enables sending shipments via <a href="https://www.ppl.cz/co-jsou-vydejni-mista">PPL</a> to PPL parcelshops.
  - The user can choose the PPL parcelshops from the <a href="https://www.ppl.cz/mapa-vydejnich-mist">map</a> during checkout in the Shipment step
  ![PPL_modal.png](docs/PPL_modal.png)
- - See PPL parcelshop in final checkout step and also in the admin panel.
+ - See PPL parcelshop instead of the shipping address in the order summary (final checkout step, customer account) and in the admin order detail.
  - Export CSV with the PPL parcelshops shipments and import it easily into PPL's system.
 
 ## PPL CSV import configuration
@@ -187,22 +187,52 @@ When a customer selects a PPL parcelshop shipping method during checkout:
 1. A PPL parcelshop selector widget will appear
 2. The customer can choose their preferred parcelshop from an interactive map
 3. The selected parcelshop information (ID, name, address) is saved with the shipment
-4. The parcelshop details are visible in the order confirmation
+4. The parcelshop details are shown instead of the shipping address in the order summary
+
+The shipping step cannot be completed with a PPL method until a parcelshop is chosen in the map.
+Switching to a shipping method without PPL ParcelShop enabled removes the selected parcelshop from the shipment.
+The parcelshop is displayed only while the shipment has a parcelshop ID and its shipping method has PPL ParcelShop enabled.
+
+The plugin replaces these Twig hookables:
+
+| Hook | Hookable |
+|------|----------|
+| `sylius_admin.order.show.content.sections.customer` | `shipping_address` |
+| `sylius_shop.shared.order.show.summary.addresses.shipping.body` | `address` |
+
+[3brs/sylius-packeta-plugin](https://github.com/3BRS/sylius-packeta-plugin) replaces the same hookables, so with both plugins installed only the one loaded later is rendered.
+An application using both plugins needs its own override of these hookables that renders the PPL parcelshop and the Packeta pickup point.
 
 ### 3. Export Shipments to PPL
 
-1. Go to the admin panel: **Shipment Export**
-2. Select the PPL ParcelShop exporter type
-3. Choose the shipments you want to export
-4. Click **Export** to download a CSV file
-5. Import the CSV file into PPL's system
+1. Go to the admin panel: **Sales → Export Shipment: PPL ParcelShop**
+2. Choose the shipments you want to export (without a selection, all listed shipments are exported)
+3. Use **Download CSV → Only download CSV**, or **Download CSV and send** to also mark the shipments as shipped
+4. Import the CSV file into PPL's system
 
-The CSV export includes all necessary information for PPL processing:
-- Parcelshop ID and details
+The list contains ready shipments whose shipping method code is in `threebrs_sylius_ppl_parcelshops_plugin_ppl_shipping_method_codes` and whose order is paid or uses an offline payment method.
+
+The CSV export includes:
+- Parcelshop ID (`code` of the parcelshop chosen in the map, legacy `pplKTMID` for older shipments)
 - Recipient information
-- Package weight and dimensions
+- Package weight
 - Cash on delivery amount (if applicable)
 - Order reference
+
+To show the parcelshop in the shipment export list, override the export plugin's row template and include `_exporterRow.html.twig`:
+
+```twig
+{# templates/bundles/ThreeBRSSyliusShipmentExportPlugin/_row.html.twig #}
+{% extends '@!ThreeBRSSyliusShipmentExportPlugin/_row.html.twig' %}
+
+{% block address %}
+    {% if row.hasPplPickupPoint() %}
+        {{ include('@ThreeBRSSyliusPplParcelshopsPlugin/_exporterRow.html.twig') }}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+```
 
 ## Development
 

@@ -172,8 +172,18 @@ class ShipmentPplExtension extends AbstractTypeExtension
                     return;
                 }
 
+                $method = $shipment->getMethod();
+                if (!$method instanceof PplShippingMethodInterface || $method->getPplParcelshopsShippingMethod() !== true) {
+                    $shipment->setPplData(null);
+                    $shipment->setPplKTMID(null);
+                    $shipment->setPplKTMname(null);
+                    $shipment->setPplKTMaddress(null);
+
+                    return;
+                }
+
                 // Find which PPL method was selected and save its JSON data
-                $methodCode = $shipment->getMethod()?->getCode();
+                $methodCode = $method->getCode();
                 if ($methodCode && \in_array($methodCode, $this->pplMethodsCodes, true)) {
                     $pplDataFieldName = 'ppl_data_' . $methodCode;
 
@@ -183,10 +193,9 @@ class ShipmentPplExtension extends AbstractTypeExtension
                         $pplJsonData = $pplDataField->getData();
 
                         if ($pplJsonData && \is_string($pplJsonData)) {
-                            try {
-                                $pplData = \json_decode($pplJsonData, true, 512, \JSON_THROW_ON_ERROR);
-                            } catch (JsonException $jsonException) {
-                                trigger_error($jsonException->getMessage(), \E_USER_WARNING);
+                            $pplData = $this->decodePplData($pplJsonData);
+                            if ($pplData === null) {
+                                $form->get('method')->addError(new FormError($this->translator->trans('threebrs.shop.checkout.pplBranch', [], 'validators')));
 
                                 return;
                             }
@@ -196,6 +205,30 @@ class ShipmentPplExtension extends AbstractTypeExtension
                     }
                 }
             });
+    }
+
+    /**
+     * @return array<mixed>|null null when the value is not a JSON object with a non-empty string `code`, or a displayed field is not a string or null
+     */
+    private function decodePplData(string $pplJsonData): ?array
+    {
+        try {
+            $pplData = \json_decode($pplJsonData, true, 512, \JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return null;
+        }
+
+        if (!\is_array($pplData) || !\is_string($pplData['code'] ?? null) || $pplData['code'] === '') {
+            return null;
+        }
+
+        foreach (['name', 'parcelshopName', 'street', 'city', 'zipCode', 'country'] as $key) {
+            if (isset($pplData[$key]) && !\is_string($pplData[$key])) {
+                return null;
+            }
+        }
+
+        return $pplData;
     }
 
     /** @return array<int, string> */

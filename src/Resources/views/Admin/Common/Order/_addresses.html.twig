@@ -1,7 +1,7 @@
 {% set order = hookable_metadata.context.resource %}
 {% set shipment = order.shipments.last %}
 
-{% if shipment is not null and (shipment.pplData is defined and shipment.pplData) %}
+{% if shipment and shipment.hasPplPickupPoint() and shipment.pplData %}
     <div>
         <strong>{{ 'sylius.ui.shipping_address'|trans }}:</strong>
     </div>
@@ -21,7 +21,7 @@
             {% endif %}
         </address>
     </div>
-{% elseif shipment is not null and (shipment.pplKTMID is defined and shipment.pplKTMID) %}
+{% elseif shipment and shipment.hasPplPickupPoint() %}
     <div>
         <strong>{{ 'sylius.ui.shipping_address'|trans }}:</strong>
     </div>

@@ -90,6 +90,34 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
         }
     }
 
+    public function choosePplParcelshop(string $code, string $name): void
+    {
+        $this->fillPplDataField((string) json_encode([
+            'accessPointType' => 'ParcelShop',
+            'city' => 'Prague',
+            'code' => $code,
+            'country' => 'CZ',
+            'name' => $name,
+            'street' => 'Frost Alley 1',
+            'zipCode' => '11000',
+        ]));
+    }
+
+    public function fillPplDataField(string $value): void
+    {
+        $this->getElement('ppl_data_field')->setValue($value);
+    }
+
+    public function getValidationMessage(): string
+    {
+        return $this->getElement('validation_error')->getText();
+    }
+
+    public function getShippingAddress(): string
+    {
+        return $this->getElement('shippingAddress')->getText();
+    }
+
     public function iSeePplBranchInsteadOfShippingAddress(): bool
     {
         // Wait for the page to load
@@ -103,11 +131,13 @@ final class PplPages extends SymfonyPage implements PplPagesInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
+            'ppl_data_field'       => 'input[name*="[ppl_data_"]',
             'ppl_select_button'    => 'button[id*="_button"][onclick*="openPplModal"]',
             'ppl_modal'            => 'div[id*="_modal"].ui.modal',
             'ppl_modal_close'      => 'div[id*="_modal"] i.close.icon',
             'ppl_widget_container' => '#ppl-parcelshop-map',
-            'shippingAddress'      => '#sylius-shipping-address',
+            'shippingAddress'      => '[data-test-shipping-address]',
+            'validation_error'     => '[data-test-validation-error]',
         ]);
     }
 }

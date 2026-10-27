@@ -96,6 +96,19 @@ Feature: Export PPL parcelshop shipments in admin panel
 		And the CSV should contain customer email "lucy@teamlucifer.com"
 
 	@ui
+	Scenario: CSV export contains PPL parcelshop chosen in the map widget
+		Given there is a customer "lucy@teamlucifer.com" that placed an order "#00000001"
+		And the customer bought a single "PHP T-Shirt"
+		And the customer "Lucifer Morningstar" addressed it to "Seaside Fwy", "90802" "Los Angeles" in the "United States"
+		And for the billing address of "Lucifer Morningstar" in the "Seaside Fwy", "90802" "Los Angeles", "United States"
+		And the customer chose "PPL parcelshop" shipping method with "Cash on Delivery" payment
+		And the customer chose PPL parcelshop with code "KM10833808" and name "PPL Parcelshop Frost Alley"
+		And I am logged in as an administrator
+		When I browse PPL parcelshop shipments ready for export
+		And I export selected PPL parcelshop shipments to CSV
+		Then the CSV should contain PPL parcelshop ID "KM10833808" for order "#00000001"
+
+	@ui
 	Scenario: Only ready shipments with paid or COD orders are shown
 		Given there is a customer "lucy@teamlucifer.com" that placed an order "#00000001"
 		And the customer bought a single "PHP T-Shirt"
